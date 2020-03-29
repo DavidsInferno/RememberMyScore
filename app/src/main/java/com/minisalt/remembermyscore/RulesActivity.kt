@@ -39,7 +39,6 @@ class RulesActivity : AppCompatActivity() {
 
 
         btnAddRules.setOnClickListener {
-            //showDialog()
             startActivity(Intent(this, PopupAddRules::class.java))
 
         }
@@ -66,36 +65,4 @@ class RulesActivity : AppCompatActivity() {
         scoresBtn.setImageResource(R.drawable.ic_storage_black)
     }
 
-
-    private fun showDialog() {
-
-
-        val dialog: Dialog = Dialog(this)
-
-        val view: View = layoutInflater.inflate(R.layout.layout_addrules, null)
-
-        val lv: ListView = view.findViewById(R.id.listView) as ListView
-
-        // Change MyActivity.this and myListOfItems to your own values
-        val clad: CustomListAdapterDialog = CustomListAdapterDialog(this@RulesActivity, hrpaBrojeva)
-
-
-        lv.adapter = clad
-
-
-        lv.onItemClickListener = object : AdapterView.OnItemClickListener {
-            override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                Toast.makeText(
-                    this@RulesActivity,
-                    hrpaBrojeva.get(position).toString() + "",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-
-
-        dialog.setContentView(view)
-
-        dialog.show()
-    }
 }
