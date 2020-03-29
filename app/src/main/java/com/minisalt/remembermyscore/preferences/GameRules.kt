@@ -1,5 +1,6 @@
 package com.minisalt.remembermyscore.preferences
 
-//pretvori buttons u ArrayList<Int>
-data class GameRules(val name:String,val pointsToWin: Int, val buttons: Int) {
+
+data class GameRules(val name:String="",val pointsToWin: Int=0, val buttons: ArrayList<Int>) {
+
 }
