@@ -1,10 +1,7 @@
 package com.minisalt.remembermyscore
 
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_rules.*
 import kotlinx.android.synthetic.main.bottom_navbar_template.*

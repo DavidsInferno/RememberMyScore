@@ -1,9 +1,8 @@
 package com.minisalt.remembermyscore
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_main.*
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.bottom_navbar_template.*
 
 class ScoresActivity : AppCompatActivity() {
