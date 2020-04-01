@@ -2,5 +2,14 @@
 <resources>
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#FAEBEFFF</color>
+    <color name="colorAccent">#FAEBEF</color>
+
+    <color name="White">#F1F3FF</color>
+    <color name="LightPink">#F7CED7</color>
+    <color name="Pink">#F99FC9</color>
+    <color name="DarkPink">#EF6079</color>
+
+
+    <color name="LivingCoral">#FC766A</color>
+    <color name="PacificCoast">#5B84B1</color>
 </resources>

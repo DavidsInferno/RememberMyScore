@@ -178,9 +178,28 @@ class PopupAddRules : AppCompatActivity() {
         if (gameRule.buttons.contains(num)) {
             Toast.makeText(this, "Button '$num' already exists", Toast.LENGTH_SHORT).show()
         } else {
-            gameRule.buttons.add(Integer.parseInt(numberInput.text.toString()))
-            buttonAdapter.notifyItemInserted(gameRule.buttons.size)
+            buttonAdapter.notifyItemInserted(addSort())
         }
+    }
+
+    private fun addSort(): Int {
+        val numberToAdd = Integer.parseInt(numberInput.text.toString())
+        var counter = 0
+        if (gameRule.buttons.size != 0) {
+            for (i in 0..gameRule.buttons.size - 1) {
+                counter = i
+                if (numberToAdd < gameRule.buttons[i]) {
+                    gameRule.buttons.add(i, numberToAdd)
+                    return i
+                } else if (numberToAdd > gameRule.buttons[gameRule.buttons.size - 1]) {
+                    gameRule.buttons.add(numberToAdd)
+                    return gameRule.buttons.size - 1
+                }
+            }
+        } else
+            gameRule.buttons.add(counter, numberToAdd)
+
+        return counter
     }
 
     private fun saveSettings(): Boolean {
@@ -250,20 +269,19 @@ class PopupAddRules : AppCompatActivity() {
         val gson = Gson()
 
         //this appends to the end
-        val allGameRules: ArrayList<GameRules>? = loadData()
+        var allGameRules: ArrayList<GameRules>? = loadData()
         if (allGameRules != null) {
-            println("UŠLO JE U IF")
+
             allGameRules.add(list)
 
-            val json: String = gson.toJson(allGameRules)
+            //sorts the list by name (So it is easier later to populate the recyclerview for all the rules)
+            val sortedList = allGameRules.sortedWith((compareBy({ it.name })))
+
+            val json: String = gson.toJson(sortedList)
             editor.putString("Game Rules", json)
             editor.apply()
 
-            println(allGameRules)
         } else {
-            println("UŠLO JE U ELSE")
-            println(gameRulesList)
-
             val json: String = gson.toJson(gameRulesList)
             editor.putString("Game Rules", json)
             editor.apply()
@@ -283,10 +301,8 @@ class PopupAddRules : AppCompatActivity() {
 
 
         if (existingRules == null) {
-            println("LOADDATA NISTA NE VRACA")
             return null
         } else {
-            println("LOADDATA VRACA ARRAYLIST!")
             return existingRules
         }
 
