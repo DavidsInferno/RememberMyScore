@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RulesActivity">
 
-    <include layout="@layout/bottom_navbar_template"/>
+    <include layout="@layout/bottom_navbar_template" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -25,7 +24,8 @@
             android:layout_marginRight="3dp"
             android:clickable="true"
             android:src="@drawable/ic_add_black"
-            android:layout_marginEnd="3dp" />
+            android:layout_marginEnd="3dp"
+            android:focusable="true" />
     </FrameLayout>
 
 </RelativeLayout>

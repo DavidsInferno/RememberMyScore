@@ -16,27 +16,20 @@ class GameActivity : AppCompatActivity() {
         //-------------------------------------------
 
 
-
-
-
-
-
-
-
         homeBtn.setOnClickListener {
-            startActivity(Intent(this,MainActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
         }
         gameBtn.setOnClickListener {
         }
         rulesBtn.setOnClickListener {
-            startActivity(Intent(this,RulesActivity::class.java))
+            startActivity(Intent(this, RulesActivity::class.java))
         }
         scoresBtn.setOnClickListener {
-            startActivity(Intent(this,ScoresActivity::class.java))
+            startActivity(Intent(this, ScoresActivity::class.java))
         }
     }
 
-    private fun changingIcons(){
+    private fun changingIcons() {
         homeBtn.setImageResource(R.drawable.ic_home_black)
         gameBtn.setImageResource(R.drawable.ic_controller_pink)
         rulesBtn.setImageResource(R.drawable.ic_receipt_black)

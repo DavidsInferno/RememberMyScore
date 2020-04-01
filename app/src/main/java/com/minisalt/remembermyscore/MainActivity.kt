@@ -8,7 +8,6 @@ import kotlinx.android.synthetic.main.bottom_navbar_template.*
 class MainActivity : AppCompatActivity() {
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -18,30 +17,22 @@ class MainActivity : AppCompatActivity() {
         //-------------------------------------------
 
 
-
-
-
-
-
-
-
-
         homeBtn.setOnClickListener {
         }
-        gameBtn.setOnClickListener{
-            startActivity(Intent(this,GameActivity::class.java))
+        gameBtn.setOnClickListener {
+            startActivity(Intent(this, GameActivity::class.java))
         }
         rulesBtn.setOnClickListener {
-            startActivity(Intent(this,RulesActivity::class.java))
+            startActivity(Intent(this, RulesActivity::class.java))
         }
         scoresBtn.setOnClickListener {
-            startActivity(Intent(this,ScoresActivity::class.java))
+            startActivity(Intent(this, ScoresActivity::class.java))
         }
-
 
 
     }
-    private fun changingIcons(){
+
+    private fun changingIcons() {
         homeBtn.setImageResource(R.drawable.ic_home_pink)
         gameBtn.setImageResource(R.drawable.ic_controller_black)
         rulesBtn.setImageResource(R.drawable.ic_receipt_black)

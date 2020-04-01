@@ -1,18 +1,4 @@
 <resources>
     <string name="app_name">RememberMyScore</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <string name="country_name">
-        <item>David</item>
-        <item>Mirko</item>
-        <item>Ante</item>
-        <item>Josko</item>
-        <item>Filip</item>
-        <item>Sarma</item>
-        <item>Hrenovke</item>
-        <item>Vrhnje</item>
-
-    </string>
 </resources>

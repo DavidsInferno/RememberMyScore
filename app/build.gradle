@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.minisalt.remembermyscore"
@@ -39,6 +39,10 @@ dependencies {
 
     // material dialogs
     implementation "com.afollestad.material-dialogs:core:3.1.0"
+
+    //preferences
+    implementation "androidx.preference:preference-ktx:1.1.0"
+    implementation 'com.google.code.gson:gson:2.8.6'
 
 
 }

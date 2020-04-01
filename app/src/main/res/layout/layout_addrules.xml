@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/colorAccent">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -12,8 +13,7 @@
             android:layout_height="wrap_content"
             android:textStyle="bold|italic"
             android:textSize="35sp"
-            android:text="Adding custom rules!"
-            />
+            android:text="Adding custom rules!" />
     </LinearLayout>
 
     <LinearLayout
@@ -28,13 +28,13 @@
             android:gravity="center"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:text="Title: "/>
+            android:text="Title: " />
 
         <EditText
             android:id="@+id/titleText"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:inputType="text"/>
+            android:inputType="text" />
 
     </LinearLayout>
 
@@ -49,13 +49,13 @@
             android:gravity="center"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:text="Points to win: "/>
+            android:text="Points to win: " />
 
         <EditText
             android:id="@+id/editPointsToWin"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:inputType="number"/>
+            android:inputType="number" />
 
     </LinearLayout>
 
@@ -70,21 +70,16 @@
             android:gravity="center"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:text="Buttons: "/>
+            android:text="Buttons: " />
 
         <EditText
             android:id="@+id/numberInput"
-            android:layout_width="50dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:inputType="numberSigned"
             android:imeOptions="actionSend"
-            android:singleLine="true"/>
+            android:singleLine="true" />
 
-        <Button
-            android:id="@+id/btnAddButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add button"/>
 
     </LinearLayout>
 
@@ -93,8 +88,16 @@
         android:layout_marginTop="280dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="4dp"
-        />
+        android:padding="4dp" />
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:text="Save" />
 
 
 </RelativeLayout>

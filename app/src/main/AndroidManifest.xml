@@ -9,10 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PopupAddRules"
-            android:theme="@style/AppTheme.PopupTheme"
-            >
-        </activity>
+        <activity
+            android:name=".PopupAddRules"
+            android:theme="@style/AppTheme.PopupTheme" />
         <activity android:name=".ScoresActivity" />
         <activity android:name=".GameActivity" />
         <activity android:name=".RulesActivity" />
