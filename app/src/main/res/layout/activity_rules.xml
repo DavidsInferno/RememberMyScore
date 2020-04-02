@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RulesActivity"
-    android:background="#5B84B1">
+    android:background="@color/LivingCoral">
 
     <include layout="@layout/bottom_navbar_template" />
 
@@ -24,10 +24,8 @@
             android:layout_gravity="bottom|end"
             android:layout_marginBottom="11dp"
             android:layout_marginRight="3dp"
-            android:clickable="true"
             android:src="@drawable/ic_add_black"
-            android:layout_marginEnd="3dp"
-            android:focusable="true" />
+            android:layout_marginEnd="3dp" />
     </FrameLayout>
 
 </RelativeLayout>
