@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home_black"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/navigation_game"
+        android:icon="@drawable/ic_controller_black"
+        android:title="Game" />
+
+    <item
+        android:id="@+id/navigation_rules"
+        android:icon="@drawable/ic_receipt_black"
+        android:title="Game Rules" />
+
+    <item
+        android:id="@+id/navigation_scores"
+        android:icon="@drawable/ic_storage_black"
+        android:title="Scores" />
+</menu>

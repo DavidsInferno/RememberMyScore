@@ -10,44 +10,70 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.KeyEvent
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
-import android.view.Window
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.minisalt.bottomnavigationview.utils.ExitWithAnimation
+import com.minisalt.bottomnavigationview.utils.exitCircularReveal
+import com.minisalt.bottomnavigationview.utils.startCircularReveal
 import com.minisalt.remembermyscore.adapter.RecycleButtonAdapter
 import com.minisalt.remembermyscore.preferences.GameRules
-import kotlinx.android.synthetic.main.layout_addrules.*
+import kotlinx.android.synthetic.main.fragment_add_rules.*
 import java.lang.reflect.Type
 import kotlin.math.roundToInt
 
-//, RecycleButtonAdapter.OnNoteListener
-class PopupAddRules : AppCompatActivity() {
+/**
+ * A simple [Fragment] subclass.
+ */
+class AddRulesFragment : Fragment(), ExitWithAnimation {
+
+    //THIS IS FRAGMENT STUFF
+    override var posX: Int? = null
+    override var posY: Int? = null
+    override fun isToBeExitedWithAnimation(): Boolean = true
+
+
+    companion object {
+        @JvmStatic
+        fun newInstance(exit: IntArray? = null): AddRulesFragment = AddRulesFragment().apply {
+            if (exit != null && exit.size == 2) {
+                posX = exit[0]
+                posY = exit[1]
+            }
+        }
+    }
+    //-----------------------
 
     lateinit var buttonAdapter: RecycleButtonAdapter
     var gameRule: GameRules = GameRules(buttons = arrayListOf())
 
-    //lateinit var gameRules:GameRules
     //swipe away assets
     private var swipeBackground: ColorDrawable = ColorDrawable(Color.parseColor("#D41414"))
     private lateinit var deleteIcon: Drawable
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.layout_addrules)
+        return inflater.inflate(R.layout.fragment_add_rules, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.startCircularReveal(false)
 
         initRecyclerView(gameRule.buttons)
-        displayWindow()
         swipeToRemove()
-
-
 
         numberInput.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
@@ -60,13 +86,15 @@ class PopupAddRules : AppCompatActivity() {
         btnSave.setOnClickListener {
             val checkClose: Boolean = saveSettings()
             if (checkClose) {
-                startActivity(Intent(this, RulesActivity::class.java))
+                view.exitCircularReveal(btnSave.x.toInt(), btnSave.y.toInt()) {
+                    fragmentManager!!.popBackStack()
+                }
             }
         }
     }
 
     private fun swipeToRemove() {
-        deleteIcon = ContextCompat.getDrawable(this, R.drawable.ic_delete)!!
+        deleteIcon = ContextCompat.getDrawable(context!!, R.drawable.ic_delete)!!
 
         val itemTouchHelperCallBack = object :
             ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
@@ -164,7 +192,7 @@ class PopupAddRules : AppCompatActivity() {
     }
 
     private fun initRecyclerView(buttonArray: ArrayList<Int>) {
-        recyclerViewButton.layoutManager = LinearLayoutManager(this@PopupAddRules)
+        recyclerViewButton.layoutManager = LinearLayoutManager(context)
         recyclerViewButton.setHasFixedSize(false)
         buttonAdapter = RecycleButtonAdapter(buttonArray)
         recyclerViewButton.adapter = buttonAdapter
@@ -176,7 +204,7 @@ class PopupAddRules : AppCompatActivity() {
 
         val num = Integer.parseInt(numberInput.text.toString())
         if (gameRule.buttons.contains(num)) {
-            Toast.makeText(this, "Button '$num' already exists", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Button '$num' already exists", Toast.LENGTH_SHORT).show()
         } else {
             buttonAdapter.notifyItemInserted(addSort())
         }
@@ -208,13 +236,13 @@ class PopupAddRules : AppCompatActivity() {
         //Check the title
         if (titleText.text.toString() == "") {     //Checking if there is a name
 
-            Toast.makeText(this, "Input valid title name", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Input valid title name", Toast.LENGTH_SHORT).show()
             return false
 
         } else if (existingList != null && repeatingName(existingList)) { //Checking if the name is already in use
 
             Toast.makeText(
-                this,
+                context,
                 "You already have rules for a game named '${titleText.text}'",
                 Toast.LENGTH_SHORT
             ).show()
@@ -227,13 +255,13 @@ class PopupAddRules : AppCompatActivity() {
         if (editPointsToWin.text.toString() != "" && Integer.parseInt(editPointsToWin.text.toString()) != 0)
             gameRule.pointsToWin = Integer.parseInt(editPointsToWin.text.toString())
         else {
-            Toast.makeText(this, "Input valid points to win", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Input valid points to win", Toast.LENGTH_SHORT).show()
             return false
         }
 
         //check if any buttons have been added
         if (gameRule.buttons.size == 0) {
-            Toast.makeText(this, "Add at least one button", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Add at least one button", Toast.LENGTH_SHORT).show()
             return false
         }
 
@@ -250,26 +278,17 @@ class PopupAddRules : AppCompatActivity() {
         return false
     }
 
-    private fun displayWindow() {
-        val dm = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(dm)
-
-        val width = dm.widthPixels
-        val height = dm.heightPixels
-
-        window.setLayout(((width * 0.8).roundToInt()), (height * 0.6).roundToInt())
-    }
 
     private fun saveDataToPreferences(list: GameRules) {
         val gameRulesList: ArrayList<GameRules> = arrayListOf(list)
 
         val sharedPreferences: SharedPreferences =
-            getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
+            context!!.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
         val gson = Gson()
 
         //this appends to the end
-        var allGameRules: ArrayList<GameRules>? = loadData()
+        val allGameRules: ArrayList<GameRules>? = loadData()
         if (allGameRules != null) {
 
             allGameRules.add(list)
@@ -292,7 +311,9 @@ class PopupAddRules : AppCompatActivity() {
 
     private fun loadData(): ArrayList<GameRules>? {
         val sharedPreferences: SharedPreferences =
-            getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
+            context!!.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
+        //val sharedPreferences: SharedPreferences =
+        //  getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
         val gson = Gson()
         val json: String? = sharedPreferences.getString("Game Rules", null)
         val type: Type = object : TypeToken<ArrayList<GameRules>>() {}.type
@@ -305,6 +326,6 @@ class PopupAddRules : AppCompatActivity() {
         } else {
             return existingRules
         }
-
     }
+
 }
