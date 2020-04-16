@@ -10,12 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".PopupAddRules"
-            android:theme="@style/AppTheme.PopupTheme" />
-        <activity android:name=".ScoresActivity" />
-        <activity android:name=".GameActivity" />
-        <activity android:name=".RulesActivity" />
-        <activity android:name=".MainActivity">
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

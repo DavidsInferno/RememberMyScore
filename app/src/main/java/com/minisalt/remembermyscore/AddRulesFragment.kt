@@ -1,21 +1,18 @@
 package com.minisalt.remembermyscore
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.KeyEvent
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,7 +25,6 @@ import com.minisalt.remembermyscore.adapter.RecycleButtonAdapter
 import com.minisalt.remembermyscore.preferences.GameRules
 import kotlinx.android.synthetic.main.fragment_add_rules.*
 import java.lang.reflect.Type
-import kotlin.math.roundToInt
 
 /**
  * A simple [Fragment] subclass.
@@ -53,7 +49,8 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
     //-----------------------
 
     lateinit var buttonAdapter: RecycleButtonAdapter
-    var gameRule: GameRules = GameRules(buttons = arrayListOf())
+    var gameRule: GameRules = GameRules(buttons = arrayListOf(-1, 1))
+
 
     //swipe away assets
     private var swipeBackground: ColorDrawable = ColorDrawable(Color.parseColor("#D41414"))
@@ -72,6 +69,7 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
         super.onViewCreated(view, savedInstanceState)
         view.startCircularReveal(false)
 
+
         initRecyclerView(gameRule.buttons)
         swipeToRemove()
 
@@ -83,14 +81,19 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
             false
         })
 
+        buttonAdd.setOnClickListener {
+            addItem()
+        }
+
         btnSave.setOnClickListener {
             val checkClose: Boolean = saveSettings()
             if (checkClose) {
-                view.exitCircularReveal(btnSave.x.toInt(), btnSave.y.toInt()) {
+                view.exitCircularReveal(btnSave.x.toInt() + 130, btnSave.y.toInt() + 100) {
                     fragmentManager!!.popBackStack()
                 }
             }
         }
+
     }
 
     private fun swipeToRemove() {
@@ -204,8 +207,9 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
 
         val num = Integer.parseInt(numberInput.text.toString())
         if (gameRule.buttons.contains(num)) {
-            Toast.makeText(context, "Button '$num' already exists", Toast.LENGTH_SHORT).show()
+            l_numberInput.error = "Button already exists"
         } else {
+            l_numberInput.error = null
             buttonAdapter.notifyItemInserted(addSort())
         }
     }
@@ -214,7 +218,7 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
         val numberToAdd = Integer.parseInt(numberInput.text.toString())
         var counter = 0
         if (gameRule.buttons.size != 0) {
-            for (i in 0..gameRule.buttons.size - 1) {
+            for (i in 0 until gameRule.buttons.size) {
                 counter = i
                 if (numberToAdd < gameRule.buttons[i]) {
                     gameRule.buttons.add(i, numberToAdd)
@@ -236,32 +240,28 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
         //Check the title
         if (titleText.text.toString() == "") {     //Checking if there is a name
 
-            Toast.makeText(context, "Input valid title name", Toast.LENGTH_SHORT).show()
+            l_titleText.error = "Input valid title name"
             return false
 
         } else if (existingList != null && repeatingName(existingList)) { //Checking if the name is already in use
 
-            Toast.makeText(
-                context,
-                "You already have rules for a game named '${titleText.text}'",
-                Toast.LENGTH_SHORT
-            ).show()
+            l_titleText.error = "You already have rules for a game named '${titleText.text}'"
             return false
 
         } else
-            gameRule.name = titleText.text.toString()
+            gameRule.name = titleText.text.toString().capitalize()
 
         //Save for points
         if (editPointsToWin.text.toString() != "" && Integer.parseInt(editPointsToWin.text.toString()) != 0)
             gameRule.pointsToWin = Integer.parseInt(editPointsToWin.text.toString())
         else {
-            Toast.makeText(context, "Input valid points to win", Toast.LENGTH_SHORT).show()
+            l_numberInput.error = "Input valid points to win"
             return false
         }
 
         //check if any buttons have been added
         if (gameRule.buttons.size == 0) {
-            Toast.makeText(context, "Add at least one button", Toast.LENGTH_SHORT).show()
+            l_numberInput.error = "Add at least one button"
             return false
         }
 
@@ -272,12 +272,11 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
 
     private fun repeatingName(existingList: ArrayList<GameRules>): Boolean {
         for (topItem in existingList)
-            if (topItem.name == titleText.text.toString())
+            if (topItem.name.toLowerCase() == titleText.text.toString().toLowerCase())
                 return true
 
         return false
     }
-
 
     private fun saveDataToPreferences(list: GameRules) {
         val gameRulesList: ArrayList<GameRules> = arrayListOf(list)
@@ -312,8 +311,6 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
     private fun loadData(): ArrayList<GameRules>? {
         val sharedPreferences: SharedPreferences =
             context!!.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
-        //val sharedPreferences: SharedPreferences =
-        //  getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
         val gson = Gson()
         val json: String? = sharedPreferences.getString("Game Rules", null)
         val type: Type = object : TypeToken<ArrayList<GameRules>>() {}.type
