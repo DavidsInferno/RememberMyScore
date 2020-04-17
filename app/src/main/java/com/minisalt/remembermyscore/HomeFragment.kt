@@ -1,23 +1,20 @@
 package com.minisalt.remembermyscore
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.minisalt.remembermyscore.preferences.GameRules
+import com.minisalt.remembermyscore.preferences.DataMover
 import kotlinx.android.synthetic.main.fragment_home.*
-import java.lang.reflect.Type
 
 /**
  * A simple [Fragment] subclass.
  */
 class HomeFragment : Fragment() {
+
+    private val dataMover = DataMover()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,7 +29,7 @@ class HomeFragment : Fragment() {
 
         val ble = ArrayList<String>()
 
-        val gameRuleList = loadData()
+        val gameRuleList = dataMover.loadGameRules(context!!)
 
         if (gameRuleList != null)
             for (rule in gameRuleList)
@@ -56,22 +53,4 @@ class HomeFragment : Fragment() {
         }
 
     }
-
-    private fun loadData(): ArrayList<GameRules>? {
-        val sharedPreferences: SharedPreferences =
-            context!!.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
-        val gson = Gson()
-        val json: String? = sharedPreferences.getString("Game Rules", null)
-        val type: Type = object : TypeToken<ArrayList<GameRules>>() {}.type
-
-        val existingRules: ArrayList<GameRules>? = gson.fromJson<ArrayList<GameRules>>(json, type)
-
-
-        if (existingRules == null) {
-            return null
-        } else {
-            return existingRules
-        }
-    }
-
 }

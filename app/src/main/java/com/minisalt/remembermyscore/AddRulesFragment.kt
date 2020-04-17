@@ -17,19 +17,20 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.minisalt.bottomnavigationview.utils.ExitWithAnimation
 import com.minisalt.bottomnavigationview.utils.exitCircularReveal
 import com.minisalt.bottomnavigationview.utils.startCircularReveal
 import com.minisalt.remembermyscore.adapter.RecycleButtonAdapter
+import com.minisalt.remembermyscore.preferences.DataMover
 import com.minisalt.remembermyscore.preferences.GameRules
 import kotlinx.android.synthetic.main.fragment_add_rules.*
-import java.lang.reflect.Type
 
 /**
  * A simple [Fragment] subclass.
  */
 class AddRulesFragment : Fragment(), ExitWithAnimation {
+
+    val dataMover = DataMover()
 
     //THIS IS FRAGMENT STUFF
     override var posX: Int? = null
@@ -57,11 +58,10 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
     private lateinit var deleteIcon: Drawable
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-
         return inflater.inflate(R.layout.fragment_add_rules, container, false)
     }
 
@@ -235,7 +235,7 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
     }
 
     private fun saveSettings(): Boolean {
-        val existingList: ArrayList<GameRules>? = loadData()
+        val existingList: ArrayList<GameRules>? = dataMover.loadGameRules(context!!)
 
         //Check the title
         if (titleText.text.toString() == "") {     //Checking if there is a name
@@ -248,6 +248,9 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
             l_titleText.error = "You already have rules for a game named '${titleText.text}'"
             return false
 
+        } else if (titleText.length() > 20) {
+            l_titleText.error = "Title length must be under 20 characters"
+            return false
         } else
             gameRule.name = titleText.text.toString().capitalize()
 
@@ -266,63 +269,16 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
         }
 
 
-        saveDataToPreferences(gameRule)
+        dataMover.saveGameRules(context!!, gameRule)
         return true
     }
 
     private fun repeatingName(existingList: ArrayList<GameRules>): Boolean {
         for (topItem in existingList)
-            if (topItem.name.toLowerCase() == titleText.text.toString().toLowerCase())
+            if (topItem.name.decapitalize() == titleText.text.toString().decapitalize())
                 return true
 
         return false
-    }
-
-    private fun saveDataToPreferences(list: GameRules) {
-        val gameRulesList: ArrayList<GameRules> = arrayListOf(list)
-
-        val sharedPreferences: SharedPreferences =
-            context!!.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
-        val editor: SharedPreferences.Editor = sharedPreferences.edit()
-        val gson = Gson()
-
-        //this appends to the end
-        val allGameRules: ArrayList<GameRules>? = loadData()
-        if (allGameRules != null) {
-
-            allGameRules.add(list)
-
-            //sorts the list by name (So it is easier later to populate the recyclerview for all the rules)
-            val sortedList = allGameRules.sortedWith((compareBy({ it.name })))
-
-            val json: String = gson.toJson(sortedList)
-            editor.putString("Game Rules", json)
-            editor.apply()
-
-        } else {
-            val json: String = gson.toJson(gameRulesList)
-            editor.putString("Game Rules", json)
-            editor.apply()
-        }
-        //----------------------
-
-    }
-
-    private fun loadData(): ArrayList<GameRules>? {
-        val sharedPreferences: SharedPreferences =
-            context!!.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
-        val gson = Gson()
-        val json: String? = sharedPreferences.getString("Game Rules", null)
-        val type: Type = object : TypeToken<ArrayList<GameRules>>() {}.type
-
-        val existingRules: ArrayList<GameRules>? = gson.fromJson<ArrayList<GameRules>>(json, type)
-
-
-        if (existingRules == null) {
-            return null
-        } else {
-            return existingRules
-        }
     }
 
 }
