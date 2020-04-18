@@ -26,11 +26,12 @@ import kotlinx.android.synthetic.main.fragment_rules.*
 class RulesFragment : Fragment(), RecyclerViewClickInterface {
 
     lateinit var ruleAdapter: RulesAdapter
-    private val dataMover = DataMover()
-
-    lateinit var helperList: ArrayList<GameRules>
 
     private var easterEgg = 0
+
+    val dataMover = DataMover()
+
+    lateinit var list: ArrayList<GameRules>
 
 
     override fun onCreateView(
@@ -45,15 +46,18 @@ class RulesFragment : Fragment(), RecyclerViewClickInterface {
         super.onViewCreated(view, savedInstanceState)
         easterEgg = 0
 
-        val list = dataMover.loadGameRules(context!!)
+        list = dataMover.loadGameRules(context!!)
+
 
         if (list.isNotEmpty()) {
             initRecyclerView(list)
             txtNoRules.visibility = View.GONE
-            helperList = list
         } else
             txtNoRules.visibility = View.VISIBLE
 
+        test.setOnClickListener {
+            initRecyclerView(list)
+        }
 
 
         fab.setOnClickListener {
@@ -62,8 +66,7 @@ class RulesFragment : Fragment(), RecyclerViewClickInterface {
                 // Pass center as the end position of the circular reveal
                 add(
                     R.id.container, AddRulesFragment.newInstance(
-                        positions,
-                        ruleAdapter = ruleAdapter
+                        positions
                     )
                 ).addToBackStack(null)
             }
@@ -90,9 +93,9 @@ class RulesFragment : Fragment(), RecyclerViewClickInterface {
 
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
-                        deletedGameRule = helperList[position]
+                        deletedGameRule = list[position]
 
-                        helperList.removeAt(position)
+                        list.removeAt(position)
                         ruleAdapter.notifyItemRemoved(position)
                         //set anchor view to show it above the navigation buttons
                         Snackbar.make(
@@ -100,17 +103,17 @@ class RulesFragment : Fragment(), RecyclerViewClickInterface {
                             deletedGameRule!!.name,
                             Snackbar.LENGTH_LONG
                         ).setAction("Undo") {
-                            helperList.add(position, deletedGameRule!!)
+                            list.add(position, deletedGameRule!!)
                             ruleAdapter.notifyItemInserted(position)
-                            DataMover().saveGameRules(context!!, helperList)
+                            dataMover.saveGameRules(context!!, list)
                         }.show()
 
-                        DataMover().saveGameRules(context!!, helperList)
+                        dataMover.saveGameRules(context!!, list)
                     }
 
                     ItemTouchHelper.RIGHT -> {
                         fragmentManager?.open {
-                            val editGameRules: GameRules = helperList[position]
+                            val editGameRules: GameRules = list[position]
 
                             val positions: IntArray = intArrayOf(
                                 recyclerViewRules.width / 2,
@@ -183,7 +186,7 @@ class RulesFragment : Fragment(), RecyclerViewClickInterface {
 
     private fun initRecyclerView(rules: ArrayList<GameRules>) {
         recyclerViewRules.layoutManager = LinearLayoutManager(context)
-        recyclerViewRules.setHasFixedSize(false)
+        recyclerViewRules.setHasFixedSize(true)
         ruleAdapter =
             RulesAdapter(rules, this)
         recyclerViewRules.adapter = ruleAdapter

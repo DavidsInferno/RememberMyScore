@@ -44,7 +44,7 @@ class AddRulesFragment : Fragment(), ExitWithAnimation, RecyclerViewClickInterfa
             exit: IntArray? = null,
             editGameRules: GameRules? = null,
             updatePosition: Int? = null,
-            ruleAdapter: RulesAdapter
+            ruleAdapter: RulesAdapter? = null
         ): AddRulesFragment = AddRulesFragment()
             .apply {
                 this.editGameRules = editGameRules
@@ -97,7 +97,7 @@ class AddRulesFragment : Fragment(), ExitWithAnimation, RecyclerViewClickInterfa
         btnSave.setOnClickListener {
             val checkClose: Boolean = saveSettings()
             if (checkClose) {
-                view.exitCircularReveal(btnSave.x.toInt() + 130, btnSave.y.toInt() + 100) {
+                view.exitCircularReveal(btnSave.x.toInt() - 200, btnSave.y.toInt() - 100) {
                     fragmentManager!!.popBackStack()
                 }
             }
@@ -244,7 +244,7 @@ class AddRulesFragment : Fragment(), ExitWithAnimation, RecyclerViewClickInterfa
             dataMover.appendToGameRules(context!!, gameRule)
         else {
             dataMover.replaceGameRule(context!!, gameRule, updatePosition!!)
-            updateAdapter!!.notifyItemChanged(updatePosition!!)
+            updateAdapter!!.notifyDataSetChanged()
         }
 
         return true
