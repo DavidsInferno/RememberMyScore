@@ -1,7 +1,5 @@
 package com.minisalt.remembermyscore
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -16,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
 import com.minisalt.bottomnavigationview.utils.ExitWithAnimation
 import com.minisalt.bottomnavigationview.utils.exitCircularReveal
 import com.minisalt.bottomnavigationview.utils.startCircularReveal

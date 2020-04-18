@@ -27,6 +27,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <TextView
+            android:id="@+id/txtNoRules"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="You might want to add some rules."
+            app:layout_constraintBottom_toBottomOf="@+id/recyclerViewRules"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recyclerViewRules" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -39,7 +39,7 @@ class DataMover {
             allGameRules.add(list)
 
             //sorts the list by name (So it is easier later to populate the recyclerview for all the rules)
-            val sortedList = allGameRules.sortedWith((compareBy({ it.name })))
+            val sortedList = allGameRules.sortedWith((compareBy { it.name }))
 
             val json: String = gson.toJson(sortedList)
             editor.putString("Game Rules", json)

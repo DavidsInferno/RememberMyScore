@@ -26,18 +26,19 @@ class RulesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view: View = inflater.inflate(R.layout.fragment_rules, container, false)
-
-        return view
-
+        return inflater.inflate(R.layout.fragment_rules, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val lista = dataMover.loadGameRules(context!!)
+        val list = dataMover.loadGameRules(context!!)
 
-        initRecyclerView(lista!!)
+        if (list != null) {
+            initRecyclerView(list)
+            txtNoRules.visibility = View.GONE
+        } else
+            txtNoRules.visibility = View.VISIBLE
 
         fab.setOnClickListener {
             val positions = it.findLocationOfCenterOnTheScreen()
@@ -55,5 +56,4 @@ class RulesFragment : Fragment() {
         ruleAdapter = RulesAdapter(rules)
         recyclerViewRules.adapter = ruleAdapter
     }
-
 }
