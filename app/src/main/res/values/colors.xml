@@ -15,4 +15,7 @@
 
     <color name="DarkerGrey">#121212</color>
 
+
+    <color name="DeleteRed">#C61313</color>
+
 </resources>

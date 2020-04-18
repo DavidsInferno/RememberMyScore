@@ -1,4 +1,4 @@
-package com.minisalt.remembermyscore.adapter
+package com.minisalt.remembermyscore.recyclerView.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,16 +7,38 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.preferences.GameRules
+import com.minisalt.remembermyscore.recyclerView.clickListener.RecyclerViewClickInterface
 
-class RulesAdapter(val rulesList: ArrayList<GameRules>) :
+class RulesAdapter(
+    val rulesList: ArrayList<GameRules>,
+    val recyclerViewClickInterface: RecyclerViewClickInterface
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    class GameRulesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+    inner class GameRulesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var mTitle: TextView = itemView.findViewById(R.id.Title)
         var mPoints: TextView = itemView.findViewById(R.id.PointsToWin)
         var mGameCount: TextView = itemView.findViewById(R.id.GameCount)
         var mButtons: TextView = itemView.findViewById(R.id.Buttons)
         var mLastPlayed: TextView = itemView.findViewById(R.id.LastPlayed)
+
+        //https://www.youtube.com/watch?v=AkiltTv0CjA
+        init {
+            itemView.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(view: View) {
+                    recyclerViewClickInterface.onItemClick(adapterPosition)
+                }
+            })
+
+            itemView.setOnLongClickListener(object : View.OnLongClickListener {
+                override fun onLongClick(view: View): Boolean {
+                    recyclerViewClickInterface.onLongItemClick(adapterPosition)
+                    return true
+                }
+            })
+        }
+        //-------------------------------------------
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

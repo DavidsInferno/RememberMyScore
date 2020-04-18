@@ -7,30 +7,28 @@ import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
 class DataMover {
-    fun loadGameRules(context: Context): ArrayList<GameRules>? {
+    fun loadGameRules(context: Context): ArrayList<GameRules> {
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
-        val gson = Gson()
         val json: String? = sharedPreferences.getString("Game Rules", null)
         val type: Type = object : TypeToken<ArrayList<GameRules>>() {}.type
 
-        val existingRules: ArrayList<GameRules>? = gson.fromJson<ArrayList<GameRules>>(json, type)
+        val existingRules: ArrayList<GameRules>? = Gson().fromJson<ArrayList<GameRules>>(json, type)
 
 
         if (existingRules == null) {
-            return null
+            return arrayListOf()
         } else {
             return existingRules
         }
     }
 
-    fun saveGameRules(context: Context, list: GameRules) {
+    fun appendToGameRules(context: Context, list: GameRules) {
         val gameRulesList: ArrayList<GameRules> = arrayListOf(list)
 
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
-        val gson = Gson()
 
         //this appends to the end
         val allGameRules: ArrayList<GameRules>? = loadGameRules(context)
@@ -41,16 +39,36 @@ class DataMover {
             //sorts the list by name (So it is easier later to populate the recyclerview for all the rules)
             val sortedList = allGameRules.sortedWith((compareBy { it.name }))
 
-            val json: String = gson.toJson(sortedList)
-            editor.putString("Game Rules", json)
+            editor.putString("Game Rules", Gson().toJson(sortedList))
             editor.apply()
 
         } else {
-            val json: String = gson.toJson(gameRulesList)
-            editor.putString("Game Rules", json)
+            editor.putString("Game Rules", Gson().toJson(gameRulesList))
             editor.apply()
         }
         //----------------------
+    }
+
+    fun saveGameRules(context: Context, list: ArrayList<GameRules>) {
+        val sharedPreferences: SharedPreferences =
+            context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+
+        editor.putString("Game Rules", Gson().toJson(list))
+        editor.apply()
+    }
+
+    fun replaceGameRule(context: Context, updatedListing: GameRules, position: Int) {
+        val sharedPreferences: SharedPreferences =
+            context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+
+        val allGameRules = loadGameRules(context)
+
+        allGameRules[position] = updatedListing
+
+        editor.putString("Game Rules", Gson().toJson(allGameRules))
+        editor.apply()
 
     }
 }

@@ -1,4 +1,4 @@
-package com.minisalt.remembermyscore.adapter
+package com.minisalt.remembermyscore.recyclerView.adapter
 
 import android.view.LayoutInflater
 import android.view.View

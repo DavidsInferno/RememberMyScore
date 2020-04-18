@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RulesFragment"
-    android:background="#ED8686">
+    tools:context=".fragments.RulesFragment"
+    android:background="#ED8686"
+    android:id="@+id/rulesContainer">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

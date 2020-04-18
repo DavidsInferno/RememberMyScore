@@ -1,4 +1,4 @@
-package com.realpacific.circularrevealexitdemo.utils
+package com.minisalt.remembermyscore.utils
 
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction

@@ -41,5 +41,8 @@ dependencies {
     implementation "androidx.preference:preference-ktx:1.1.0"
     implementation 'com.google.code.gson:gson:2.8.6'
 
+    //https://github.com/xabaras/RecyclerViewSwipeDecorator
+    implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.2'
+
 
 }

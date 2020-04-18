@@ -8,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.minisalt.bottomnavigationview.utils.ExitWithAnimation
 import com.minisalt.bottomnavigationview.utils.exitCircularReveal
+import com.minisalt.remembermyscore.fragments.GameFragment
+import com.minisalt.remembermyscore.fragments.HomeFragment
+import com.minisalt.remembermyscore.fragments.RulesFragment
+import com.minisalt.remembermyscore.fragments.ScoresFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
@@ -22,13 +26,16 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         bottom_nav_view.setOnNavigationItemSelectedListener(this)
         bottom_nav_view.selectedItemId = R.id.navigation_home
-
     }
 
-    val homeFragment: HomeFragment = HomeFragment()
-    val gameFragment: GameFragment = GameFragment()
-    val rulesFragment: RulesFragment = RulesFragment()
-    val scoresFragment: ScoresFragment = ScoresFragment()
+    val homeFragment: HomeFragment =
+        HomeFragment()
+    val gameFragment: GameFragment =
+        GameFragment()
+    val rulesFragment: RulesFragment =
+        RulesFragment()
+    val scoresFragment: ScoresFragment =
+        ScoresFragment()
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 

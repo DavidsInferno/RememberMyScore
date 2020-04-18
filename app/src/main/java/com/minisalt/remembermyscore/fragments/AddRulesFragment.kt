@@ -1,10 +1,8 @@
-package com.minisalt.remembermyscore
+package com.minisalt.remembermyscore.fragments
 
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.Editable
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -17,17 +15,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.minisalt.bottomnavigationview.utils.ExitWithAnimation
 import com.minisalt.bottomnavigationview.utils.exitCircularReveal
 import com.minisalt.bottomnavigationview.utils.startCircularReveal
-import com.minisalt.remembermyscore.adapter.RecycleButtonAdapter
+import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.preferences.DataMover
 import com.minisalt.remembermyscore.preferences.GameRules
+import com.minisalt.remembermyscore.recyclerView.adapter.RecycleButtonAdapter
+import com.minisalt.remembermyscore.recyclerView.adapter.RulesAdapter
+import com.minisalt.remembermyscore.recyclerView.clickListener.RecyclerViewClickInterface
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.android.synthetic.main.fragment_add_rules.*
 
-/**
- * A simple [Fragment] subclass.
- */
-class AddRulesFragment : Fragment(), ExitWithAnimation {
 
-    val dataMover = DataMover()
+class AddRulesFragment : Fragment(), ExitWithAnimation, RecyclerViewClickInterface {
+
+    private val dataMover = DataMover()
+    var editGameRules: GameRules? = null
+    var updatePosition: Int? = null
+    var updateAdapter: RulesAdapter? = null
 
     //THIS IS FRAGMENT STUFF
     override var posX: Int? = null
@@ -37,22 +40,27 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
 
     companion object {
         @JvmStatic
-        fun newInstance(exit: IntArray? = null): AddRulesFragment = AddRulesFragment().apply {
-            if (exit != null && exit.size == 2) {
-                posX = exit[0]
-                posY = exit[1]
+        fun newInstance(
+            exit: IntArray? = null,
+            editGameRules: GameRules? = null,
+            updatePosition: Int? = null,
+            ruleAdapter: RulesAdapter
+        ): AddRulesFragment = AddRulesFragment()
+            .apply {
+                this.editGameRules = editGameRules
+                this.updatePosition = updatePosition
+                this.updateAdapter = ruleAdapter
+                if (exit != null && exit.size == 2) {
+                    posX = exit[0]
+                    posY = exit[1]
+                }
             }
-        }
     }
     //-----------------------
 
     lateinit var buttonAdapter: RecycleButtonAdapter
-    var gameRule: GameRules = GameRules(buttons = arrayListOf(-1, 1))
+    var gameRule: GameRules = GameRules()
 
-
-    //swipe away assets
-    private var swipeBackground: ColorDrawable = ColorDrawable(Color.parseColor("#D41414"))
-    private lateinit var deleteIcon: Drawable
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,9 +74,12 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
         super.onViewCreated(view, savedInstanceState)
         view.startCircularReveal(false)
 
+        if (editGameRules != null) {
+            updatingListing()
+        }
+
 
         initRecyclerView(gameRule.buttons)
-        swipeToRemove()
 
         numberInput.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
@@ -82,6 +93,7 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
             addItem()
         }
 
+
         btnSave.setOnClickListener {
             val checkClose: Boolean = saveSettings()
             if (checkClose) {
@@ -93,16 +105,14 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
 
     }
 
-    private fun swipeToRemove() {
-        deleteIcon = ContextCompat.getDrawable(context!!, R.drawable.ic_delete)!!
-
-        val itemTouchHelperCallBack = object :
-            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+    private val simpleCallback: ItemTouchHelper.SimpleCallback =
+        object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
+                //THIS METHOD IS JUST IF YOU WANT TO REARRANGE ITEMS IN THE RECYCLERVIEW
                 return false
             }
 
@@ -119,61 +129,22 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
                 actionState: Int,
                 isCurrentlyActive: Boolean
             ) {
-                val itemView = viewHolder.itemView
-
-                val iconMargin = (itemView.height - deleteIcon.intrinsicHeight) / 2
-
-                if (dX > 0) {
-                    swipeBackground.setBounds(
-                        itemView.left,
-                        itemView.top,
-                        dX.toInt(),
-                        itemView.bottom
-                    )
-                    deleteIcon.setBounds(
-                        itemView.left + iconMargin,
-                        itemView.top + iconMargin,
-                        itemView.left + iconMargin + deleteIcon.intrinsicWidth,
-                        itemView.bottom - iconMargin
-                    )
-                } else {
-                    swipeBackground.setBounds(
-                        itemView.right + dX.toInt(),
-                        itemView.top,
-                        itemView.right,
-                        itemView.bottom
-                    )
-                    deleteIcon.setBounds(
-                        itemView.right - iconMargin - deleteIcon.intrinsicWidth,
-                        itemView.top + iconMargin,
-                        itemView.right - iconMargin,
-                        itemView.bottom - iconMargin
-                    )
-                }
-
-                swipeBackground.draw(c)
-
-                c.save()
+                RecyclerViewSwipeDecorator.Builder(
+                    c,
+                    recyclerView,
+                    viewHolder,
+                    dX,
+                    dY,
+                    actionState,
+                    isCurrentlyActive
+                )
+                    .addBackgroundColor(ContextCompat.getColor(context!!, R.color.DeleteRed))
+                    .addActionIcon(R.drawable.ic_delete)
+                    .setIconHorizontalMargin(R.drawable.ic_delete, 8)
+                    .create()
+                    .decorate()
 
 
-                if (dX > 0)
-                    c.clipRect(
-                        itemView.left,
-                        itemView.top,
-                        dX.toInt(),
-                        itemView.bottom
-                    )
-                else
-                    c.clipRect(
-                        itemView.right + dX.toInt(),
-                        itemView.top,
-                        itemView.right,
-                        itemView.bottom
-                    )
-
-                deleteIcon.draw(c)
-
-                c.restore()
 
                 super.onChildDraw(
                     c,
@@ -187,15 +158,16 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
             }
         }
 
-        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallBack)
-        itemTouchHelper.attachToRecyclerView(recyclerViewButton)
-    }
-
     private fun initRecyclerView(buttonArray: ArrayList<Int>) {
         recyclerViewButton.layoutManager = LinearLayoutManager(context)
         recyclerViewButton.setHasFixedSize(false)
-        buttonAdapter = RecycleButtonAdapter(buttonArray)
+        buttonAdapter =
+            RecycleButtonAdapter(
+                buttonArray
+            )
         recyclerViewButton.adapter = buttonAdapter
+        val itemTouchHelper = ItemTouchHelper(simpleCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerViewButton)
     }
 
     private fun addItem() {
@@ -209,6 +181,8 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
             l_numberInput.error = null
             buttonAdapter.notifyItemInserted(addSort())
         }
+
+        numberInput.text?.clear()
     }
 
     private fun addSort(): Int {
@@ -266,7 +240,13 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
         }
 
 
-        dataMover.saveGameRules(context!!, gameRule)
+        if (updatePosition == null)
+            dataMover.appendToGameRules(context!!, gameRule)
+        else {
+            dataMover.replaceGameRule(context!!, gameRule, updatePosition!!)
+            updateAdapter!!.notifyItemChanged(updatePosition!!)
+        }
+
         return true
     }
 
@@ -276,6 +256,22 @@ class AddRulesFragment : Fragment(), ExitWithAnimation {
                 return true
 
         return false
+    }
+
+    private fun updatingListing() {
+        titleText.text = Editable.Factory.getInstance().newEditable(editGameRules!!.name)
+        editPointsToWin.text =
+            Editable.Factory.getInstance().newEditable(editGameRules!!.pointsToWin.toString())
+        gameRule.buttons = editGameRules!!.buttons
+        btnSave.text = "Update"
+    }
+
+    override fun onItemClick(position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onLongItemClick(position: Int) {
+        TODO("Not yet implemented")
     }
 
 }
