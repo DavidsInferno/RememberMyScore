@@ -42,25 +42,25 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         when (item.itemId) {
             R.id.navigation_home -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, homeFragment).commit()
+                    .replace(R.id.container, homeFragment, "Home Fragment").commit()
                 return true
             }
 
             R.id.navigation_game -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, gameFragment).commit()
+                    .replace(R.id.container, gameFragment, "Game Fragment").commit()
                 return true
             }
 
             R.id.navigation_rules -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, rulesFragment).commit()
+                    .replace(R.id.container, rulesFragment, "Rule Fragment").commit()
                 return true
             }
 
             R.id.navigation_scores -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, scoresFragment).commit()
+                    .replace(R.id.container, scoresFragment, "Scores Fragment").commit()
                 return true
             }
 

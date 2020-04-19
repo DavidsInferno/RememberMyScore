@@ -3,9 +3,7 @@ package com.minisalt.remembermyscore.fragments
 import android.graphics.Canvas
 import android.os.Bundle
 import android.os.Handler
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -23,7 +21,7 @@ import com.minisalt.remembermyscore.utils.open
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.android.synthetic.main.fragment_rules.*
 
-class RulesFragment : Fragment(), RecyclerViewClickInterface {
+class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterface {
 
     lateinit var ruleAdapter: RulesAdapter
 
@@ -32,14 +30,6 @@ class RulesFragment : Fragment(), RecyclerViewClickInterface {
     val dataMover = DataMover()
 
     lateinit var list: ArrayList<GameRules>
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_rules, container, false)
-    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,9 +45,6 @@ class RulesFragment : Fragment(), RecyclerViewClickInterface {
         } else
             txtNoRules.visibility = View.VISIBLE
 
-        test.setOnClickListener {
-            initRecyclerView(list)
-        }
 
 
         fab.setOnClickListener {
@@ -124,8 +111,7 @@ class RulesFragment : Fragment(), RecyclerViewClickInterface {
                                 AddRulesFragment.newInstance(
                                     positions,
                                     editGameRules,
-                                    position,
-                                    ruleAdapter
+                                    position
                                 )
                             ).addToBackStack(null)
                             Handler().postDelayed({ ruleAdapter.notifyItemChanged(position) }, 400)
@@ -202,6 +188,13 @@ class RulesFragment : Fragment(), RecyclerViewClickInterface {
             Toast.makeText(context!!, "Just the way I like it", Toast.LENGTH_LONG).show()
 
 
+    }
+
+    fun changesApplied(position: Int?) {
+        initRecyclerView(dataMover.loadGameRules(context!!))
+
+        if (position != null)
+            Handler().postDelayed({ ruleAdapter.notifyItemChanged(position) }, 700)
     }
 
     override fun onLongItemClick(position: Int) {

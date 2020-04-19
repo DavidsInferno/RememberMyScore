@@ -4,9 +4,7 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.text.Editable
 import android.view.KeyEvent
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -19,18 +17,17 @@ import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.preferences.DataMover
 import com.minisalt.remembermyscore.preferences.GameRules
 import com.minisalt.remembermyscore.recyclerView.adapter.RecycleButtonAdapter
-import com.minisalt.remembermyscore.recyclerView.adapter.RulesAdapter
 import com.minisalt.remembermyscore.recyclerView.clickListener.RecyclerViewClickInterface
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.android.synthetic.main.fragment_add_rules.*
 
 
-class AddRulesFragment : Fragment(), ExitWithAnimation, RecyclerViewClickInterface {
+class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimation,
+    RecyclerViewClickInterface {
 
     private val dataMover = DataMover()
     var editGameRules: GameRules? = null
     var updatePosition: Int? = null
-    var updateAdapter: RulesAdapter? = null
 
     //THIS IS FRAGMENT STUFF
     override var posX: Int? = null
@@ -43,13 +40,11 @@ class AddRulesFragment : Fragment(), ExitWithAnimation, RecyclerViewClickInterfa
         fun newInstance(
             exit: IntArray? = null,
             editGameRules: GameRules? = null,
-            updatePosition: Int? = null,
-            ruleAdapter: RulesAdapter? = null
+            updatePosition: Int? = null
         ): AddRulesFragment = AddRulesFragment()
             .apply {
                 this.editGameRules = editGameRules
                 this.updatePosition = updatePosition
-                this.updateAdapter = ruleAdapter
                 if (exit != null && exit.size == 2) {
                     posX = exit[0]
                     posY = exit[1]
@@ -59,16 +54,8 @@ class AddRulesFragment : Fragment(), ExitWithAnimation, RecyclerViewClickInterfa
     //-----------------------
 
     lateinit var buttonAdapter: RecycleButtonAdapter
-    var gameRule: GameRules = GameRules()
+    private var gameRule: GameRules = GameRules()
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_add_rules, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -224,7 +211,7 @@ class AddRulesFragment : Fragment(), ExitWithAnimation, RecyclerViewClickInterfa
         return true
     }
 
-    fun pointCheck(): Boolean {
+    private fun pointCheck(): Boolean {
         return if (editPointsToWin.text.toString() != "" && Integer.parseInt(editPointsToWin.text.toString()) != 0) {
             gameRule.pointsToWin = Integer.parseInt(editPointsToWin.text.toString())
             true
@@ -234,7 +221,7 @@ class AddRulesFragment : Fragment(), ExitWithAnimation, RecyclerViewClickInterfa
         }
     }
 
-    fun buttonCheck(): Boolean {
+    private fun buttonCheck(): Boolean {
         return if (gameRule.buttons.size == 0) {
             l_numberInput.error = "Add at least one button"
             false
@@ -250,11 +237,16 @@ class AddRulesFragment : Fragment(), ExitWithAnimation, RecyclerViewClickInterfa
         if (!(titleCheck(existingList) && pointCheck() && buttonCheck()))
             return false
 
-        if (updatePosition == null)
+        val fragm: RulesFragment? =
+            fragmentManager!!.findFragmentByTag("Rule Fragment") as RulesFragment?
+
+        if (updatePosition == null) {
             dataMover.appendToGameRules(context!!, gameRule)
+            fragm!!.changesApplied(updatePosition)
+        }
         else {
             dataMover.replaceGameRule(context!!, gameRule, updatePosition!!)
-            updateAdapter!!.notifyDataSetChanged()
+            fragm!!.changesApplied(updatePosition!!)
         }
 
         return true
@@ -283,5 +275,6 @@ class AddRulesFragment : Fragment(), ExitWithAnimation, RecyclerViewClickInterfa
     override fun onLongItemClick(position: Int) {
         TODO("Not yet implemented")
     }
+
 
 }
