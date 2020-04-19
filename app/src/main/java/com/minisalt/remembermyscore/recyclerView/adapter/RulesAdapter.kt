@@ -10,7 +10,7 @@ import com.minisalt.remembermyscore.preferences.GameRules
 import com.minisalt.remembermyscore.recyclerView.clickListener.RecyclerViewClickInterface
 
 class RulesAdapter(
-    val rulesList: ArrayList<GameRules>,
+    private val rulesList: ArrayList<GameRules>,
     val recyclerViewClickInterface: RecyclerViewClickInterface
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {

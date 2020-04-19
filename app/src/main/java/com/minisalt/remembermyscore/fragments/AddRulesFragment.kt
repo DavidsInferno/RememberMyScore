@@ -205,16 +205,12 @@ class AddRulesFragment : Fragment(), ExitWithAnimation, RecyclerViewClickInterfa
         return counter
     }
 
-    private fun saveSettings(): Boolean {
-        val existingList: ArrayList<GameRules>? = dataMover.loadGameRules(context!!)
-
-        //Check the title
+    private fun titleCheck(list: ArrayList<GameRules>): Boolean {
         if (titleText.text.toString() == "") {     //Checking if there is a name
-
             l_titleText.error = "Input valid title name"
             return false
 
-        } else if (existingList != null && repeatingName(existingList)) { //Checking if the name is already in use
+        } else if (list.size != 0 && repeatingName(list)) { //Checking if the name is already in use
 
             l_titleText.error = "You already have rules for a game named '${titleText.text}'"
             return false
@@ -225,20 +221,34 @@ class AddRulesFragment : Fragment(), ExitWithAnimation, RecyclerViewClickInterfa
         } else
             gameRule.name = titleText.text.toString().capitalize()
 
-        //Save for points
-        if (editPointsToWin.text.toString() != "" && Integer.parseInt(editPointsToWin.text.toString()) != 0)
+        return true
+    }
+
+    fun pointCheck(): Boolean {
+        return if (editPointsToWin.text.toString() != "" && Integer.parseInt(editPointsToWin.text.toString()) != 0) {
             gameRule.pointsToWin = Integer.parseInt(editPointsToWin.text.toString())
-        else {
+            true
+        } else {
             l_numberInput.error = "Input valid points to win"
-            return false
+            false
         }
+    }
 
-        //check if any buttons have been added
-        if (gameRule.buttons.size == 0) {
+    fun buttonCheck(): Boolean {
+        return if (gameRule.buttons.size == 0) {
             l_numberInput.error = "Add at least one button"
-            return false
-        }
+            false
+        } else
+            true
+    }
 
+
+    private fun saveSettings(): Boolean {
+        val existingList: ArrayList<GameRules> = dataMover.loadGameRules(context!!)
+
+
+        if (!(titleCheck(existingList) && pointCheck() && buttonCheck()))
+            return false
 
         if (updatePosition == null)
             dataMover.appendToGameRules(context!!, gameRule)
