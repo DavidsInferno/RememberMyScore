@@ -39,6 +39,8 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
         list = dataMover.loadGameRules(context!!)
 
 
+
+
         if (list.isNotEmpty()) {
             initRecyclerView(list)
             txtNoRules.visibility = View.GONE
@@ -58,6 +60,17 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
                 ).addToBackStack(null)
             }
         }
+
+        recyclerViewRules.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerViewRules, dx, dy)
+                if (dy > 0 && fab.visibility == View.VISIBLE) {
+                    fab.hide()
+                } else if (dy < 0 && fab.visibility != View.VISIBLE) {
+                    fab.show()
+                }
+            }
+        })
     }
 
 
@@ -144,14 +157,14 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
                             R.color.colorAccent
                         )
                     )
-                    .addSwipeLeftActionIcon(R.drawable.ic_delete)
+                    .addSwipeLeftActionIcon(R.drawable.ic_delete_white)
                     .addSwipeRightBackgroundColor(
                         ContextCompat.getColor(
                             context!!,
                             R.color.colorAccent
                         )
                     )
-                    .addSwipeRightActionIcon(R.drawable.ic_edit_black_24dp)
+                    .addSwipeRightActionIcon(R.drawable.ic_edit_black)
                     .create()
                     .decorate()
 

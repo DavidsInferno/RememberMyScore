@@ -126,8 +126,8 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
                     isCurrentlyActive
                 )
                     .addBackgroundColor(ContextCompat.getColor(context!!, R.color.DeleteRed))
-                    .addActionIcon(R.drawable.ic_delete)
-                    .setIconHorizontalMargin(R.drawable.ic_delete, 8)
+                    .addActionIcon(R.drawable.ic_delete_white)
+                    .setIconHorizontalMargin(R.drawable.ic_delete_white, 8)
                     .create()
                     .decorate()
 
