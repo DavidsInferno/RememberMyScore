@@ -16,7 +16,7 @@ import com.minisalt.bottomnavigationview.utils.startCircularReveal
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.preferences.DataMover
 import com.minisalt.remembermyscore.preferences.GameRules
-import com.minisalt.remembermyscore.recyclerView.adapter.RecycleButtonAdapter
+import com.minisalt.remembermyscore.recyclerView.adapter.ButtonAdapter
 import com.minisalt.remembermyscore.recyclerView.clickListener.RecyclerViewClickInterface
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.android.synthetic.main.fragment_add_rules.*
@@ -53,7 +53,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
     }
     //-----------------------
 
-    lateinit var buttonAdapter: RecycleButtonAdapter
+    lateinit var buttonAdapter: ButtonAdapter
     private var gameRule: GameRules = GameRules()
 
 
@@ -147,9 +147,9 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
 
     private fun initRecyclerView(buttonArray: ArrayList<Int>) {
         recyclerViewButton.layoutManager = LinearLayoutManager(context)
-        recyclerViewButton.setHasFixedSize(false)
+        recyclerViewButton.setHasFixedSize(true)
         buttonAdapter =
-            RecycleButtonAdapter(
+            ButtonAdapter(
                 buttonArray
             )
         recyclerViewButton.adapter = buttonAdapter
@@ -162,11 +162,17 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
             return
 
         val num = Integer.parseInt(numberInput.text.toString())
-        if (gameRule.buttons.contains(num)) {
-            l_numberInput.error = "Button already exists"
-        } else {
-            l_numberInput.error = null
-            buttonAdapter.notifyItemInserted(addSort())
+        when {
+            gameRule.buttons.contains(num) -> {
+                l_numberInput.error = "Button already exists"
+            }
+            num == 0 -> {
+                l_numberInput.error = "The number 0 isn't a valid number to add"
+            }
+            else -> {
+                l_numberInput.error = null
+                buttonAdapter.notifyItemInserted(addSort())
+            }
         }
 
         numberInput.text?.clear()
@@ -216,7 +222,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
             gameRule.pointsToWin = Integer.parseInt(editPointsToWin.text.toString())
             true
         } else {
-            l_numberInput.error = "Input valid points to win"
+            l_pointsToWin.error = "Input valid points to win"
             false
         }
     }

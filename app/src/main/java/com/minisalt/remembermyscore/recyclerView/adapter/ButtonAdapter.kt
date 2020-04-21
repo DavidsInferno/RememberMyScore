@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.minisalt.remembermyscore.R
 
-class RecycleButtonAdapter(val itemList: ArrayList<Int>) :
+class ButtonAdapter(val itemList: ArrayList<Int>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

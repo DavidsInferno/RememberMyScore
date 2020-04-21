@@ -20,50 +20,42 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     lateinit var toast: Toast
     private var doubleBackExitPressedOnce = false
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         bottom_nav_view.setOnNavigationItemSelectedListener(this)
         bottom_nav_view.selectedItemId = R.id.navigation_home
-    }
 
-    val homeFragment: HomeFragment =
-        HomeFragment()
-    val gameFragment: GameFragment =
-        GameFragment()
-    val rulesFragment: RulesFragment =
-        RulesFragment()
-    val scoresFragment: ScoresFragment =
-        ScoresFragment()
+    }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
             R.id.navigation_home -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, homeFragment, "Home Fragment").commit()
+                    .replace(R.id.container, HomeFragment(), "Home Fragment").commit()
                 return true
             }
 
             R.id.navigation_game -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, gameFragment, "Game Fragment").commit()
+                    .replace(R.id.container, GameFragment(), "Game Fragment").commit()
                 return true
             }
 
             R.id.navigation_rules -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, rulesFragment, "Rule Fragment").commit()
+                    .replace(R.id.container, RulesFragment(), "Rule Fragment").commit()
                 return true
             }
 
             R.id.navigation_scores -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, scoresFragment, "Scores Fragment").commit()
+                    .replace(R.id.container, ScoresFragment(), "Scores Fragment").commit()
                 return true
             }
-
         }
 
 

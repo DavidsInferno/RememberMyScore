@@ -73,9 +73,6 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
         })
     }
 
-
-    var deletedGameRule: GameRules? = null
-
     private val simpleCallback: ItemTouchHelper.SimpleCallback =
         object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
@@ -93,41 +90,54 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
 
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
-                        deletedGameRule = list[position]
+                        val swipedGameRule = list[position]
 
-                        list.removeAt(position)
-                        ruleAdapter.notifyItemRemoved(position)
-                        //set anchor view to show it above the navigation buttons
-                        Snackbar.make(
-                            recyclerViewRules,
-                            deletedGameRule!!.name,
-                            Snackbar.LENGTH_LONG
-                        ).setAction("Undo") {
-                            list.add(position, deletedGameRule!!)
-                            ruleAdapter.notifyItemInserted(position)
+                        if (!(checkIfGameIsInProgress(swipedGameRule.name))) {
+
+                            list.removeAt(position)
+                            ruleAdapter.notifyItemRemoved(position)
+                            //set anchor view to show it above the navigation buttons
+                            Snackbar.make(
+                                recyclerViewRules,
+                                swipedGameRule.name,
+                                Snackbar.LENGTH_LONG
+                            ).setAction("Undo") {
+                                list.add(position, swipedGameRule)
+                                ruleAdapter.notifyItemInserted(position)
+                                dataMover.saveGameRules(context!!, list)
+                            }.show()
+
                             dataMover.saveGameRules(context!!, list)
-                        }.show()
-
-                        dataMover.saveGameRules(context!!, list)
+                        } else
+                            ruleAdapter.notifyItemChanged(position)
                     }
 
                     ItemTouchHelper.RIGHT -> {
                         fragmentManager?.open {
-                            val editGameRules: GameRules = list[position]
+                            val swipedGameRule = list[position]
 
-                            val positions: IntArray = intArrayOf(
-                                recyclerViewRules.width / 2,
-                                viewHolder.itemView.y.toInt() + viewHolder.itemView.height / 2
-                            )
-                            add(
-                                R.id.container,
-                                AddRulesFragment.newInstance(
-                                    positions,
-                                    editGameRules,
-                                    position
+                            if (!(checkIfGameIsInProgress(swipedGameRule.name))) {
+
+                                val positions: IntArray = intArrayOf(
+                                    recyclerViewRules.width / 2,
+                                    viewHolder.itemView.y.toInt() + viewHolder.itemView.height / 2
                                 )
-                            ).addToBackStack(null)
-                            Handler().postDelayed({ ruleAdapter.notifyItemChanged(position) }, 400)
+                                add(
+                                    R.id.container,
+                                    AddRulesFragment.newInstance(
+                                        positions,
+                                        swipedGameRule,
+                                        position
+                                    )
+                                ).addToBackStack(null)
+                                Handler().postDelayed(
+                                    { ruleAdapter.notifyItemChanged(position) },
+                                    400
+                                )
+                            } else {
+                                ruleAdapter.notifyItemChanged(position)
+                            }
+
                         }
                     }
                 }
@@ -211,5 +221,21 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
     }
 
     override fun onLongItemClick(position: Int) {
+    }
+
+    fun checkIfGameIsInProgress(gameName: String): Boolean {
+        val currentGame = dataMover.loadCurrentGame(context!!)
+        return if (currentGame != null && currentGame.gameTitle == gameName) {
+            val snackBar = Snackbar.make(
+                recyclerViewRules, "You are currently playing this game",
+                Snackbar.LENGTH_LONG
+            )
+            snackBar.setAction("Dismiss") {
+                snackBar.dismiss()
+            }
+            snackBar.show()
+            true
+        } else
+            false
     }
 }
