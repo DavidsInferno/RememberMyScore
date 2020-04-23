@@ -244,13 +244,13 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
 
     private fun saveSettings(): Boolean {
         val allRules: ArrayList<GameRules> = dataMover.loadGameRules(requireContext())
-
         val fragm: RulesFragment? =
             requireFragmentManager().findFragmentByTag("Rule Fragment") as RulesFragment?
 
+
         return if (updatePosition == null && titleCheck(allRules) && pointCheck()) {
             dataMover.appendToGameRules(requireContext(), gameRule)
-            fragm?.gettingLatestRuleList(updatePosition)
+            fragm?.gettingLatestRuleList(null)
             true
         } else if (updatePosition != null && checkForChanges(allRules)) {
             dataMover.replaceGameRule(requireContext(), gameRule, updatePosition!!)

@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
+import java.util.*
 
 class DataMover {
     fun loadGameRules(context: Context): ArrayList<GameRules> {
@@ -16,15 +17,14 @@ class DataMover {
         val existingRules: ArrayList<GameRules>? = Gson().fromJson<ArrayList<GameRules>>(json, type)
 
 
-        if (existingRules == null) {
-            return arrayListOf()
+        return if (existingRules == null) {
+            arrayListOf()
         } else {
-            return existingRules
+            existingRules
         }
     }
 
     fun appendToGameRules(context: Context, rule: GameRules) {
-        val gameRulesList: ArrayList<GameRules> = arrayListOf(rule)
 
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
@@ -43,6 +43,9 @@ class DataMover {
             editor.apply()
 
         } else {
+            val gameRulesList: ArrayList<GameRules> = arrayListOf()
+            gameRulesList.add(rule)
+            println(gameRulesList)
             editor.putString("Game Rules", Gson().toJson(gameRulesList))
             editor.apply()
         }
@@ -123,8 +126,6 @@ class DataMover {
     }
 
     fun appendToFinishedMatches(context: Context, match: FinishedMatch) {
-        val finishedMatches: ArrayList<FinishedMatch> = arrayListOf(match)
-
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
@@ -144,6 +145,8 @@ class DataMover {
             editor.apply()
 
         } else {
+            val finishedMatches: ArrayList<FinishedMatch> = arrayListOf()
+            finishedMatches.add(match)
             editor.putString("Finished Matches", Gson().toJson(finishedMatches))
             editor.apply()
         }
@@ -178,6 +181,25 @@ class DataMover {
         val allRules = loadGameRules(context)
 
         return allRules[index].name
+    }
+
+
+    fun dateOfLastGame(context: Context, gameTitle: String): Date? {
+        val allMatches = loadAllMatches(context)
+        for (i in allMatches)
+            if (i.gameTitle == gameTitle)
+                return i.datePlayed
+        return null
+    }
+
+    fun numberOfGamesPlayed(context: Context, gameTitle: String): Int {
+        val allMatches = loadAllMatches(context)
+        var counter = 0
+        for (i in allMatches)
+            if (i.gameTitle == gameTitle)
+                counter++
+
+        return counter
     }
 
 }

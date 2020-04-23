@@ -27,35 +27,37 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         bottom_nav_view.setOnNavigationItemSelectedListener(this)
         bottom_nav_view.selectedItemId = R.id.navigation_home
-
-
     }
+
+
+    val homeFragment = HomeFragment()
+    val gameFragment = GameFragment()
+    val rulesFragment = RulesFragment()
+    val scoresFragment = ScoresFragment()
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
             R.id.navigation_home -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, HomeFragment(), "Home Fragment").commit()
+                    .replace(R.id.container, homeFragment, "Home Fragment").commit()
             }
 
             R.id.navigation_game -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, GameFragment(), "Game Fragment").commit()
+                    .replace(R.id.container, gameFragment, "Game Fragment").commit()
             }
 
             R.id.navigation_rules -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, RulesFragment(), "Rule Fragment").commit()
+                    .replace(R.id.container, rulesFragment, "Rule Fragment").commit()
             }
 
             R.id.navigation_scores -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, ScoresFragment(), "Scores Fragment").commit()
+                    .replace(R.id.container, scoresFragment, "Scores Fragment").commit()
             }
         }
-
-        title = getString(R.string.app_name)
         return true
     }
 

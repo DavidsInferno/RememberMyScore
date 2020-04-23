@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.DataMover
@@ -24,6 +25,8 @@ class HomeFragment(private val savedGame: Boolean = false, val deletedGame: Bool
 
         val gameRuleList = DataMover().loadGameRules(requireContext())
 
+
+
         if (gameRuleList.size != 0)
             for (rule in gameRuleList)
                 nameOfListRules.add(rule.name)
@@ -42,7 +45,6 @@ class HomeFragment(private val savedGame: Boolean = false, val deletedGame: Bool
         }
 
 
-
         val myAdapter: ArrayAdapter<String> =
             ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, nameOfListRules)
 
@@ -52,23 +54,38 @@ class HomeFragment(private val savedGame: Boolean = false, val deletedGame: Bool
         btnLaunchGame.setOnClickListener {
             if (nameOfListRules[0] != "You have no games saved") {
                 val homeData = HomeData(
-                    numberPicker.value, dataMover.getStringFromIndex
-                        (requireContext(), spinner.selectedItemPosition)
+                    numberPicker.value,
+                    dataMover.getStringFromIndex(requireContext(), spinner.selectedItemPosition)
                 )
                 val currentGame = dataMover.loadCurrentGame(requireContext())
 
 
-                goToPlayScreen(homeData)
+                goToGameFragment(homeData)
 
-                /*OVO JE ZA PROVJERIT AKO IMA UPALJENA IGRA
-                if (currentGame == null) {
-                    goToPlayScreen(homeData)
-                } else {
-                    //prozor ce se otvorit
-                }*/
-            }
+
+//                if (currentGame == null) {
+//                    goToGameFragment(homeData)
+//                } else {
+//                    dialog(homeData)
+//                }
+            } else
+                goToRuleFragment()
+
         }
     }
+
+    fun dialog(homeData: HomeData) {
+        MaterialAlertDialogBuilder(context)
+            .setTitle("Start a new game?")
+            .setMessage("You currently have a game active. Continuing will start a fresh game.")
+            .setNegativeButton("No") { dialog, which ->
+                dialog.dismiss()
+            }
+            .setPositiveButton("Start fresh") { dialog, which ->
+                goToGameFragment(homeData)
+            }
+    }
+
 
     private fun numberPickerSetup() {
         numberPicker.minValue = 1
@@ -77,12 +94,20 @@ class HomeFragment(private val savedGame: Boolean = false, val deletedGame: Bool
         numberPicker.wrapSelectorWheel = true
     }
 
-    private fun goToPlayScreen(newGame: HomeData) {
+    private fun goToGameFragment(newGame: HomeData) {
         fragmentManager?.beginTransaction()?.replace(
             R.id.container, GameFragment
                 (homeData = newGame)
         )?.commit()
         val navigationView = requireActivity().findViewById(R.id.bottom_nav_view) as BottomNavigationView
         navigationView.menu.getItem(1).isChecked = true
+    }
+
+    private fun goToRuleFragment() {
+        fragmentManager?.beginTransaction()?.replace(
+            R.id.container, RulesFragment()
+        )?.commit()
+        val navigationView = requireActivity().findViewById(R.id.bottom_nav_view) as BottomNavigationView
+        navigationView.menu.getItem(2).isChecked = true
     }
 }

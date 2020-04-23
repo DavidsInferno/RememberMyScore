@@ -1,19 +1,25 @@
 package com.minisalt.remembermyscore.recyclerView.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.minisalt.remembermyscore.R
+import com.minisalt.remembermyscore.data.DataMover
 import com.minisalt.remembermyscore.data.GameRules
 import com.minisalt.remembermyscore.recyclerView.clickListener.RecyclerViewClickInterface
+import java.text.SimpleDateFormat
+import java.util.*
 
 class RulesAdapter(
-    private val rulesList: ArrayList<GameRules>,
-    val recyclerViewClickInterface: RecyclerViewClickInterface
+    private val rulesList: ArrayList<GameRules>, val recyclerViewClickInterface: RecyclerViewClickInterface, val context:
+    Context
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    val dataMover = DataMover()
 
 
     inner class GameRulesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -52,15 +58,27 @@ class RulesAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
+        val date = dataMover.dateOfLastGame(context, rulesList[position].name)
+
+
         when (holder) {
             is GameRulesViewHolder -> {
                 holder.mTitle.text = rulesList[position].name
                 holder.mPoints.text = rulesList[position].pointsToWin.toString()
-                holder.mGameCount.text = rulesList[position].gamesPlayed.toString()
+                holder.mGameCount.text = dataMover.numberOfGamesPlayed(context, rulesList[position].name).toString()
                 holder.mButtons.text = rulesList[position].buttons.toString()
-                holder.mLastPlayed.text = "Datum"
+                if (date != null) {
+                    holder.mLastPlayed.text = dateParser(date)
+
+                } else
+                    holder.mLastPlayed.text = "Not played yet"
             }
         }
+    }
+
+    private fun dateParser(date: Date): String {
+        return SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(date)
     }
 
 }

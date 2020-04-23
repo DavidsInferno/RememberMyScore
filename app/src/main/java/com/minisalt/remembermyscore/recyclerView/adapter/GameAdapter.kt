@@ -2,7 +2,7 @@ package com.minisalt.remembermyscore.recyclerView.adapter
 
 import android.content.Context
 import android.text.Editable
-import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,42 +28,25 @@ class GameAdapter(
         // To allow the use od EditText changing in recyclerview
         init {
 
-            mName.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    charSequence: CharSequence, i: Int, i1: Int, i2: Int
-                ) {
-
-                }
-
-                override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+            mName.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                     if (mName.text.toString() != "")
                         playerList[adapterPosition].playerName = mName.text.toString()
+                    return@OnKeyListener true
                 }
-
-                override fun afterTextChanged(editable: Editable) {
-                }
+                false
             })
 
-            mPoints.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    charSequence: CharSequence, i: Int, i1: Int, i2: Int
-                ) {
-                }
-
-                override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+            mPoints.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                     if (mPoints.text.toString() != "") {
-                        if (mPoints.text.length < 10)
-                            playerList[adapterPosition].playerPoints =
-                                Integer.parseInt(mPoints.text.toString())
-                        else
-                            playerList[adapterPosition].playerPoints = 0
+                        if (mPoints.text.length < 10) {
+                            playerList[adapterPosition].playerPoints = Integer.parseInt(mPoints.text.toString())
+                        }
                     }
+                    return@OnKeyListener true
                 }
-
-                override fun afterTextChanged(editable: Editable) {
-                    println("IM IN GAME ADAPTER")
-
-                }
+                false
             })
         }
         //------------------------------------------------

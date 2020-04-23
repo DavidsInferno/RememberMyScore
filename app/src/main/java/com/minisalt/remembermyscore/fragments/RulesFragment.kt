@@ -71,7 +71,7 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
     fun gettingLatestRuleList(position: Int?) {
         list = dataMover.loadGameRules(requireContext())
 
-        if (list.isNotEmpty()) {
+        if (list.size != 0) {
             initRecyclerView(list)
             txtNoRules.visibility = View.GONE
 
@@ -79,8 +79,6 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
                 Handler().postDelayed({ ruleAdapter.notifyItemChanged(position) }, 700)
         } else
             txtNoRules.visibility = View.VISIBLE
-
-
     }
 
     private val simpleCallback: ItemTouchHelper.SimpleCallback =
@@ -207,7 +205,7 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
         recyclerViewRules.layoutManager = LinearLayoutManager(context)
         recyclerViewRules.setHasFixedSize(true)
         ruleAdapter =
-            RulesAdapter(rules, this)
+            RulesAdapter(rules, this, requireContext())
         recyclerViewRules.adapter = ruleAdapter
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
         itemTouchHelper.attachToRecyclerView(recyclerViewRules)

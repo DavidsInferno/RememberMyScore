@@ -16,7 +16,7 @@
             android:id="@+id/materialToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|snap"
+            app:layout_scrollFlags="scroll|snap|enterAlways"
             app:menu="@menu/top_app_bar"
             style="@style/ThemeOverlay.MaterialComponents.Toolbar.Primary" />
 

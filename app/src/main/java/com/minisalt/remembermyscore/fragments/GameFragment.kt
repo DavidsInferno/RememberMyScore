@@ -34,6 +34,9 @@ class GameFragment(val homeData: HomeData? = null) :
 
         gameRules = dataMover.loadGameRules(requireContext())
 
+        testBtn.setOnClickListener {
+
+        }
 
         when {
             homeData != null -> {
@@ -166,7 +169,7 @@ class GameFragment(val homeData: HomeData? = null) :
         navigationView.menu.getItem(0).isChecked = true
     }
 
-    fun errorMessage(reason: String) {
+    private fun errorMessage(reason: String) {
         Toast.makeText(
             requireContext(), reason, Toast
                 .LENGTH_SHORT
