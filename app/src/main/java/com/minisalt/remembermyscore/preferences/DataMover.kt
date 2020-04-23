@@ -23,18 +23,18 @@ class DataMover {
         }
     }
 
-    fun appendToGameRules(context: Context, list: GameRules) {
-        val gameRulesList: ArrayList<GameRules> = arrayListOf(list)
+    fun appendToGameRules(context: Context, rule: GameRules) {
+        val gameRulesList: ArrayList<GameRules> = arrayListOf(rule)
 
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
 
         //this appends to the end
-        val allGameRules: ArrayList<GameRules>? = loadGameRules(context)
-        if (allGameRules != null) {
+        val allGameRules: ArrayList<GameRules> = loadGameRules(context)
+        if (allGameRules.size != 0) {
 
-            allGameRules.add(list)
+            allGameRules.add(rule)
 
             //sorts the list by name (So it is easier later to populate the recyclerview for all the rules)
             val sortedList = allGameRules.sortedWith((compareBy { it.name }))
@@ -72,6 +72,12 @@ class DataMover {
 
     }
 
+    fun gameRuleExistence(context: Context, rule: GameRules): Boolean {
+        val allGameRules: ArrayList<GameRules> = loadGameRules(context)
+
+        return allGameRules.contains(rule)
+    }
+
 
     fun saveCurrentGame(context: Context, match: FinishedMatch) {
         val sharedPreferences: SharedPreferences =
@@ -97,10 +103,7 @@ class DataMover {
         val json: String? = sharedPreferences.getString("Finished Matches", null)
         val type: Type = object : TypeToken<ArrayList<FinishedMatch>>() {}.type
 
-        val existingMatches: ArrayList<FinishedMatch>? = Gson().fromJson<ArrayList<FinishedMatch>>(
-            json,
-            type
-        )
+        val existingMatches: ArrayList<FinishedMatch>? = Gson().fromJson<ArrayList<FinishedMatch>>(json, type)
 
 
         if (existingMatches == null) {
@@ -119,8 +122,8 @@ class DataMover {
         editor.apply()
     }
 
-    fun appendToFinishedMatches(context: Context, list: FinishedMatch) {
-        val finishedMatches: ArrayList<FinishedMatch> = arrayListOf(list)
+    fun appendToFinishedMatches(context: Context, match: FinishedMatch) {
+        val finishedMatches: ArrayList<FinishedMatch> = arrayListOf(match)
 
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
@@ -130,10 +133,12 @@ class DataMover {
         val allFinishedMatches: ArrayList<FinishedMatch>? = loadAllMatches(context)
         if (allFinishedMatches != null) {
 
-            allFinishedMatches.add(list)
+            allFinishedMatches.add(match)
 
             //Sorts the list by date
             val sortedList = allFinishedMatches.sortedWith((compareBy { it.datePlayed }))
+
+            println("FIX THE DATE IF IT DOESN'T WORK!")
 
             editor.putString("Finished Matches", Gson().toJson(sortedList))
             editor.apply()
@@ -143,6 +148,11 @@ class DataMover {
             editor.apply()
         }
         //----------------------
+    }
+
+    fun deleteCurrentGame(context: Context) {
+        val settings = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
+        settings.edit().remove("Current Game").apply()
     }
 
 

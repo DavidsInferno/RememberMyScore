@@ -225,7 +225,7 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
 
     fun checkIfGameIsInProgress(gameName: String): Boolean {
         val currentGame = dataMover.loadCurrentGame(context!!)
-        return if (currentGame != null && currentGame.gameTitle == gameName) {
+        return if (currentGame != null && currentGame.gameTitle == gameName) { //Display a snackbar if it is
             val snackBar = Snackbar.make(
                 recyclerViewRules, "You are currently playing this game",
                 Snackbar.LENGTH_LONG

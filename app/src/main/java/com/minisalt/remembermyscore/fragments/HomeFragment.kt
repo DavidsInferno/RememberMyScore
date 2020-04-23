@@ -11,7 +11,7 @@ import com.minisalt.remembermyscore.preferences.HomeData
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment(val savedGame: Boolean = false, val deletedGame: Boolean = false) : Fragment(R.layout.fragment_home) {
 
     val dataMover = DataMover()
 

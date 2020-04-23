@@ -84,7 +84,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         btnSave.setOnClickListener {
             val checkClose: Boolean = saveSettings()
             if (checkClose) {
-                view.exitCircularReveal(btnSave.x.toInt() - 200, btnSave.y.toInt() - 100) {
+                view.exitCircularReveal(btnSave.x.toInt() + 200, btnSave.y.toInt()) {
                     fragmentManager!!.popBackStack()
                 }
             }
@@ -227,30 +227,19 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         }
     }
 
-    private fun buttonCheck(): Boolean {
-        return if (gameRule.buttons.size == 0) {
-            l_numberInput.error = "Add at least one button"
-            false
-        } else
-            true
-    }
-
-
     private fun saveSettings(): Boolean {
-        val existingList: ArrayList<GameRules> = dataMover.loadGameRules(context!!)
-
-
-        if (!(titleCheck(existingList) && pointCheck() && buttonCheck()))
-            return false
+        val allRules: ArrayList<GameRules> = dataMover.loadGameRules(context!!)
 
         val fragm: RulesFragment? =
             fragmentManager!!.findFragmentByTag("Rule Fragment") as RulesFragment?
 
-        if (updatePosition == null) {
+        if (updatePosition == null && titleCheck(allRules) && pointCheck()) {
             dataMover.appendToGameRules(context!!, gameRule)
             fragm!!.changesApplied(updatePosition)
-        }
-        else {
+        } else {
+            if (!checkForChanges(allRules))
+                return false
+
             dataMover.replaceGameRule(context!!, gameRule, updatePosition!!)
             fragm!!.changesApplied(updatePosition!!)
         }
@@ -258,8 +247,8 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         return true
     }
 
-    private fun repeatingName(existingList: ArrayList<GameRules>): Boolean {
-        for (topItem in existingList)
+    private fun repeatingName(allRules: ArrayList<GameRules>): Boolean {
+        for (topItem in allRules)
             if (topItem.name.decapitalize() == titleText.text.toString().decapitalize())
                 return true
 
@@ -274,6 +263,25 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         btnSave.text = "Update"
     }
 
+    private fun checkForChanges(allRules: ArrayList<GameRules>): Boolean {
+        return if (updatedName(allRules) && pointCheck() && dataMover.gameRuleExistence(context!!, gameRule)) {
+            true
+        } else true
+    }
+
+    private fun updatedName(list: ArrayList<GameRules>): Boolean {
+        if (titleText.text.toString() == "") {     //Checking if there is a name
+            l_titleText.error = "Input valid title name"
+            return false
+        } else if (titleText.length() > 20) {
+            l_titleText.error = "Title length must be under 20 characters"
+            return false
+        } else
+            gameRule.name = titleText.text.toString().capitalize()
+
+        return true
+    }
+
     override fun onItemClick(position: Int) {
         TODO("Not yet implemented")
     }
@@ -281,6 +289,5 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
     override fun onLongItemClick(position: Int) {
         TODO("Not yet implemented")
     }
-
 
 }

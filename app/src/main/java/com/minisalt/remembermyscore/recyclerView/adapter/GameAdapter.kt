@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import com.minisalt.remembermyscore.R
+import com.minisalt.remembermyscore.preferences.GameRules
 import com.minisalt.remembermyscore.preferences.PlayerData
 
 class GameAdapter(
-    val playerList: ArrayList<PlayerData>, val context: Context, val buttonList:
-    ArrayList<Int>
+    val playerList: ArrayList<PlayerData>, val context: Context, val gameRule: GameRules
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -61,6 +61,8 @@ class GameAdapter(
                 }
 
                 override fun afterTextChanged(editable: Editable) {
+                    println("TEXT HAS BEEN CHANGED")
+
                 }
             })
         }
@@ -89,16 +91,26 @@ class GameAdapter(
 
                 val nestedButtonRecyclerViewAdapter = NestedButtonRecyclerViewAdapter(
                     context,
-                    buttonList, holder.mScore
+                    gameRule.buttons, holder.mScore
                 )
 
-                holder.nestedRecyclerView.setHasFixedSize(true)
-                holder.nestedRecyclerView.layoutManager = LinearLayoutManager(
-                    context,
-                    LinearLayoutManager.HORIZONTAL, false
-                )
-                holder.nestedRecyclerView.adapter = nestedButtonRecyclerViewAdapter
+                initRecyclerView(holder.nestedRecyclerView, nestedButtonRecyclerViewAdapter)
+
+
             }
         }
+    }
+
+    fun initRecyclerView(
+        nestedRecyclerView: RecyclerView,
+        nestedButtonRecyclerViewAdapter: NestedButtonRecyclerViewAdapter
+    ) {
+
+        nestedRecyclerView.setHasFixedSize(true)
+        nestedRecyclerView.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.HORIZONTAL, false
+        )
+        nestedRecyclerView.adapter = nestedButtonRecyclerViewAdapter
     }
 }
