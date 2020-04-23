@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/gameReset"
+        android:icon="@drawable/ic_reset_black"
+        android:contentDescription="@string/reset_game_desc"
+        android:title="@string/reset_game"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/gameDelete"
+        android:icon="@drawable/ic_delete_sweep"
+        android:contentDescription="@string/delete_game_desc"
+        android:title="@string/delete_game"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/gameSave"
+        android:icon="@drawable/ic_save_black"
+        android:contentDescription="@string/save_game_desc"
+        android:title="@string/save_game"
+        app:showAsAction="ifRoom" />
+
+</menu>

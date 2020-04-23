@@ -1,16 +1,15 @@
 package com.minisalt.remembermyscore.fragments
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.Snackbar
-import com.leinardi.android.speeddial.SpeedDialActionItem
-import com.leinardi.android.speeddial.SpeedDialView
-import com.minisalt.remembermyscore.MainActivity
 import com.minisalt.remembermyscore.R
-import com.minisalt.remembermyscore.preferences.*
+import com.minisalt.remembermyscore.data.*
 import com.minisalt.remembermyscore.recyclerView.adapter.GameAdapter
 import kotlinx.android.synthetic.main.fragment_game.*
 import java.util.*
@@ -19,196 +18,160 @@ import java.util.*
 class GameFragment(val homeData: HomeData? = null) :
     Fragment(R.layout.fragment_game) {
 
-    lateinit var gameAdapter: GameAdapter
+    private var displayedGame: FinishedMatch = FinishedMatch()
 
-    var displayedGame: FinishedMatch = FinishedMatch()
+    private val dataMover = DataMover()
 
+    private var saveOccured = false //prevents the game from being saved to cache
 
-    val dataMover = DataMover()
-
-    var playerList: ArrayList<PlayerData> = arrayListOf()
-
-    var saveOccured = false //prevents the game from being saved to cache
+    lateinit var gameRules: ArrayList<GameRules>
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
 
-        fabCustomization()
+        val existingGame = dataMover.loadCurrentGame(requireContext())
 
-
-        val existingGame = dataMover.loadCurrentGame(context!!)
-
-        val gameRules = dataMover.loadGameRules(context!!)
-
-
-        btnTest.setOnClickListener {
-
-        }
-
+        gameRules = dataMover.loadGameRules(requireContext())
 
 
         when {
             homeData != null -> {
-                val indexOfRule = dataMover.getIndexOfRule(context!!, homeData.gameName)
-                freshGame(gameRules, indexOfRule)
+                val indexOfRule = dataMover.getIndexOfRule(requireContext(), homeData.gameName)
 
-                displayedGame = FinishedMatch(playerList, homeData.gameName)
+                if (indexOfRule != -1) {
+                    freshGame(gameRules, indexOfRule, homeData.players)
 
-                changingTitle(displayedGame.gameTitle, gameRules[indexOfRule].pointsToWin)
+                    displayedGame = FinishedMatch(displayedGame.players, homeData.gameName)
+                    initToolbar(displayedGame.gameTitle, gameRules[indexOfRule].pointsToWin)
+                    initFAB()
+                } else
+                    errorMessage("Problem loading home data at GameFragment")
             }
-            existingGame != null && dataMover.getIndexOfRule(context!!, existingGame.gameTitle) != -1 -> {
-                val indexOfRule = dataMover.getIndexOfRule(context!!, existingGame.gameTitle)
-                initRecyclerView(existingGame.players, gameRules[indexOfRule])
-                displayedGame = FinishedMatch(existingGame.players, existingGame.gameTitle)
+            existingGame != null -> {
+                val indexOfRule = dataMover.getIndexOfRule(requireContext(), existingGame.gameTitle)
+
+                if (indexOfRule != -1) {
+                    initRecyclerView(existingGame.players, gameRules[indexOfRule])
 
 
-                changingTitle(existingGame.gameTitle, gameRules[indexOfRule].pointsToWin)
+                    displayedGame = FinishedMatch(existingGame.players, existingGame.gameTitle)
+                    initToolbar(existingGame.gameTitle, gameRules[indexOfRule].pointsToWin)
+                    initFAB()
+                } else
+                    errorMessage("Problem loading existing data at GameFragment")
+
 
             }
             else -> {
                 txtNoGameActive.visibility = View.VISIBLE
+                materialToolbar.visibility = View.GONE
+                btnScoreboard.visibility = View.GONE
             }
         }
     }
 
-    fun changingTitle(title: String, points: Int?) {
+    private fun initFAB() {
+        recyclerViewPlayers.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerViewPlayers, dx, dy)
+                if (dy > 0 && btnScoreboard.visibility == View.VISIBLE) {
+                    btnScoreboard.hide()
+                } else if (dy < 0 && btnScoreboard.visibility != View.VISIBLE) {
+                    btnScoreboard.show()
+                }
+            }
+        })
+    }
+
+    private fun initToolbar(title: String, points: Int?) {
         if (points != null)
-            (activity as MainActivity?)?.setTitleName("$title -> $points")
+            materialToolbar.title = "$title -> $points"
         else
-            (activity as MainActivity?)?.setTitleName(title)
+            materialToolbar.title = title
+
+        toolBarButtons()
     }
 
 
-    private fun freshGame(
-        gameRules: ArrayList<GameRules>,
-        indexOfGame: Int
-    ) {
-        for (i in 0 until homeData!!.players)
-            playerList.add(PlayerData(playerName = "Player ${i + 1}"))
+    private fun freshGame(gameRules: ArrayList<GameRules>, indexOfGame: Int, amountOfPlayers: Int) {
+        displayedGame.players = arrayListOf()
 
+        for (i in 0 until amountOfPlayers)
+            displayedGame.players.add(PlayerData(playerName = "Player ${i + 1}"))
 
-        initRecyclerView(playerList, gameRules[indexOfGame])
+        println(displayedGame.players)
+
+        initRecyclerView(displayedGame.players, gameRules[indexOfGame])
     }
 
     private fun initRecyclerView(playerList: ArrayList<PlayerData>, gameRule: GameRules) {
         recyclerViewPlayers.layoutManager = LinearLayoutManager(context)
         recyclerViewPlayers.setHasFixedSize(true)
-        gameAdapter =
-            GameAdapter(
-                playerList, context!!, gameRule
-            )
+        val gameAdapter = GameAdapter(playerList, requireContext(), gameRule)
         recyclerViewPlayers.adapter = gameAdapter
     }
 
 
-    fun fabCustomization() {
-        fabMain()
-        fabSave()
-        fabClose()
-        fabReset()
+    private fun toolBarButtons() {
+        materialToolbar.setOnMenuItemClickListener { item: MenuItem? ->
+            when (item?.itemId) {
+                R.id.gameReset -> {
+                    val indexOfRule = dataMover.getIndexOfRule(requireContext(), displayedGame.gameTitle)
+                    if (indexOfRule != -1) {
+                        freshGame(gameRules, indexOfRule, displayedGame.players.size)
+                        true
+                    } else {
+                        errorMessage("Problem resetting game at GameFragment")
+                        false
+                    }
 
-
-        speedDial.setOnActionSelectedListener(SpeedDialView.OnActionSelectedListener { actionItem ->
-            when (actionItem.id) {
-                R.id.fab_save_game -> {
-                    displayedGame.datePlayed = Date()
-                    dataMover.appendToFinishedMatches(context!!, displayedGame)
-
-                    val snackBar = Snackbar.make(
-                        recyclerViewPlayers, "Game saved successfully",
-                        Snackbar.LENGTH_LONG
-                    )
-                    snackBar.setAction("Dismiss") { snackBar.dismiss() }
-                    snackBar.show()
-                    saveOccured = true
-
-                    dataMover.deleteCurrentGame(context!!)
-
-                    returnHome(savedGame = true, deletedGame = false)
-
-                    speedDial.close()
-                    return@OnActionSelectedListener true
                 }
-                R.id.fab_close_game -> {
-                    dataMover.deleteCurrentGame(context!!)
+                R.id.gameDelete -> {
+                    dataMover.deleteCurrentGame(requireContext())
                     saveOccured = true
                     returnHome(savedGame = false, deletedGame = true)
-
-                    speedDial.close()
-                    return@OnActionSelectedListener true
+                    true
                 }
-                R.id.fab_reset -> {
-                    val ammountOfPlayers = displayedGame.players.size
-                    val indexOfGame = dataMover.getIndexOfRule(context!!, displayedGame.gameTitle)
-                    val gameRules = dataMover.loadGameRules(context!!)
+                R.id.gameSave -> {
+                    displayedGame.datePlayed = Date()
+                    dataMover.appendToFinishedMatches(requireContext(), displayedGame)
 
+                    saveOccured = true
 
-                    val freshPlayers: ArrayList<PlayerData> = arrayListOf()
+                    dataMover.deleteCurrentGame(requireContext())
 
-                    for (i in 0 until ammountOfPlayers)
-                        freshPlayers.add(PlayerData(playerName = "Player ${i + 1}"))
-
-                    initRecyclerView(freshPlayers, gameRules[indexOfGame])
-
-                    speedDial.close()
-                    return@OnActionSelectedListener true
+                    returnHome(savedGame = true, deletedGame = false)
+                    true
                 }
+                else -> false
+
             }
-            false
-        })
+        }
     }
-
-
-    fun fabMain() {
-        speedDial.mainFabClosedBackgroundColor = resources.getColor(R.color.DarkPink)
-    }
-
-    fun fabSave() {
-        speedDial.addActionItem(
-            SpeedDialActionItem.Builder(R.id.fab_save_game, R.drawable.ic_save_black)
-                .setFabBackgroundColor(resources.getColor(R.color.PacificCoast))
-                .setLabelBackgroundColor(resources.getColor(R.color.LightPink))
-                .setLabel("Save & close game")
-                .create()
-        )
-    }
-
-    fun fabClose() {
-        speedDial.addActionItem(
-            SpeedDialActionItem.Builder(R.id.fab_close_game, R.drawable.ic_delete_sweep)
-                .setFabBackgroundColor(resources.getColor(R.color.PacificCoast))
-                .setLabelBackgroundColor(resources.getColor(R.color.LightPink))
-                .setLabel("Close game")
-                .create()
-        )
-    }
-
-    fun fabReset() {
-        speedDial.addActionItem(
-            SpeedDialActionItem.Builder(R.id.fab_reset, R.drawable.ic_reset_black)
-                .setFabBackgroundColor(resources.getColor(R.color.PacificCoast))
-                .setLabelBackgroundColor(resources.getColor(R.color.LightPink))
-                .setLabel("Reset game")
-                .create()
-        )
-    }
-
 
     override fun onPause() {
         super.onPause()
+        println(displayedGame)
 
         if (displayedGame != FinishedMatch() && !saveOccured)
-            dataMover.saveCurrentGame(context!!, displayedGame)
+            dataMover.saveCurrentGame(requireContext(), displayedGame)
     }
 
-    fun returnHome(savedGame: Boolean, deletedGame: Boolean) {
+    private fun returnHome(savedGame: Boolean, deletedGame: Boolean) {
         fragmentManager?.beginTransaction()?.setCustomAnimations(R.anim.slide_out_right, R.anim.slide_in_right)?.replace(
             R.id.container, HomeFragment(savedGame, deletedGame)
         )?.commit()
-        changingTitle(getString(R.string.app_name), null)
-        val navigationView = activity!!.findViewById(R.id.bottom_nav_view) as BottomNavigationView
+        val navigationView = requireActivity().findViewById(R.id.bottom_nav_view) as BottomNavigationView
         navigationView.menu.getItem(0).isChecked = true
+    }
+
+    fun errorMessage(reason: String) {
+        Toast.makeText(
+            requireContext(), reason, Toast
+                .LENGTH_SHORT
+        )
+            .show()
+
     }
 }

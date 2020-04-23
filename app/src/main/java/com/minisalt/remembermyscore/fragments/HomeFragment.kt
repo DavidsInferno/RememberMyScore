@@ -5,22 +5,24 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.minisalt.remembermyscore.R
-import com.minisalt.remembermyscore.preferences.DataMover
-import com.minisalt.remembermyscore.preferences.HomeData
+import com.minisalt.remembermyscore.data.DataMover
+import com.minisalt.remembermyscore.data.HomeData
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
-class HomeFragment(val savedGame: Boolean = false, val deletedGame: Boolean = false) : Fragment(R.layout.fragment_home) {
+class HomeFragment(private val savedGame: Boolean = false, val deletedGame: Boolean = false) :
+    Fragment(R.layout.fragment_home) {
 
-    val dataMover = DataMover()
+    private val dataMover = DataMover()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val nameOfListRules = ArrayList<String>()
 
-        val gameRuleList = DataMover().loadGameRules(context!!)
+        val gameRuleList = DataMover().loadGameRules(requireContext())
 
         if (gameRuleList.size != 0)
             for (rule in gameRuleList)
@@ -30,9 +32,19 @@ class HomeFragment(val savedGame: Boolean = false, val deletedGame: Boolean = fa
 
         numberPickerSetup()
 
+        if (savedGame) {
+            val snackBar = Snackbar.make(
+                snackbar_pos, "Game saved successfully",
+                Snackbar.LENGTH_LONG
+            )
+            snackBar.setAction("Dismiss") { snackBar.dismiss() }
+            snackBar.show()
+        }
+
+
 
         val myAdapter: ArrayAdapter<String> =
-            ArrayAdapter(context!!, android.R.layout.simple_list_item_1, nameOfListRules)
+            ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, nameOfListRules)
 
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = myAdapter
@@ -41,9 +53,9 @@ class HomeFragment(val savedGame: Boolean = false, val deletedGame: Boolean = fa
             if (nameOfListRules[0] != "You have no games saved") {
                 val homeData = HomeData(
                     numberPicker.value, dataMover.getStringFromIndex
-                        (context!!, spinner.selectedItemPosition)
+                        (requireContext(), spinner.selectedItemPosition)
                 )
-                val currentGame = dataMover.loadCurrentGame(context!!)
+                val currentGame = dataMover.loadCurrentGame(requireContext())
 
 
                 goToPlayScreen(homeData)
@@ -70,7 +82,7 @@ class HomeFragment(val savedGame: Boolean = false, val deletedGame: Boolean = fa
             R.id.container, GameFragment
                 (homeData = newGame)
         )?.commit()
-        val navigationView = activity!!.findViewById(R.id.bottom_nav_view) as BottomNavigationView
+        val navigationView = requireActivity().findViewById(R.id.bottom_nav_view) as BottomNavigationView
         navigationView.menu.getItem(1).isChecked = true
     }
 }

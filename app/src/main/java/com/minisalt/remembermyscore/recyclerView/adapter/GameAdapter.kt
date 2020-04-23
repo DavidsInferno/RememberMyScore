@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import com.minisalt.remembermyscore.R
-import com.minisalt.remembermyscore.preferences.GameRules
-import com.minisalt.remembermyscore.preferences.PlayerData
+import com.minisalt.remembermyscore.data.GameRules
+import com.minisalt.remembermyscore.data.PlayerData
 
 class GameAdapter(
     val playerList: ArrayList<PlayerData>, val context: Context, val gameRule: GameRules
@@ -61,7 +61,7 @@ class GameAdapter(
                 }
 
                 override fun afterTextChanged(editable: Editable) {
-                    println("TEXT HAS BEEN CHANGED")
+                    println("IM IN GAME ADAPTER")
 
                 }
             })

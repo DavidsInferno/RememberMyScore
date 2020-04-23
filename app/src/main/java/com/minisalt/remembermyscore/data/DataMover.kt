@@ -1,4 +1,4 @@
-package com.minisalt.remembermyscore.preferences
+package com.minisalt.remembermyscore.data
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -167,8 +167,11 @@ class DataMover {
                     return counter
                 else
                     counter++
-        }
+        } else
+            println("!!!!!!!!!!! FUNCTION DataMover().getIndexOfRule returning -1")
+
         return -1
+
     }
 
     fun getStringFromIndex(context: Context, index: Int): String {

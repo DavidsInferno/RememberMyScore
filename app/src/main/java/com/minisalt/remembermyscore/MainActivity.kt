@@ -20,18 +20,18 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     lateinit var toast: Toast
     private var doubleBackExitPressedOnce = false
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         bottom_nav_view.setOnNavigationItemSelectedListener(this)
         bottom_nav_view.selectedItemId = R.id.navigation_home
+
 
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-
 
         when (item.itemId) {
             R.id.navigation_home -> {
@@ -90,9 +90,5 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
         }
 
-    }
-
-    fun setTitleName(title: String) {
-        this.title = title
     }
 }

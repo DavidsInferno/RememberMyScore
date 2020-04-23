@@ -1,67 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.GameFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/l_materialToolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:liftOnScroll="true">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/coordinatorLayout"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/materialToolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|snap"
+            app:menu="@menu/top_app_bar"
+            style="@style/ThemeOverlay.MaterialComponents.Toolbar.Primary" />
 
-            <com.leinardi.android.speeddial.SpeedDialOverlayLayout
-                android:id="@+id/overlay"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-            <com.leinardi.android.speeddial.SpeedDialView
-                android:id="@+id/speedDial"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:sdMainFabClosedSrc="@drawable/ic_save_black"
-                app:sdMainFabOpenedSrc="@drawable/ic_close_black"
-                app:sdOverlayLayout="@id/overlay" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewPlayers"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewPlayers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnScoreboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:src="@drawable/trophy"
+        android:layout_margin="16dp" />
 
 
-        <TextView
-            android:id="@+id/txtNoGameActive"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Your princess is in another castle!"
-            app:layout_constraintBottom_toBottomOf="@+id/coordinatorLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/coordinatorLayout"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone" />
+    <TextView
+        android:id="@+id/txtNoGameActive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your princess is in another castle!"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnTest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/testBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

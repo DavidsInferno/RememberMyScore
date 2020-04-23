@@ -3,4 +3,14 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+
+    <string name="save_game">Save and Close Game</string>
+    <string name="save_game_desc">Saves current game and returns to home</string>
+
+    <string name="delete_game">Delete Game</string>
+    <string name="delete_game_desc">Deletes active game and returns home</string>
+
+    <string name="reset_game_desc">Resets game with same rules</string>
+    <string name="reset_game">Reset Game</string>
+
 </resources>

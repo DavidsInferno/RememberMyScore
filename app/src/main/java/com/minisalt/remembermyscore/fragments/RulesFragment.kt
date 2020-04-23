@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.minisalt.bottomnavigationview.utils.findLocationOfCenterOnTheScreen
 import com.minisalt.remembermyscore.R
-import com.minisalt.remembermyscore.preferences.DataMover
-import com.minisalt.remembermyscore.preferences.GameRules
+import com.minisalt.remembermyscore.data.DataMover
+import com.minisalt.remembermyscore.data.GameRules
 import com.minisalt.remembermyscore.recyclerView.adapter.RulesAdapter
 import com.minisalt.remembermyscore.recyclerView.clickListener.RecyclerViewClickInterface
 import com.minisalt.remembermyscore.utils.open
@@ -36,19 +36,14 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
         super.onViewCreated(view, savedInstanceState)
         easterEgg = 0
 
-        list = dataMover.loadGameRules(context!!)
+        gettingLatestRuleList(null)
+
+        fabSetup()
 
 
+    }
 
-
-        if (list.isNotEmpty()) {
-            initRecyclerView(list)
-            txtNoRules.visibility = View.GONE
-        } else
-            txtNoRules.visibility = View.VISIBLE
-
-
-
+    fun fabSetup() {
         fab.setOnClickListener {
             val positions = it.findLocationOfCenterOnTheScreen()
             fragmentManager?.open {
@@ -71,6 +66,21 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
                 }
             }
         })
+    }
+
+    fun gettingLatestRuleList(position: Int?) {
+        list = dataMover.loadGameRules(requireContext())
+
+        if (list.isNotEmpty()) {
+            initRecyclerView(list)
+            txtNoRules.visibility = View.GONE
+
+            if (position != null)
+                Handler().postDelayed({ ruleAdapter.notifyItemChanged(position) }, 700)
+        } else
+            txtNoRules.visibility = View.VISIBLE
+
+
     }
 
     private val simpleCallback: ItemTouchHelper.SimpleCallback =
@@ -99,7 +109,7 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
                             //set anchor view to show it above the navigation buttons
                             Snackbar.make(
                                 recyclerViewRules,
-                                swipedGameRule.name,
+                                swipedGameRule.name + " has been deleted!",
                                 Snackbar.LENGTH_LONG
                             ).setAction("Undo") {
                                 list.add(position, swipedGameRule)
@@ -206,25 +216,18 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
     override fun onItemClick(position: Int) {
         easterEgg++
         if (easterEgg == 10)
-            Toast.makeText(context!!, "Press me harder", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Press me harder", Toast.LENGTH_LONG).show()
         else if (easterEgg == 20)
-            Toast.makeText(context!!, "Just the way I like it", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Just the way I like it", Toast.LENGTH_LONG).show()
 
 
-    }
-
-    fun changesApplied(position: Int?) {
-        initRecyclerView(dataMover.loadGameRules(context!!))
-
-        if (position != null)
-            Handler().postDelayed({ ruleAdapter.notifyItemChanged(position) }, 700)
     }
 
     override fun onLongItemClick(position: Int) {
     }
 
     fun checkIfGameIsInProgress(gameName: String): Boolean {
-        val currentGame = dataMover.loadCurrentGame(context!!)
+        val currentGame = dataMover.loadCurrentGame(requireContext())
         return if (currentGame != null && currentGame.gameTitle == gameName) { //Display a snackbar if it is
             val snackBar = Snackbar.make(
                 recyclerViewRules, "You are currently playing this game",

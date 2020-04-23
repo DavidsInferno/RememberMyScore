@@ -1,4 +1,4 @@
-package com.minisalt.remembermyscore.preferences
+package com.minisalt.remembermyscore.data
 
 import java.util.*
 

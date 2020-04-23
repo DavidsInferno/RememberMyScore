@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.minisalt.bottomnavigationview.utils.ExitWithAnimation
-import com.minisalt.bottomnavigationview.utils.exitCircularReveal
 import com.minisalt.bottomnavigationview.utils.startCircularReveal
+import com.minisalt.remembermyscore.MainActivity
 import com.minisalt.remembermyscore.R
-import com.minisalt.remembermyscore.preferences.DataMover
-import com.minisalt.remembermyscore.preferences.GameRules
+import com.minisalt.remembermyscore.data.DataMover
+import com.minisalt.remembermyscore.data.GameRules
 import com.minisalt.remembermyscore.recyclerView.adapter.ButtonAdapter
 import com.minisalt.remembermyscore.recyclerView.clickListener.RecyclerViewClickInterface
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
@@ -84,10 +84,9 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         btnSave.setOnClickListener {
             val checkClose: Boolean = saveSettings()
             if (checkClose) {
-                view.exitCircularReveal(btnSave.x.toInt() + 200, btnSave.y.toInt()) {
-                    fragmentManager!!.popBackStack()
-                }
+                (activity as MainActivity?)?.onBackPressed()
             }
+
         }
 
     }
@@ -214,37 +213,51 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         } else
             gameRule.name = titleText.text.toString().capitalize()
 
+        l_titleText.error = null
         return true
     }
 
     private fun pointCheck(): Boolean {
-        return if (editPointsToWin.text.toString() != "" && Integer.parseInt(editPointsToWin.text.toString()) != 0) {
-            gameRule.pointsToWin = Integer.parseInt(editPointsToWin.text.toString())
-            true
-        } else {
-            l_pointsToWin.error = "Input valid points to win"
-            false
+        val pointsAsString = editPointsToWin.text.toString()
+
+        when {
+            pointsAsString == "" -> {
+                l_pointsToWin.error = "Field can't be empty"
+                return false
+            }
+            pointsAsString.length > 10 -> {
+                l_pointsToWin.error = "Number is too big"
+                return false
+            }
+            Integer.parseInt(pointsAsString) == 0 -> {
+                l_pointsToWin.error = "Input valid points to win"
+                return false
+            }
+            else -> {
+                gameRule.pointsToWin = Integer.parseInt(pointsAsString)
+                l_pointsToWin.error = null
+                return true
+            }
         }
+
     }
 
     private fun saveSettings(): Boolean {
-        val allRules: ArrayList<GameRules> = dataMover.loadGameRules(context!!)
+        val allRules: ArrayList<GameRules> = dataMover.loadGameRules(requireContext())
 
         val fragm: RulesFragment? =
-            fragmentManager!!.findFragmentByTag("Rule Fragment") as RulesFragment?
+            requireFragmentManager().findFragmentByTag("Rule Fragment") as RulesFragment?
 
-        if (updatePosition == null && titleCheck(allRules) && pointCheck()) {
-            dataMover.appendToGameRules(context!!, gameRule)
-            fragm!!.changesApplied(updatePosition)
-        } else {
-            if (!checkForChanges(allRules))
-                return false
-
-            dataMover.replaceGameRule(context!!, gameRule, updatePosition!!)
-            fragm!!.changesApplied(updatePosition!!)
-        }
-
-        return true
+        return if (updatePosition == null && titleCheck(allRules) && pointCheck()) {
+            dataMover.appendToGameRules(requireContext(), gameRule)
+            fragm?.gettingLatestRuleList(updatePosition)
+            true
+        } else if (updatePosition != null && checkForChanges(allRules)) {
+            dataMover.replaceGameRule(requireContext(), gameRule, updatePosition!!)
+            fragm?.gettingLatestRuleList(updatePosition)
+            true
+        } else
+            false
     }
 
     private fun repeatingName(allRules: ArrayList<GameRules>): Boolean {
@@ -264,20 +277,22 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
     }
 
     private fun checkForChanges(allRules: ArrayList<GameRules>): Boolean {
-        return if (updatedName(allRules) && pointCheck() && dataMover.gameRuleExistence(context!!, gameRule)) {
-            true
-        } else true
+        return updatedName() && pointCheck() && !dataMover.gameRuleExistence(requireContext(), gameRule)
     }
 
-    private fun updatedName(list: ArrayList<GameRules>): Boolean {
-        if (titleText.text.toString() == "") {     //Checking if there is a name
-            l_titleText.error = "Input valid title name"
-            return false
-        } else if (titleText.length() > 20) {
-            l_titleText.error = "Title length must be under 20 characters"
-            return false
-        } else
-            gameRule.name = titleText.text.toString().capitalize()
+    private fun updatedName(): Boolean {
+
+        when {
+            titleText.text.toString() == "" -> {     //Checking if there is a name
+                l_titleText.error = "Input valid title name"
+                return false
+            }
+            titleText.length() > 20 -> {
+                l_titleText.error = "Title length must be under 20 characters"
+                return false
+            }
+            else -> gameRule.name = titleText.text.toString().capitalize()
+        }
 
         return true
     }

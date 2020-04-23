@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.minisalt.remembermyscore.R
-import com.minisalt.remembermyscore.preferences.GameRules
+import com.minisalt.remembermyscore.data.GameRules
 import com.minisalt.remembermyscore.recyclerView.clickListener.RecyclerViewClickInterface
 
 class RulesAdapter(

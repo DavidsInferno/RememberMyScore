@@ -18,7 +18,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -38,15 +38,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
 
     //preferences
-    implementation "androidx.preference:preference-ktx:1.1.0"
+    implementation "androidx.preference:preference-ktx:1.1.1"
     implementation 'com.google.code.gson:gson:2.8.6'
 
     //https://github.com/xabaras/RecyclerViewSwipeDecorator
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.2'
-
-
-    //https://github.com/leinardi/FloatingActionButtonSpeedDial
-    implementation "com.leinardi.android:speed-dial:3.1.1"
-
-
 }
