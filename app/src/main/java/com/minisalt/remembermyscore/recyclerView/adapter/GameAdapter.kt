@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
@@ -23,7 +24,6 @@ class GameAdapter(
         var mName: TextInputEditText = itemView.findViewById(R.id.nameInput)
         var mPoints: EditText = itemView.findViewById(R.id.inputScore)
         var nestedRecyclerView: RecyclerView = itemView.findViewById(R.id.rvNestedButtons)
-        var mScore: EditText = itemView.findViewById(R.id.inputScore)
 
         // To allow the use od EditText changing in recyclerview
         init {
@@ -42,6 +42,8 @@ class GameAdapter(
                     if (mPoints.text.toString() != "") {
                         if (mPoints.text.length < 10) {
                             playerList[adapterPosition].playerPoints = Integer.parseInt(mPoints.text.toString())
+                            checkWinner(playerList[adapterPosition].playerPoints, gameRule.pointsToWin)
+
                         }
                     }
                     return@OnKeyListener true
@@ -71,20 +73,23 @@ class GameAdapter(
                 holder.mPoints.text = Editable.Factory.getInstance()
                     .newEditable(playerList[position].playerPoints.toString())
 
-
                 val nestedButtonRecyclerViewAdapter = NestedButtonRecyclerViewAdapter(
-                    context,
-                    gameRule.buttons, holder.mScore
+                    context, gameRule, holder.mPoints,
+                    playerList[position]
                 )
 
                 initRecyclerView(holder.nestedRecyclerView, nestedButtonRecyclerViewAdapter)
-
-
             }
         }
     }
 
-    fun initRecyclerView(
+    fun checkWinner(playerPoints: Int, pointsToWin: Int) {
+        if (playerPoints >= pointsToWin) {
+            Toast.makeText(context, "We have a winner!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun initRecyclerView(
         nestedRecyclerView: RecyclerView,
         nestedButtonRecyclerViewAdapter: NestedButtonRecyclerViewAdapter
     ) {

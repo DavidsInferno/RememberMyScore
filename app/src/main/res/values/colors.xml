@@ -18,4 +18,11 @@
 
     <color name="DeleteRed">#C61313</color>
 
+
+    <color name="Gold">#FFD700</color>
+    <color name="Silver">#C0C0C0</color>
+    <color name="Bronze">#CD7F32</color>
+
+    <color name="OtherRows">#00796B</color>
+
 </resources>

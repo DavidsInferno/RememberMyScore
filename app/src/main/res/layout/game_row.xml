@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/LightPink"
-    android:layout_margin="16dp">
+    android:layout_margin="16dp"
+    android:id="@+id/gameRow">
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="100dp"

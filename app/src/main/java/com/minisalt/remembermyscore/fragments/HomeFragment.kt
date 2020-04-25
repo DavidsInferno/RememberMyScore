@@ -21,9 +21,40 @@ class HomeFragment(private val savedGame: Boolean = false, val deletedGame: Bool
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val nameOfListRules = ArrayList<String>()
+        val allRules = arrayListOf<String>()
 
-        val gameRuleList = DataMover().loadGameRules(requireContext())
+
+        numberPickerSetup()
+        initSpinner(allRules)
+
+
+
+        if (savedGame) {
+            Snackbar.make(snackbar_pos, "Game saved successfully", Snackbar.LENGTH_LONG)
+                .setAction("Dismiss") {}
+                .show()
+        }
+
+        btnLaunchGame.setOnClickListener {
+            if (allRules[0] != resources.getString(R.string.Lenny)) {
+                val homeData = HomeData(
+                    numberPicker.value, dataMover.getStringFromIndex(requireContext(), spinner.selectedItemPosition)
+                )
+                val currentGame = dataMover.loadCurrentGame(requireContext())
+
+                if (currentGame == null) {
+                    goToGameFragment(homeData)
+                } else {
+                    dialog(homeData)
+                }
+            } else
+                goToRuleFragment()
+
+        }
+    }
+
+    private fun initSpinner(nameOfListRules: ArrayList<String>) {
+        val gameRuleList = dataMover.loadGameRules(requireContext())
 
 
 
@@ -31,47 +62,13 @@ class HomeFragment(private val savedGame: Boolean = false, val deletedGame: Bool
             for (rule in gameRuleList)
                 nameOfListRules.add(rule.name)
         else
-            nameOfListRules.add("You have no games saved")
-
-        numberPickerSetup()
-
-        if (savedGame) {
-            val snackBar = Snackbar.make(
-                snackbar_pos, "Game saved successfully",
-                Snackbar.LENGTH_LONG
-            )
-            snackBar.setAction("Dismiss") { snackBar.dismiss() }
-            snackBar.show()
-        }
-
+            nameOfListRules.add(resources.getString(R.string.Lenny))
 
         val myAdapter: ArrayAdapter<String> =
             ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, nameOfListRules)
 
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = myAdapter
-
-        btnLaunchGame.setOnClickListener {
-            if (nameOfListRules[0] != "You have no games saved") {
-                val homeData = HomeData(
-                    numberPicker.value,
-                    dataMover.getStringFromIndex(requireContext(), spinner.selectedItemPosition)
-                )
-                val currentGame = dataMover.loadCurrentGame(requireContext())
-
-
-                goToGameFragment(homeData)
-
-
-//                if (currentGame == null) {
-//                    goToGameFragment(homeData)
-//                } else {
-//                    dialog(homeData)
-//                }
-            } else
-                goToRuleFragment()
-
-        }
     }
 
     fun dialog(homeData: HomeData) {
@@ -83,7 +80,9 @@ class HomeFragment(private val savedGame: Boolean = false, val deletedGame: Bool
             }
             .setPositiveButton("Start fresh") { dialog, which ->
                 goToGameFragment(homeData)
+                dialog.dismiss()
             }
+            .show()
     }
 
 

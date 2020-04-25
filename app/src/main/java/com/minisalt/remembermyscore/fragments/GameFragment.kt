@@ -15,8 +15,7 @@ import kotlinx.android.synthetic.main.fragment_game.*
 import java.util.*
 
 
-class GameFragment(val homeData: HomeData? = null) :
-    Fragment(R.layout.fragment_game) {
+class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_game) {
 
     private var displayedGame: FinishedMatch = FinishedMatch()
 
@@ -34,8 +33,9 @@ class GameFragment(val homeData: HomeData? = null) :
 
         gameRules = dataMover.loadGameRules(requireContext())
 
-        testBtn.setOnClickListener {
 
+        btnScoreboard.setOnClickListener {
+            openScoreboard()
         }
 
         when {
@@ -155,6 +155,7 @@ class GameFragment(val homeData: HomeData? = null) :
 
     override fun onPause() {
         super.onPause()
+        println("This is the current game. BWAH!")
         println(displayedGame)
 
         if (displayedGame != FinishedMatch() && !saveOccured)
@@ -175,6 +176,11 @@ class GameFragment(val homeData: HomeData? = null) :
                 .LENGTH_SHORT
         )
             .show()
+    }
 
+    fun openScoreboard() {
+        fragmentManager?.beginTransaction()?.add(
+            R.id.containerScoreboard, ScoreboardFragment(displayedGame.players)
+        )?.commit()
     }
 }
