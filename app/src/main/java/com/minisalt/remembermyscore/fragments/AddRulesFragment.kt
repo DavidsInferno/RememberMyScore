@@ -8,7 +8,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.minisalt.bottomnavigationview.utils.ExitWithAnimation
 import com.minisalt.bottomnavigationview.utils.startCircularReveal
@@ -145,12 +144,8 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         }
 
     private fun initRecyclerView(buttonArray: ArrayList<Int>) {
-        recyclerViewButton.layoutManager = LinearLayoutManager(context)
         recyclerViewButton.setHasFixedSize(true)
-        buttonAdapter =
-            ButtonAdapter(
-                buttonArray
-            )
+        buttonAdapter = ButtonAdapter(buttonArray)
         recyclerViewButton.adapter = buttonAdapter
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
         itemTouchHelper.attachToRecyclerView(recyclerViewButton)
@@ -252,7 +247,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
             dataMover.appendToGameRules(requireContext(), gameRule)
             fragm?.gettingLatestRuleList(null)
             true
-        } else if (updatePosition != null && checkForChanges(allRules)) {
+        } else if (updatePosition != null && checkForChanges()) {
             dataMover.replaceGameRule(requireContext(), gameRule, updatePosition!!)
             fragm?.gettingLatestRuleList(updatePosition)
             true
@@ -276,7 +271,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         btnSave.text = "Update"
     }
 
-    private fun checkForChanges(allRules: ArrayList<GameRules>): Boolean {
+    private fun checkForChanges(): Boolean {
         return updatedName() && pointCheck() && !dataMover.gameRuleExistence(requireContext(), gameRule)
     }
 

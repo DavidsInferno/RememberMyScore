@@ -14,14 +14,8 @@ class DataMover {
         val json: String? = sharedPreferences.getString("Game Rules", null)
         val type: Type = object : TypeToken<ArrayList<GameRules>>() {}.type
 
-        val existingRules: ArrayList<GameRules>? = Gson().fromJson<ArrayList<GameRules>>(json, type)
 
-
-        return if (existingRules == null) {
-            arrayListOf()
-        } else {
-            existingRules
-        }
+        return Gson().fromJson(json, type) ?: arrayListOf()
     }
 
     fun appendToGameRules(context: Context, rule: GameRules) {
@@ -83,8 +77,7 @@ class DataMover {
 
 
     fun saveCurrentGame(context: Context, match: FinishedMatch) {
-        val sharedPreferences: SharedPreferences =
-            context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
+        val sharedPreferences: SharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
 
         editor.putString("Current Game", Gson().toJson(match))
@@ -92,8 +85,7 @@ class DataMover {
     }
 
     fun loadCurrentGame(context: Context): FinishedMatch? {
-        val sharedPreferences: SharedPreferences =
-            context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
+        val sharedPreferences: SharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
         val json: String? = sharedPreferences.getString("Current Game", null)
         val type: Type = object : TypeToken<FinishedMatch>() {}.type
 
@@ -101,24 +93,16 @@ class DataMover {
     }
 
     fun loadAllMatches(context: Context): ArrayList<FinishedMatch> {
-        val sharedPreferences: SharedPreferences =
-            context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
+        val sharedPreferences: SharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
         val json: String? = sharedPreferences.getString("Finished Matches", null)
         val type: Type = object : TypeToken<ArrayList<FinishedMatch>>() {}.type
 
-        val existingMatches: ArrayList<FinishedMatch>? = Gson().fromJson<ArrayList<FinishedMatch>>(json, type)
 
-
-        if (existingMatches == null) {
-            return arrayListOf()
-        } else {
-            return existingMatches
-        }
+        return Gson().fromJson(json, type) ?: arrayListOf()
     }
 
     fun saveMatches(context: Context, matches: ArrayList<FinishedMatch>) {
-        val sharedPreferences: SharedPreferences =
-            context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
+        val sharedPreferences: SharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
 
         editor.putString("Finished Matches", Gson().toJson(matches))
@@ -126,8 +110,7 @@ class DataMover {
     }
 
     fun appendToFinishedMatches(context: Context, match: FinishedMatch) {
-        val sharedPreferences: SharedPreferences =
-            context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
+        val sharedPreferences: SharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
 
         //this appends to the end
@@ -137,9 +120,7 @@ class DataMover {
             allFinishedMatches.add(match)
 
             //Sorts the list by date
-            val sortedList = allFinishedMatches.sortedWith((compareBy { it.datePlayed }))
-
-            println("FIX THE DATE IF IT DOESN'T WORK!")
+            val sortedList = allFinishedMatches.sortedWith((compareByDescending { it.datePlayed }))
 
             editor.putString("Finished Matches", Gson().toJson(sortedList))
             editor.apply()
@@ -170,8 +151,11 @@ class DataMover {
                     return counter
                 else
                     counter++
-        } else
-            println("!!!!!!!!!!! FUNCTION DataMover().getIndexOfRule returning -1")
+        }
+
+        println("!!!!!!!!!!! FUNCTION DataMover().getIndexOfRule returning -1")
+        println("Game name was: $gameName")
+
 
         return -1
 
@@ -187,7 +171,7 @@ class DataMover {
     fun dateOfLastGame(context: Context, gameTitle: String): Date? {
         val allMatches = loadAllMatches(context)
         for (i in allMatches)
-            if (i.gameTitle == gameTitle)
+            if (i.gamePlayed.name == gameTitle)
                 return i.datePlayed
         return null
     }
@@ -196,7 +180,7 @@ class DataMover {
         val allMatches = loadAllMatches(context)
         var counter = 0
         for (i in allMatches)
-            if (i.gameTitle == gameTitle)
+            if (i.gamePlayed.name == gameTitle)
                 counter++
 
         return counter

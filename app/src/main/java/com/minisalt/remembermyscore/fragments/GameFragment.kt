@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Fade
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.*
@@ -17,11 +18,11 @@ import java.util.*
 
 class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_game) {
 
-    private var displayedGame: FinishedMatch = FinishedMatch()
+    private lateinit var displayedGame: FinishedMatch
 
     private val dataMover = DataMover()
 
-    private var saveOccured = false //prevents the game from being saved to cache
+    private var saveOccurred = false //prevents the game from being saved to cache
 
     lateinit var gameRules: ArrayList<GameRules>
 
@@ -29,7 +30,12 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        animSetup()
+
+        displayedGame = FinishedMatch()
+
         val existingGame = dataMover.loadCurrentGame(requireContext())
+        println("Existing game at first point: $existingGame")
 
         gameRules = dataMover.loadGameRules(requireContext())
 
@@ -43,28 +49,28 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
                 val indexOfRule = dataMover.getIndexOfRule(requireContext(), homeData.gameName)
 
                 if (indexOfRule != -1) {
-                    freshGame(gameRules, indexOfRule, homeData.players)
 
-                    displayedGame = FinishedMatch(displayedGame.players, homeData.gameName)
-                    initToolbar(displayedGame.gameTitle, gameRules[indexOfRule].pointsToWin)
+                    freshGame(gameRules[indexOfRule], homeData.players)
+
+                    displayedGame = FinishedMatch(displayedGame.players, gameRules[indexOfRule])
+                    initToolbar(displayedGame.gamePlayed.name, gameRules[indexOfRule].pointsToWin)
                     initFAB()
                 } else
                     errorMessage("Problem loading home data at GameFragment")
             }
             existingGame != null -> {
-                val indexOfRule = dataMover.getIndexOfRule(requireContext(), existingGame.gameTitle)
+                println("Rule that is being searched ${existingGame.gamePlayed.name}")
+                val indexOfRule = dataMover.getIndexOfRule(requireContext(), existingGame.gamePlayed.name)
+                println("Index of rule is: $indexOfRule")
 
                 if (indexOfRule != -1) {
                     initRecyclerView(existingGame.players, gameRules[indexOfRule])
 
-
-                    displayedGame = FinishedMatch(existingGame.players, existingGame.gameTitle)
-                    initToolbar(existingGame.gameTitle, gameRules[indexOfRule].pointsToWin)
+                    displayedGame = FinishedMatch(existingGame.players, existingGame.gamePlayed)
+                    initToolbar(existingGame.gamePlayed.name, gameRules[indexOfRule].pointsToWin)
                     initFAB()
                 } else
-                    errorMessage("Problem loading existing data at GameFragment")
-
-
+                    errorMessage("Corrupted save data at GameFragment")
             }
             else -> {
                 txtNoGameActive.visibility = View.VISIBLE
@@ -72,6 +78,12 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
                 btnScoreboard.visibility = View.GONE
             }
         }
+    }
+
+    private fun animSetup() {
+        val fragm: GameFragment? = requireFragmentManager().findFragmentByTag("Game Fragment") as GameFragment?
+        fragm?.enterTransition = Fade()
+        fragm?.exitTransition = Fade()
     }
 
     private fun initFAB() {
@@ -97,32 +109,28 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
     }
 
 
-    private fun freshGame(gameRules: ArrayList<GameRules>, indexOfGame: Int, amountOfPlayers: Int) {
+    private fun freshGame(gameRule: GameRules, amountOfPlayers: Int) {
         displayedGame.players = arrayListOf()
 
         for (i in 0 until amountOfPlayers)
             displayedGame.players.add(PlayerData(playerName = "Player ${i + 1}"))
 
-        println(displayedGame.players)
-
-        initRecyclerView(displayedGame.players, gameRules[indexOfGame])
+        initRecyclerView(displayedGame.players, gameRule)
     }
 
     private fun initRecyclerView(playerList: ArrayList<PlayerData>, gameRule: GameRules) {
-        recyclerViewPlayers.layoutManager = LinearLayoutManager(context)
         recyclerViewPlayers.setHasFixedSize(true)
         val gameAdapter = GameAdapter(playerList, requireContext(), gameRule)
         recyclerViewPlayers.adapter = gameAdapter
     }
 
-
     private fun toolBarButtons() {
         materialToolbar.setOnMenuItemClickListener { item: MenuItem? ->
             when (item?.itemId) {
                 R.id.gameReset -> {
-                    val indexOfRule = dataMover.getIndexOfRule(requireContext(), displayedGame.gameTitle)
+                    val indexOfRule = dataMover.getIndexOfRule(requireContext(), displayedGame.gamePlayed.name)
                     if (indexOfRule != -1) {
-                        freshGame(gameRules, indexOfRule, displayedGame.players.size)
+                        freshGame(gameRules[indexOfRule], displayedGame.players.size)
                         true
                     } else {
                         errorMessage("Problem resetting game at GameFragment")
@@ -132,7 +140,7 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
                 }
                 R.id.gameDelete -> {
                     dataMover.deleteCurrentGame(requireContext())
-                    saveOccured = true
+                    saveOccurred = true
                     returnHome(savedGame = false, deletedGame = true)
                     true
                 }
@@ -140,7 +148,7 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
                     displayedGame.datePlayed = Date()
                     dataMover.appendToFinishedMatches(requireContext(), displayedGame)
 
-                    saveOccured = true
+                    saveOccurred = true
 
                     dataMover.deleteCurrentGame(requireContext())
 
@@ -155,11 +163,12 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
 
     override fun onPause() {
         super.onPause()
-        println("This is the current game. BWAH!")
-        println(displayedGame)
 
-        if (displayedGame != FinishedMatch() && !saveOccured)
+
+        if (displayedGame != FinishedMatch() && !saveOccurred) {
+            println("At pause time the game was: $displayedGame")
             dataMover.saveCurrentGame(requireContext(), displayedGame)
+        }
     }
 
     private fun returnHome(savedGame: Boolean, deletedGame: Boolean) {
@@ -178,9 +187,35 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
             .show()
     }
 
-    fun openScoreboard() {
-        fragmentManager?.beginTransaction()?.add(
-            R.id.containerScoreboard, ScoreboardFragment(displayedGame.players)
-        )?.commit()
+    private fun openScoreboard() {
+        containerScoreboard.isClickable = true
+        btnScoreboard.hide()
+        scoreboardOverlay.isClickable = true
+        scoreboardOverlay.visibility = View.VISIBLE
+
+        overlayMargin()
+
+        fragmentManager?.beginTransaction()
+            ?.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_in_up)?.add(
+                R.id.containerScoreboard, ScoreboardFragment(displayedGame.players), "Scoreboard Fragment"
+            )?.addToBackStack(null)?.commit()
+    }
+
+    fun onCloseScoreboard() {
+        btnScoreboard.show()
+        containerScoreboard.isClickable = false
+        scoreboardOverlay.isClickable = false
+        scoreboardOverlay.visibility = View.GONE
+    }
+
+    private fun overlayMargin() {
+        val newLayoutParams = scoreboardOverlay.layoutParams as ConstraintLayout.LayoutParams
+
+        if (l_materialToolbar.height - l_materialToolbar.bottom == 0)
+            newLayoutParams.topMargin = l_materialToolbar.height
+        else
+            newLayoutParams.topMargin = 0
+
+        scoreboardOverlay.layoutParams = newLayoutParams
     }
 }

@@ -19,7 +19,6 @@
         android:layout_marginHorizontal="16dp"
         app:errorEnabled="true"
         app:endIconMode="clear_text"
-
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -75,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberSigned"
-            android:imeOptions="actionDone"
+            android:imeOptions="actionSend"
             android:singleLine="true"
             android:hint="Buttons" />
 
@@ -110,6 +109,8 @@
         app:layout_constraintTop_toBottomOf="@+id/l_numberInput"
         app:layout_constraintVertical_bias="0.0"
 
+
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:overScrollMode="never" />
 
     <Button

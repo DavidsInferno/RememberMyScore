@@ -8,8 +8,8 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Fade
 import com.google.android.material.snackbar.Snackbar
 import com.minisalt.bottomnavigationview.utils.findLocationOfCenterOnTheScreen
 import com.minisalt.remembermyscore.R
@@ -34,6 +34,7 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        animSetup()
         easterEgg = 0
 
         gettingLatestRuleList(null)
@@ -41,6 +42,12 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
         fabSetup()
 
 
+    }
+
+    fun animSetup() {
+        val fragm: RulesFragment? = requireFragmentManager().findFragmentByTag("Rules Fragment") as RulesFragment?
+        fragm?.enterTransition = Fade()
+        fragm?.exitTransition = Fade()
     }
 
     fun fabSetup() {
@@ -202,11 +209,10 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
 
 
     private fun initRecyclerView(rules: ArrayList<GameRules>) {
-        recyclerViewRules.layoutManager = LinearLayoutManager(context)
         recyclerViewRules.setHasFixedSize(true)
-        ruleAdapter =
-            RulesAdapter(rules, this, requireContext())
+        ruleAdapter = RulesAdapter(rules, this, requireContext());
         recyclerViewRules.adapter = ruleAdapter
+
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
         itemTouchHelper.attachToRecyclerView(recyclerViewRules)
     }
@@ -226,7 +232,7 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
 
     fun checkIfGameIsInProgress(gameName: String): Boolean {
         val currentGame = dataMover.loadCurrentGame(requireContext())
-        return if (currentGame != null && currentGame.gameTitle == gameName) { //Display a snackbar if it is
+        return if (currentGame != null && currentGame.gamePlayed.name == gameName) {
             val snackBar = Snackbar.make(
                 recyclerViewRules, "You are currently playing this game",
                 Snackbar.LENGTH_LONG

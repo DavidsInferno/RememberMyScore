@@ -3,10 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.ScoreboardFragment">
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCloseScoreboard"
+        android:text="Close Scoreboard"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize" />
+
+
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="?attr/actionBarSize"
         android:id="@+id/recyclerScoreboard"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

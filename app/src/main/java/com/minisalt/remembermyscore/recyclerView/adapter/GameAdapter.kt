@@ -2,18 +2,18 @@ package com.minisalt.remembermyscore.recyclerView.adapter
 
 import android.content.Context
 import android.text.Editable
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.widget.EditText
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.GameRules
 import com.minisalt.remembermyscore.data.PlayerData
+
 
 class GameAdapter(
     val playerList: ArrayList<PlayerData>, val context: Context, val gameRule: GameRules
@@ -28,31 +28,49 @@ class GameAdapter(
         // To allow the use od EditText changing in recyclerview
         init {
 
-            mName.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
-                if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
-                    if (mName.text.toString() != "")
-                        playerList[adapterPosition].playerName = mName.text.toString()
-                    return@OnKeyListener true
-                }
-                false
-            })
+            mName.setOnFocusChangeListener { _, hasFocus ->
+                if (!hasFocus)
+                    nameChecking()
+            }
 
-            mPoints.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
-                if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
-                    if (mPoints.text.toString() != "") {
-                        if (mPoints.text.length < 10) {
-                            playerList[adapterPosition].playerPoints = Integer.parseInt(mPoints.text.toString())
-                            checkWinner(playerList[adapterPosition].playerPoints, gameRule.pointsToWin)
-
-                        }
-                    }
-                    return@OnKeyListener true
+            mName.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == IME_ACTION_DONE) {
+                    nameChecking()
+                    return@setOnEditorActionListener true
                 }
-                false
-            })
+                return@setOnEditorActionListener false
+            }
+
+
+
+            mPoints.setOnFocusChangeListener { _, hasFocus ->
+                if (!hasFocus)
+                    pointChecking()
+            }
+
+            mPoints.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == IME_ACTION_DONE) {
+                    pointChecking()
+                    return@setOnEditorActionListener true
+                }
+                return@setOnEditorActionListener false
+            }
         }
         //------------------------------------------------
 
+        private fun nameChecking() {
+            if (mName.text.toString() != "")
+                playerList[adapterPosition].playerName = mName.text.toString()
+        }
+
+        private fun pointChecking() {
+            if (mPoints.text.toString() != "") {
+                if (mPoints.text.length < 10) {
+                    playerList[adapterPosition].playerPoints = Integer.parseInt(mPoints.text.toString())
+                    checkWinner(playerList[adapterPosition].playerPoints, gameRule.pointsToWin)
+                }
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -72,6 +90,9 @@ class GameAdapter(
                     Editable.Factory.getInstance().newEditable(playerList[position].playerName)
                 holder.mPoints.text = Editable.Factory.getInstance()
                     .newEditable(playerList[position].playerPoints.toString())
+
+                if (!holder.mName.isFocused)
+                    println("This is not focused")
 
                 val nestedButtonRecyclerViewAdapter = NestedButtonRecyclerViewAdapter(
                     context, gameRule, holder.mPoints,
@@ -95,10 +116,6 @@ class GameAdapter(
     ) {
 
         nestedRecyclerView.setHasFixedSize(true)
-        nestedRecyclerView.layoutManager = LinearLayoutManager(
-            context,
-            LinearLayoutManager.HORIZONTAL, false
-        )
         nestedRecyclerView.adapter = nestedButtonRecyclerViewAdapter
     }
 }

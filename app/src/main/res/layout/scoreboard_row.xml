@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#A64A4A4A"
+    android:background="#A6FFFFFF"
     android:id="@+id/scoreboardRow">
 
     <TextView
@@ -13,33 +13,72 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:text="position"
+
+
+        android:text="1"
+        android:gravity="center"
+        android:textSize="20sp"
+
+        android:textStyle="bold|italic"
+
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="1dp"
+        android:layout_height="30dp"
+        android:background="?android:attr/dividerVertical"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/playerPosition"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/playerName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="Player"
+        android:layout_marginStart="8dp"
+
+
+        android:gravity="start"
+        android:text="Random Username"
+        android:textSize="20sp"
+
+        android:textStyle="bold"
+
+
+        app:layout_constraintBottom_toBottomOf="@+id/playerPosition"
+        app:layout_constraintStart_toEndOf="@+id/divider1"
+        app:layout_constraintTop_toTopOf="@+id/playerPosition"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="1dp"
+        android:layout_height="30dp"
+        android:background="?android:attr/dividerVertical"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/playerPoints"
-        app:layout_constraintHorizontal_bias="0.15"
-        app:layout_constraintStart_toEndOf="@+id/playerPosition"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/playerPoints"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="POINTZ"
-        app:layout_constraintBottom_toBottomOf="parent"
+
+
+        android:gravity="center"
+        android:text="35"
+        android:textSize="25sp"
+        android:textStyle="bold"
+
+        app:layout_constraintBottom_toBottomOf="@+id/playerPosition"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/playerPosition" />
 </androidx.constraintlayout.widget.ConstraintLayout>

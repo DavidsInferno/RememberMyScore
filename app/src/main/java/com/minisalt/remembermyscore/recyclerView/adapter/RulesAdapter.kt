@@ -70,7 +70,6 @@ class RulesAdapter(
                 holder.mButtons.text = rulesList[position].buttons.toString()
                 if (date != null) {
                     holder.mLastPlayed.text = dateParser(date)
-
                 } else
                     holder.mLastPlayed.text = "Not played yet"
             }
@@ -78,7 +77,7 @@ class RulesAdapter(
     }
 
     private fun dateParser(date: Date): String {
-        return SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(date)
+        return SimpleDateFormat("dd-MM-yy HH:mm").format(date)
     }
 
 }

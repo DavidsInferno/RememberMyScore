@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.transition.Fade
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -20,6 +21,8 @@ class HomeFragment(private val savedGame: Boolean = false, val deletedGame: Bool
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        animSetup()
 
         val allRules = arrayListOf<String>()
 
@@ -51,6 +54,12 @@ class HomeFragment(private val savedGame: Boolean = false, val deletedGame: Bool
                 goToRuleFragment()
 
         }
+    }
+
+    fun animSetup() {
+        val fragm: HomeFragment? = requireFragmentManager().findFragmentByTag("Home Fragment") as HomeFragment?
+        fragm?.enterTransition = Fade()
+        fragm?.exitTransition = Fade()
     }
 
     private fun initSpinner(nameOfListRules: ArrayList<String>) {
