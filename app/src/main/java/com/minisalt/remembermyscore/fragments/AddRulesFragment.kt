@@ -40,15 +40,14 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
             exit: IntArray? = null,
             editGameRules: GameRules? = null,
             updatePosition: Int? = null
-        ): AddRulesFragment = AddRulesFragment()
-            .apply {
-                this.editGameRules = editGameRules
-                this.updatePosition = updatePosition
-                if (exit != null && exit.size == 2) {
-                    posX = exit[0]
-                    posY = exit[1]
-                }
+        ): AddRulesFragment = AddRulesFragment().apply {
+            this.editGameRules = editGameRules
+            this.updatePosition = updatePosition
+            if (exit != null && exit.size == 2) {
+                posX = exit[0]
+                posY = exit[1]
             }
+        }
     }
     //-----------------------
 
