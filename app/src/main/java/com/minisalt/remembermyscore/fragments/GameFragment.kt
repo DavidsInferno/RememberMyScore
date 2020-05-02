@@ -7,8 +7,8 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.Fade
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.transition.MaterialFadeThrough
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.*
 import com.minisalt.remembermyscore.recyclerView.adapter.GameAdapter
@@ -26,16 +26,20 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
 
     lateinit var gameRules: ArrayList<GameRules>
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enterTransition = MaterialFadeThrough.create()
+        exitTransition = MaterialFadeThrough.create()
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        animSetup()
 
         displayedGame = FinishedMatch()
 
         val existingGame = dataMover.loadCurrentGame(requireContext())
-        println("Existing game at first point: $existingGame")
 
         gameRules = dataMover.loadGameRules(requireContext())
 
@@ -49,7 +53,6 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
                 val indexOfRule = dataMover.getIndexOfRule(requireContext(), homeData.gameName)
 
                 if (indexOfRule != -1) {
-
                     freshGame(gameRules[indexOfRule], homeData.players)
 
                     displayedGame = FinishedMatch(displayedGame.players, gameRules[indexOfRule])
@@ -59,9 +62,7 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
                     errorMessage("Problem loading home data at GameFragment")
             }
             existingGame != null -> {
-                println("Rule that is being searched ${existingGame.gamePlayed.name}")
                 val indexOfRule = dataMover.getIndexOfRule(requireContext(), existingGame.gamePlayed.name)
-                println("Index of rule is: $indexOfRule")
 
                 if (indexOfRule != -1) {
                     initRecyclerView(existingGame.players, gameRules[indexOfRule])
@@ -69,8 +70,12 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
                     displayedGame = FinishedMatch(existingGame.players, existingGame.gamePlayed)
                     initToolbar(existingGame.gamePlayed.name, gameRules[indexOfRule].pointsToWin)
                     initFAB()
-                } else
+                } else {
+                    txtNoGameActive.visibility = View.VISIBLE
+                    materialToolbar.visibility = View.GONE
+                    btnScoreboard.visibility = View.GONE
                     errorMessage("Corrupted save data at GameFragment")
+                }
             }
             else -> {
                 txtNoGameActive.visibility = View.VISIBLE
@@ -78,12 +83,6 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
                 btnScoreboard.visibility = View.GONE
             }
         }
-    }
-
-    private fun animSetup() {
-        val fragm: GameFragment? = requireFragmentManager().findFragmentByTag("Game Fragment") as GameFragment?
-        fragm?.enterTransition = Fade()
-        fragm?.exitTransition = Fade()
     }
 
     private fun initFAB() {
@@ -101,7 +100,7 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
 
     private fun initToolbar(title: String, points: Int?) {
         if (points != null)
-            materialToolbar.title = "$title -> $points"
+            materialToolbar.title = "$title ➞ $points"
         else
             materialToolbar.title = title
 
@@ -113,7 +112,9 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
         displayedGame.players = arrayListOf()
 
         for (i in 0 until amountOfPlayers)
-            displayedGame.players.add(PlayerData(playerName = "Player ${i + 1}"))
+            displayedGame.players.add(PlayerData())
+
+        //playerName = "Player ${i + 1}"
 
         initRecyclerView(displayedGame.players, gameRule)
     }
@@ -141,18 +142,19 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
                 R.id.gameDelete -> {
                     dataMover.deleteCurrentGame(requireContext())
                     saveOccurred = true
-                    returnHome(savedGame = false, deletedGame = true)
+                    returnHome(savedGame = false)
                     true
                 }
                 R.id.gameSave -> {
                     displayedGame.datePlayed = Date()
-                    dataMover.appendToFinishedMatches(requireContext(), displayedGame)
+                    displayedGame.addPlayerPositionsAndNames()
 
+                    dataMover.appendToFinishedMatches(requireContext(), displayedGame)
                     saveOccurred = true
 
                     dataMover.deleteCurrentGame(requireContext())
 
-                    returnHome(savedGame = true, deletedGame = false)
+                    returnHome(savedGame = true)
                     true
                 }
                 else -> false
@@ -164,16 +166,14 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
     override fun onPause() {
         super.onPause()
 
-
-        if (displayedGame != FinishedMatch() && !saveOccurred) {
-            println("At pause time the game was: $displayedGame")
+        if (displayedGame != FinishedMatch() && !saveOccurred)
             dataMover.saveCurrentGame(requireContext(), displayedGame)
-        }
+
     }
 
-    private fun returnHome(savedGame: Boolean, deletedGame: Boolean) {
+    private fun returnHome(savedGame: Boolean) {
         fragmentManager?.beginTransaction()?.setCustomAnimations(R.anim.slide_out_right, R.anim.slide_in_right)?.replace(
-            R.id.container, HomeFragment(savedGame, deletedGame)
+            R.id.container, HomeFragment(savedGame)
         )?.commit()
         val navigationView = requireActivity().findViewById(R.id.bottom_nav_view) as BottomNavigationView
         navigationView.menu.getItem(0).isChecked = true
@@ -194,6 +194,8 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
         scoreboardOverlay.visibility = View.VISIBLE
 
         overlayMargin()
+
+        displayedGame.addPlayerPositionsAndNames()
 
         fragmentManager?.beginTransaction()
             ?.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_in_up)?.add(

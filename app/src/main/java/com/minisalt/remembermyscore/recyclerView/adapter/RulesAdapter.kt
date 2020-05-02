@@ -65,9 +65,15 @@ class RulesAdapter(
         when (holder) {
             is GameRulesViewHolder -> {
                 holder.mTitle.text = rulesList[position].name
-                holder.mPoints.text = rulesList[position].pointsToWin.toString()
-                holder.mGameCount.text = dataMover.numberOfGamesPlayed(context, rulesList[position].name).toString()
-                holder.mButtons.text = rulesList[position].buttons.toString()
+                holder.mPoints.text = "Playing to " + rulesList[position].pointsToWin.toString()
+                holder.mGameCount.text = "Games played: " + dataMover.numberOfGamesPlayed(context, rulesList[position].name).toString()
+
+                if (rulesList[position].buttons.size != 0)
+                    holder.mButtons.text = "Buttons: " + rulesList[position].buttons.toString()
+                else
+                    holder.mButtons.text = "Buttons: none"
+
+
                 if (date != null) {
                     holder.mLastPlayed.text = dateParser(date)
                 } else

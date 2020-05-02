@@ -6,12 +6,12 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.minisalt.bottomnavigationview.utils.ExitWithAnimation
-import com.minisalt.bottomnavigationview.utils.exitCircularReveal
 import com.minisalt.remembermyscore.fragments.GameFragment
 import com.minisalt.remembermyscore.fragments.HomeFragment
 import com.minisalt.remembermyscore.fragments.RulesFragment
 import com.minisalt.remembermyscore.fragments.ScoresFragment
+import com.minisalt.remembermyscore.utils.ExitWithAnimation
+import com.minisalt.remembermyscore.utils.exitCircularReveal
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {

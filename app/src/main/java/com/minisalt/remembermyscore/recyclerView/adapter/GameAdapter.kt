@@ -27,7 +27,6 @@ class GameAdapter(
 
         // To allow the use od EditText changing in recyclerview
         init {
-
             mName.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus)
                     nameChecking()
@@ -40,7 +39,6 @@ class GameAdapter(
                 }
                 return@setOnEditorActionListener false
             }
-
 
 
             mPoints.setOnFocusChangeListener { _, hasFocus ->
@@ -91,15 +89,10 @@ class GameAdapter(
                 holder.mPoints.text = Editable.Factory.getInstance()
                     .newEditable(playerList[position].playerPoints.toString())
 
-                if (!holder.mName.isFocused)
-                    println("This is not focused")
 
-                val nestedButtonRecyclerViewAdapter = NestedButtonRecyclerViewAdapter(
-                    context, gameRule, holder.mPoints,
-                    playerList[position]
-                )
 
-                initRecyclerView(holder.nestedRecyclerView, nestedButtonRecyclerViewAdapter)
+
+                initRecyclerView(holder.nestedRecyclerView, holder.mPoints, position)
             }
         }
     }
@@ -112,10 +105,12 @@ class GameAdapter(
 
     private fun initRecyclerView(
         nestedRecyclerView: RecyclerView,
-        nestedButtonRecyclerViewAdapter: NestedButtonRecyclerViewAdapter
+        mPoints: EditText,
+        position: Int
     ) {
-
-        nestedRecyclerView.setHasFixedSize(true)
+        val nestedButtonRecyclerViewAdapter =
+            NestedButtonRecyclerViewAdapter(context, gameRule, mPoints, playerList[position])
+        nestedRecyclerView.setHasFixedSize(true);
         nestedRecyclerView.adapter = nestedButtonRecyclerViewAdapter
     }
 }

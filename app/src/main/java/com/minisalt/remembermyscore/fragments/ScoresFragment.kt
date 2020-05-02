@@ -3,6 +3,7 @@ package com.minisalt.remembermyscore.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import com.google.android.material.transition.MaterialFadeThrough
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.DataMover
 import com.minisalt.remembermyscore.data.FinishedMatch
@@ -14,6 +15,13 @@ import java.util.*
 class ScoresFragment : Fragment(R.layout.fragment_scores) {
 
     val dataMover = DataMover()
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enterTransition = MaterialFadeThrough.create()
+        exitTransition = MaterialFadeThrough.create()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

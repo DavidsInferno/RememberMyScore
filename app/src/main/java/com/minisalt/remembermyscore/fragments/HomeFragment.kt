@@ -4,25 +4,30 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.transition.Fade
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.transition.MaterialFadeThrough
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.DataMover
 import com.minisalt.remembermyscore.data.HomeData
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
-class HomeFragment(private val savedGame: Boolean = false, val deletedGame: Boolean = false) :
+class HomeFragment(private val savedGame: Boolean = false) :
     Fragment(R.layout.fragment_home) {
 
     private val dataMover = DataMover()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enterTransition = MaterialFadeThrough.create()
+        exitTransition = MaterialFadeThrough.create()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        animSetup()
 
         val allRules = arrayListOf<String>()
 
@@ -40,26 +45,18 @@ class HomeFragment(private val savedGame: Boolean = false, val deletedGame: Bool
 
         btnLaunchGame.setOnClickListener {
             if (allRules[0] != resources.getString(R.string.Lenny)) {
-                val homeData = HomeData(
-                    numberPicker.value, dataMover.getStringFromIndex(requireContext(), spinner.selectedItemPosition)
-                )
+                val homeData = HomeData(numberPicker.value, dataMover.getStringFromIndex(requireContext(), spinner.selectedItemPosition))
                 val currentGame = dataMover.loadCurrentGame(requireContext())
 
-                if (currentGame == null) {
+                if (currentGame == null)
                     goToGameFragment(homeData)
-                } else {
+                else
                     dialog(homeData)
-                }
+
             } else
                 goToRuleFragment()
 
         }
-    }
-
-    fun animSetup() {
-        val fragm: HomeFragment? = requireFragmentManager().findFragmentByTag("Home Fragment") as HomeFragment?
-        fragm?.enterTransition = Fade()
-        fragm?.exitTransition = Fade()
     }
 
     private fun initSpinner(nameOfListRules: ArrayList<String>) {
@@ -81,7 +78,7 @@ class HomeFragment(private val savedGame: Boolean = false, val deletedGame: Bool
     }
 
     fun dialog(homeData: HomeData) {
-        MaterialAlertDialogBuilder(context)
+        MaterialAlertDialogBuilder(requireContext())
             .setTitle("Start a new game?")
             .setMessage("You currently have a game active. Continuing will start a fresh game.")
             .setNegativeButton("No") { dialog, which ->

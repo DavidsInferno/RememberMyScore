@@ -1,4 +1,4 @@
-package com.minisalt.bottomnavigationview.utils
+package com.minisalt.remembermyscore.utils
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -23,7 +23,7 @@ fun View.startCircularReveal(fromLeft: Boolean) {
             val radius = hypot(right.toDouble(), bottom.toDouble()).toInt()
             ViewAnimationUtils.createCircularReveal(v, cx, cy, 0f, radius.toFloat()).apply {
                 interpolator = DecelerateInterpolator(2f)
-                duration = 1000
+                duration = 1500
                 start()
             }
         }
@@ -41,7 +41,7 @@ fun View.startCircularReveal(fromLeft: Boolean) {
 fun View.exitCircularReveal(exitX: Int, exitY: Int, block: () -> Unit) {
     val startRadius = hypot(this.width.toDouble(), this.height.toDouble())
     ViewAnimationUtils.createCircularReveal(this, exitX, exitY, startRadius.toFloat(), 0f).apply {
-        duration = 350
+        duration = 600
         interpolator = DecelerateInterpolator(1f)
         addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator?) {

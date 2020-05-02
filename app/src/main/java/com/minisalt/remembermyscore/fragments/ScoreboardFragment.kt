@@ -18,12 +18,7 @@ class ScoreboardFragment(var players: ArrayList<PlayerData>) : Fragment(R.layout
             requireFragmentManager().findFragmentByTag("Scoreboard Fragment") as ScoreboardFragment?
         fragm?.exitTransition = Slide()
 
-        val sortedList: List<PlayerData> = players.sortedWith((compareByDescending { it.playerPoints }))
-
-        for (i in sortedList.indices)
-            sortedList[i].playerPosition = i + 1
-
-        initRecyclerView(sortedList)
+        initRecyclerView(players)
 
         btnCloseScoreboard.setOnClickListener {
             closeScoreboard()

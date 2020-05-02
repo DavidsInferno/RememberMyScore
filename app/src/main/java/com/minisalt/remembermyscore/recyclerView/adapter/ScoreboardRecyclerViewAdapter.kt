@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.PlayerData
@@ -18,7 +17,6 @@ class ScoreboardRecyclerViewAdapter(val context: Context, val players: List<Play
         val mPosition: TextView = itemView.findViewById(R.id.playerPosition)
         val mPlayerName: TextView = itemView.findViewById(R.id.playerName)
         val mPlayerScore: TextView = itemView.findViewById(R.id.playerPoints)
-        val mRow: ConstraintLayout = itemView.findViewById(R.id.scoreboardRow)
     }
 
 
@@ -38,21 +36,7 @@ class ScoreboardRecyclerViewAdapter(val context: Context, val players: List<Play
                 holder.mPosition.text = players[position].playerPosition.toString()
                 holder.mPlayerName.text = players[position].playerName
                 holder.mPlayerScore.text = players[position].playerPoints.toString()
-
-
-                when (players[position].playerPosition) {
-                    1 -> holder.mRow.setBackgroundResource(R.color.Gold)
-                    2 -> holder.mRow.setBackgroundResource(R.color.Silver)
-                    3 -> {
-                        holder.mRow.setBackgroundResource(R.color.Bronze)
-
-                    }
-                    else ->
-                        holder.mRow.setBackgroundResource(R.color.OtherRows)
-                }
             }
-
-
         }
     }
 }

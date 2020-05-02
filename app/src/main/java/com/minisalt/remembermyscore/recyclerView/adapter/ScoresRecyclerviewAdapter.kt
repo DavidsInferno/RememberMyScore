@@ -76,11 +76,11 @@ class ScoresRecyclerviewAdapter(val finishedMatch: ArrayList<FinishedMatch>, val
         when (holder) {
             is ScoresViewHolder -> {
 
-                val gameTitleText = finishedMatch[position].gamePlayed.name + " -> " + finishedMatch[position]
+                val gameTitleText = finishedMatch[position].gamePlayed.name + " ➙ " + finishedMatch[position]
                     .gamePlayed.pointsToWin.toString()
 
                 holder.mGameTitle.text = gameTitleText
-                holder.mDatePlayed.text = "Played: " + dateParser(finishedMatch[position].datePlayed)
+                holder.mDatePlayed.text = "Played: " + dateParser(finishedMatch[position].datePlayed!!)
                 holder.mPosition.text = "Rank"
                 holder.mUsername.text = "User name"
                 holder.mPointsToWin.text = "Score"

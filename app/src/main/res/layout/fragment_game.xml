@@ -66,7 +66,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:clickable="false"
-        android:background="#807B7B7B"
+        android:background="#4D7B7B7B"
         android:visibility="gone" />
 
     <FrameLayout

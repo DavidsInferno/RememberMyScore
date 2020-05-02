@@ -9,14 +9,14 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.Fade
 import com.google.android.material.snackbar.Snackbar
-import com.minisalt.bottomnavigationview.utils.findLocationOfCenterOnTheScreen
+import com.google.android.material.transition.MaterialFadeThrough
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.DataMover
 import com.minisalt.remembermyscore.data.GameRules
 import com.minisalt.remembermyscore.recyclerView.adapter.RulesAdapter
 import com.minisalt.remembermyscore.recyclerView.clickListener.RecyclerViewClickInterface
+import com.minisalt.remembermyscore.utils.findLocationOfCenterOnTheScreen
 import com.minisalt.remembermyscore.utils.open
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.android.synthetic.main.fragment_rules.*
@@ -25,29 +25,22 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
 
     lateinit var ruleAdapter: RulesAdapter
 
-    private var easterEgg = 0
-
     val dataMover = DataMover()
 
     lateinit var list: ArrayList<GameRules>
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enterTransition = MaterialFadeThrough.create()
+        exitTransition = MaterialFadeThrough.create()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        animSetup()
-        easterEgg = 0
 
         gettingLatestRuleList(null)
 
         fabSetup()
-
-
-    }
-
-    fun animSetup() {
-        val fragm: RulesFragment? = requireFragmentManager().findFragmentByTag("Rules Fragment") as RulesFragment?
-        fragm?.enterTransition = Fade()
-        fragm?.exitTransition = Fade()
     }
 
     fun fabSetup() {
@@ -133,22 +126,10 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
 
                             if (!(checkIfGameIsInProgress(swipedGameRule.name))) {
 
-                                val positions: IntArray = intArrayOf(
-                                    recyclerViewRules.width / 2,
-                                    viewHolder.itemView.y.toInt() + viewHolder.itemView.height / 2
-                                )
-                                add(
-                                    R.id.container,
-                                    AddRulesFragment.newInstance(
-                                        positions,
-                                        swipedGameRule,
-                                        position
-                                    )
-                                ).addToBackStack(null)
-                                Handler().postDelayed(
-                                    { ruleAdapter.notifyItemChanged(position) },
-                                    400
-                                )
+                                val positions: IntArray =
+                                    intArrayOf(recyclerViewRules.width / 2, viewHolder.itemView.y.toInt() + viewHolder.itemView.height / 2)
+                                add(R.id.container, AddRulesFragment.newInstance(positions, swipedGameRule, position)).addToBackStack(null)
+                                Handler().postDelayed({ ruleAdapter.notifyItemChanged(position) }, 400)
                             } else {
                                 ruleAdapter.notifyItemChanged(position)
                             }
@@ -167,43 +148,16 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
                 actionState: Int,
                 isCurrentlyActive: Boolean
             ) {
-                RecyclerViewSwipeDecorator.Builder(
-                    c,
-                    recyclerView,
-                    viewHolder,
-                    dX,
-                    dY,
-                    actionState,
-                    isCurrentlyActive
-                )
-                    .addSwipeLeftBackgroundColor(
-                        ContextCompat.getColor(
-                            context!!,
-                            R.color.colorAccent
-                        )
-                    )
+                RecyclerViewSwipeDecorator
+                    .Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
                     .addSwipeLeftActionIcon(R.drawable.ic_delete_white)
-                    .addSwipeRightBackgroundColor(
-                        ContextCompat.getColor(
-                            context!!,
-                            R.color.colorAccent
-                        )
-                    )
+                    .addSwipeRightBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
                     .addSwipeRightActionIcon(R.drawable.ic_edit_black)
                     .create()
                     .decorate()
 
-
-
-                super.onChildDraw(
-                    c,
-                    recyclerView,
-                    viewHolder,
-                    dX,
-                    dY,
-                    actionState,
-                    isCurrentlyActive
-                )
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             }
         }
 
@@ -218,13 +172,7 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
     }
 
     override fun onItemClick(position: Int) {
-        easterEgg++
-        if (easterEgg == 10)
-            Toast.makeText(requireContext(), "Press me harder", Toast.LENGTH_LONG).show()
-        else if (easterEgg == 20)
-            Toast.makeText(requireContext(), "Just the way I like it", Toast.LENGTH_LONG).show()
-
-
+        Toast.makeText(requireContext(), "You can swipe the rules!", Toast.LENGTH_LONG).show()
     }
 
     override fun onLongItemClick(position: Int) {
@@ -234,13 +182,11 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
         val currentGame = dataMover.loadCurrentGame(requireContext())
         return if (currentGame != null && currentGame.gamePlayed.name == gameName) {
             val snackBar = Snackbar.make(
-                recyclerViewRules, "You are currently playing this game",
+                recyclerViewRules,
+                "You are currently playing this game",
                 Snackbar.LENGTH_LONG
             )
-            snackBar.setAction("Dismiss") {
-                snackBar.dismiss()
-            }
-            snackBar.show()
+            snackBar.setAction("Dismiss") {}.show()
             true
         } else
             false

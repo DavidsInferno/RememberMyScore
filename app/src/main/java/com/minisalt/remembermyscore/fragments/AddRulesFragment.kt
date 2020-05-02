@@ -9,17 +9,16 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.minisalt.bottomnavigationview.utils.ExitWithAnimation
-import com.minisalt.bottomnavigationview.utils.startCircularReveal
 import com.minisalt.remembermyscore.MainActivity
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.DataMover
 import com.minisalt.remembermyscore.data.GameRules
 import com.minisalt.remembermyscore.recyclerView.adapter.ButtonAdapter
 import com.minisalt.remembermyscore.recyclerView.clickListener.RecyclerViewClickInterface
+import com.minisalt.remembermyscore.utils.ExitWithAnimation
+import com.minisalt.remembermyscore.utils.startCircularReveal
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.android.synthetic.main.fragment_add_rules.*
-
 
 class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimation,
     RecyclerViewClickInterface {
@@ -36,32 +35,32 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
 
     companion object {
         @JvmStatic
-        fun newInstance(
-            exit: IntArray? = null,
-            editGameRules: GameRules? = null,
-            updatePosition: Int? = null
-        ): AddRulesFragment = AddRulesFragment().apply {
-            this.editGameRules = editGameRules
-            this.updatePosition = updatePosition
-            if (exit != null && exit.size == 2) {
-                posX = exit[0]
-                posY = exit[1]
+        fun newInstance(exit: IntArray? = null, editGameRules: GameRules? = null, updatePosition: Int? = null): AddRulesFragment =
+            AddRulesFragment().apply {
+                this.editGameRules = editGameRules
+                this.updatePosition = updatePosition
+                if (exit != null && exit.size == 2) {
+                    posX = exit[0]
+                    posY = exit[1]
+                }
             }
-        }
     }
     //-----------------------
 
     lateinit var buttonAdapter: ButtonAdapter
     private var gameRule: GameRules = GameRules()
 
+    //When a user updated a listing and didn't save, the changes would be displayed in RulesFragment. Not saved, just
+    // would look ugly
+    private var buttonBackup: ArrayList<Int> = arrayListOf()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.startCircularReveal(false)
 
-        if (editGameRules != null) {
+        if (editGameRules != null)
             updatingListing()
-        }
+
 
 
         initRecyclerView(gameRule.buttons)
@@ -264,10 +263,10 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
 
     private fun updatingListing() {
         titleText.text = Editable.Factory.getInstance().newEditable(editGameRules!!.name)
-        editPointsToWin.text =
-            Editable.Factory.getInstance().newEditable(editGameRules!!.pointsToWin.toString())
+        editPointsToWin.text = Editable.Factory.getInstance().newEditable(editGameRules!!.pointsToWin.toString())
         gameRule.buttons = editGameRules!!.buttons
         btnSave.text = "Update"
+        buttonBackup.addAll(gameRule.buttons)
     }
 
     private fun checkForChanges(): Boolean {
@@ -275,7 +274,6 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
     }
 
     private fun updatedName(): Boolean {
-
         when {
             titleText.text.toString() == "" -> {     //Checking if there is a name
                 l_titleText.error = "Input valid title name"
@@ -289,6 +287,14 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         }
 
         return true
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (updatePosition != null) {
+            gameRule.buttons.clear()
+            gameRule.buttons.addAll(buttonBackup)
+        }
     }
 
     override fun onItemClick(position: Int) {

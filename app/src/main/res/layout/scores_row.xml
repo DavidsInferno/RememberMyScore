@@ -93,6 +93,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <View
+                android:id="@+id/horizontalDivider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="?android:attr/dividerVertical"
+                app:layout_constraintEnd_toEndOf="@+id/scoreboardRecyclerView"
+                app:layout_constraintStart_toStartOf="@+id/scoreboardRecyclerView"
+                app:layout_constraintTop_toTopOf="@+id/scoreboardRecyclerView" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/scoreboardRecyclerView"
                 android:layout_width="match_parent"
