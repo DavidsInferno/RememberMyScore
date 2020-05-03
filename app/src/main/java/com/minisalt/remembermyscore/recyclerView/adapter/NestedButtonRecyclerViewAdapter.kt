@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.GameRules
 import com.minisalt.remembermyscore.data.PlayerData
@@ -57,7 +57,13 @@ class NestedButtonRecyclerViewAdapter(
 
     private fun checkWinner(playerPoints: Int, pointsToWin: Int) {
         if (playerPoints >= pointsToWin) {
-            Toast.makeText(context, "We have a winner!", Toast.LENGTH_SHORT).show()
+            MaterialAlertDialogBuilder(context)
+                .setTitle("${playerData.playerName} has won the game!")
+                .setMessage("On dialog close, you can resume the game, or start another")
+                .setPositiveButton("Awesome!") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
         }
     }
 }

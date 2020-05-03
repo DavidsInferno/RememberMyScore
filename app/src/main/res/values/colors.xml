@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#FAEBEF</color>
+    <color name="colorAccent">#FF00DE</color>
 
     <color name="White">#F1F3FF</color>
     <color name="LightPink">#F7CED7</color>
@@ -19,13 +19,6 @@
     <color name="DeleteRed">#C61313</color>
 
 
-    <color name="Gold">#FFDF00</color>
-    <color name="Silver">#C0C0C0</color>
-    <color name="Bronze">#CD7F32</color>
-
-    <color name="OtherRows">#00796B</color>
-
-
     <color name="list_item_bg_collapsed">#E2FAFF</color>
     <color name="list_item_bg_expanded">@android:color/white</color>
 
@@ -33,5 +26,9 @@
     <color name="subtitle_color">#B0E7EF</color>
 
     <color name="rules_background">#18BDD6</color>
+
+    <!--    Home fragment colours-->
+    <color name="SailorBlue">#00203F</color>
+    <color name="Mint">#ADEFD1</color>
 
 </resources>

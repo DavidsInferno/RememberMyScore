@@ -65,7 +65,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
 
         initRecyclerView(gameRule.buttons)
 
-        numberInput.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+        numberInput.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                 addItem()
                 return@OnKeyListener true

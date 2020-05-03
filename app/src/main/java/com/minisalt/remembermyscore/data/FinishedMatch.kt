@@ -12,7 +12,7 @@ data class FinishedMatch(
         for (i in sortedList.indices) {
             sortedList[i].playerPosition = i + 1
             if (sortedList[i].playerName == "")
-                sortedList[i].playerName = "Player $i"
+                sortedList[i].playerName = "Player ${i + 1}"
             players[i] = sortedList[i]
         }
     }

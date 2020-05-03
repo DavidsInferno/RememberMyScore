@@ -1,18 +1,23 @@
 package com.minisalt.remembermyscore.recyclerView.adapter
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.widget.EditText
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.GameRules
 import com.minisalt.remembermyscore.data.PlayerData
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
+import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil
 
 
 class GameAdapter(
@@ -35,6 +40,7 @@ class GameAdapter(
             mName.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == IME_ACTION_DONE) {
                     nameChecking()
+                    UIUtil.hideKeyboard(context, mName)
                     return@setOnEditorActionListener true
                 }
                 return@setOnEditorActionListener false
@@ -49,12 +55,34 @@ class GameAdapter(
             mPoints.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == IME_ACTION_DONE) {
                     pointChecking()
+                    UIUtil.hideKeyboard(context, mPoints)
                     return@setOnEditorActionListener true
                 }
                 return@setOnEditorActionListener false
             }
+
+            KeyboardVisibilityEvent.setEventListener(getActivity(context)!!, object : KeyboardVisibilityEventListener {
+                override fun onVisibilityChanged(isOpen: Boolean) {
+                    if (!isOpen) {
+                        nameChecking()
+                        pointChecking()
+                    }
+                }
+            })
+        }
+
+        private fun getActivity(context: Context): Activity? {
+            if (context is ContextWrapper) {
+                return if (context is Activity) {
+                    context
+                } else {
+                    getActivity((context).baseContext)
+                }
+            }
+            return null
         }
         //------------------------------------------------
+
 
         private fun nameChecking() {
             if (mName.text.toString() != "")
@@ -65,7 +93,7 @@ class GameAdapter(
             if (mPoints.text.toString() != "") {
                 if (mPoints.text.length < 10) {
                     playerList[adapterPosition].playerPoints = Integer.parseInt(mPoints.text.toString())
-                    checkWinner(playerList[adapterPosition].playerPoints, gameRule.pointsToWin)
+                    checkWinner(playerList[adapterPosition].playerPoints, gameRule.pointsToWin, adapterPosition)
                 }
             }
         }
@@ -97,9 +125,15 @@ class GameAdapter(
         }
     }
 
-    fun checkWinner(playerPoints: Int, pointsToWin: Int) {
+    fun checkWinner(playerPoints: Int, pointsToWin: Int, adapterPosition: Int) {
         if (playerPoints >= pointsToWin) {
-            Toast.makeText(context, "We have a winner!", Toast.LENGTH_SHORT).show()
+            MaterialAlertDialogBuilder(context)
+                .setTitle("${playerList[adapterPosition].playerName} has won the game!")
+                .setMessage("On dialog close, you can resume the game, or start another")
+                .setPositiveButton("Awesome!") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
         }
     }
 

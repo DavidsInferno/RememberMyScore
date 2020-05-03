@@ -38,5 +38,4 @@ class ScoresFragment : Fragment(R.layout.fragment_scores) {
         val scoresAdapter = ScoresRecyclerviewAdapter(allMatches, requireContext())
         recyclerViewScores.adapter = scoresAdapter
     }
-
 }

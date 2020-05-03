@@ -28,7 +28,6 @@ class HomeFragment(private val savedGame: Boolean = false) :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         val allRules = arrayListOf<String>()
 
 
@@ -81,10 +80,10 @@ class HomeFragment(private val savedGame: Boolean = false) :
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Start a new game?")
             .setMessage("You currently have a game active. Continuing will start a fresh game.")
-            .setNegativeButton("No") { dialog, which ->
+            .setNegativeButton("No") { dialog, _ ->
                 dialog.dismiss()
             }
-            .setPositiveButton("Start fresh") { dialog, which ->
+            .setPositiveButton("Start fresh") { dialog, _ ->
                 goToGameFragment(homeData)
                 dialog.dismiss()
             }

@@ -36,7 +36,6 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         displayedGame = FinishedMatch()
 
         val existingGame = dataMover.loadCurrentGame(requireContext())
@@ -113,8 +112,6 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
 
         for (i in 0 until amountOfPlayers)
             displayedGame.players.add(PlayerData())
-
-        //playerName = "Player ${i + 1}"
 
         initRecyclerView(displayedGame.players, gameRule)
     }
