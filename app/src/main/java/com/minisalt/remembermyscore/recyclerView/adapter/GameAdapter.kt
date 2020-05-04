@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.widget.EditText
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -64,8 +65,11 @@ class GameAdapter(
             KeyboardVisibilityEvent.setEventListener(getActivity(context)!!, object : KeyboardVisibilityEventListener {
                 override fun onVisibilityChanged(isOpen: Boolean) {
                     if (!isOpen) {
-                        nameChecking()
-                        pointChecking()
+                        if (adapterPosition != -1) {
+                            nameChecking()
+                            pointChecking()
+                        } else
+                            Toast.makeText(context, "The adapter position was just -1", Toast.LENGTH_SHORT).show()
                     }
                 }
             })

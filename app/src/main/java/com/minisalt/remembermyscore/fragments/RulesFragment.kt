@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -150,10 +149,10 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
             ) {
                 RecyclerViewSwipeDecorator
                     .Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
-                    .addSwipeLeftActionIcon(R.drawable.ic_delete_white)
-                    .addSwipeRightBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
+                    .addSwipeLeftActionIcon(R.drawable.ic_delete_black)
+                    .addSwipeLeftLabel("Delete")
                     .addSwipeRightActionIcon(R.drawable.ic_edit_black)
+                    .addSwipeRightLabel("Edit")
                     .create()
                     .decorate()
 

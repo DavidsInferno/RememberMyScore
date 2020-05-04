@@ -6,7 +6,7 @@
     android:id="@+id/ScoresRow"
     android:layout_marginVertical="8dp"
     android:layout_marginHorizontal="16dp"
-    android:backgroundTint="@color/list_item_bg_collapsed"
+    android:background="@color/White"
     app:cardCornerRadius="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:tint="@color/title_color"
+            android:tint="@color/BudStatusBar"
             app:layout_constraintBottom_toBottomOf="@+id/datePlayed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -31,7 +31,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="Scores"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/chevron"
             app:layout_constraintTop_toTopOf="parent" />
@@ -48,8 +48,6 @@
             android:text="Datum igre"
             android:textSize="15sp"
 
-
-            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/chevron"
             app:layout_constraintTop_toBottomOf="@+id/gameTitle" />
 

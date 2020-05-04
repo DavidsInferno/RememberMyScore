@@ -21,8 +21,10 @@ import java.util.*
 class ScoresRecyclerviewAdapter(val finishedMatch: ArrayList<FinishedMatch>, val context: Context) : RecyclerView
 .Adapter<RecyclerView.ViewHolder>() {
 
-    val collapsedColor = ContextCompat.getColor(context, R.color.list_item_bg_collapsed)
-    val expandedColor = ContextCompat.getColor(context, R.color.list_item_bg_expanded)
+    val collapsedColor = ContextCompat.getColor(context, R.color.Bluepercent)
+    val collapsedTextColor = ContextCompat.getColor(context, R.color.Black)
+    val expandedColor = ContextCompat.getColor(context, R.color.White)
+    val expandedTextColor = ContextCompat.getColor(context, R.color.Black)
 
     var previouslyExpanded: Int = -1
 
@@ -101,6 +103,8 @@ class ScoresRecyclerviewAdapter(val finishedMatch: ArrayList<FinishedMatch>, val
     private fun expandItem(holder: ScoresViewHolder) {
         holder.expandableLayout.visibility = View.VISIBLE
         holder.mCardView.backgroundTintList = ColorStateList.valueOf(expandedColor)
+        holder.mGameTitle.setTextColor(expandedTextColor)
+        holder.mDatePlayed.setTextColor(expandedTextColor)
 
         val newLayoutParams = holder.mCardView.layoutParams as RecyclerView.LayoutParams
 
@@ -116,12 +120,13 @@ class ScoresRecyclerviewAdapter(val finishedMatch: ArrayList<FinishedMatch>, val
 
         val newLayoutParams = holder.mCardView.layoutParams as RecyclerView.LayoutParams
 
+        holder.mGameTitle.setTextColor(collapsedTextColor)
+        holder.mDatePlayed.setTextColor(collapsedTextColor)
+
 
         //I know in the layout it says 16 but when checking what newLayoutParams spat it out says its 56
         newLayoutParams.setMargins(56, 35, 56, 35)
         holder.mCardView.layoutParams = newLayoutParams
-
-
 
 
         ObjectAnimator.ofFloat(holder.mArrow, View.ROTATION, 0f, -90f).setDuration(300).start()

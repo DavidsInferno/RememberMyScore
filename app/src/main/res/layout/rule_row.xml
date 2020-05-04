@@ -1,108 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:focusable="true"
     android:clickable="true"
     android:layout_margin="8dp"
-    android:elevation="8dp"
-    android:orientation="vertical">
+    app:cardCornerRadius="8dp">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/Title"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/titleConstraint"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Title Of Game"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:background="@color/CornflowerBlue">
 
-        <TextView
-            android:id="@+id/PointsToWin"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Title Of Game"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/White"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/PointsToWin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+
+                android:text="35 pts"
+                android:textSize="10sp"
+                android:textColor="@color/White"
+
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/Title"
+                app:layout_constraintStart_toStartOf="@+id/Title"
+                app:layout_constraintTop_toBottomOf="@+id/Title" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/infoConstraint"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/White">
 
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:gravity="center"
+            <TextView
+                android:id="@+id/Buttons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-            android:text="35 pts"
-            android:textSize="15sp"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/Title"
-            app:layout_constraintStart_toStartOf="@+id/Title"
-            app:layout_constraintTop_toBottomOf="@+id/Title" />
+                android:layout_marginStart="8dp"
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_marginTop="8dp"
+                android:text="1, 2, 3, 4, 5, 6, 7, 8, 9, 10"
+                android:textStyle="bold|italic"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+            <TextView
+                android:id="@+id/GameCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="end"
 
-        <TextView
-            android:id="@+id/Buttons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                android:text="Games played: 15"
 
-            android:textStyle="bold|italic"
-
-
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="1, 2, 3, 4, 5, 6, 7, 8, 9, 10"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/GameCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:gravity="end"
-
-            android:textStyle="bold|italic"
-
-            android:text="Games played: 15"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Buttons" />
+                android:textStyle="bold|italic"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Buttons" />
 
 
-        <TextView
-            android:id="@+id/LastPlayed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            <TextView
+                android:id="@+id/LastPlayed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
 
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
 
-            android:layout_marginBottom="8dp"
-            android:drawableStart="@drawable/ic_history_black_18dp"
+                android:layout_marginBottom="8dp"
+                android:drawableStart="@drawable/ic_history_black_18dp"
 
-            android:drawablePadding="3dp"
-            android:gravity="end"
-            android:text="Last Played On: 15.3.2019."
-            android:textStyle="bold|italic"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/GameCount" />
+                android:drawablePadding="3dp"
+                android:gravity="end"
+                android:text="Last Played On: 15.3.2019."
+                android:textStyle="bold|italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/GameCount" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

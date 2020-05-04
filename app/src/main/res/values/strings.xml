@@ -14,5 +14,6 @@
     <string name="reset_game">Reset Game</string>
 
     <string name="Lenny">Press the button ( ͡° ͜ʖ ͡°)</string>
+    <string name="no_active_games">You have no game active! ¯\\\_(ツ)_/¯</string>
 
 </resources>

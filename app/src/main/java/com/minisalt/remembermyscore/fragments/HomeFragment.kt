@@ -70,9 +70,10 @@ class HomeFragment(private val savedGame: Boolean = false) :
             nameOfListRules.add(resources.getString(R.string.Lenny))
 
         val myAdapter: ArrayAdapter<String> =
-            ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, nameOfListRules)
+            ArrayAdapter(requireContext(), R.layout.spinner_item, nameOfListRules)
 
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
         spinner.adapter = myAdapter
     }
 

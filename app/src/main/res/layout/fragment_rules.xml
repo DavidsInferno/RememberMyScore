@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.RulesFragment"
-    android:background="#ED8686"
+    android:background="@color/Tasman"
     android:id="@+id/rulesContainer">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +17,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+
             android:src="@drawable/ic_add_white"
+            app:tint="@color/colorPrimary"
+            app:backgroundTint="@color/colorAccent"
+
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

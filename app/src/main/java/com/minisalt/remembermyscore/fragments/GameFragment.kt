@@ -47,6 +47,13 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
             openScoreboard()
         }
 
+
+
+        scoreboardOverlay.setOnClickListener {
+            fragmentManager?.popBackStack()
+            onCloseScoreboard()
+        }
+
         when {
             homeData != null -> {
                 val indexOfRule = dataMover.getIndexOfRule(requireContext(), homeData.gameName)
@@ -113,6 +120,7 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
         for (i in 0 until amountOfPlayers)
             displayedGame.players.add(PlayerData())
 
+        displayedGame.addPlayerPositionsAndNames()
         initRecyclerView(displayedGame.players, gameRule)
     }
 

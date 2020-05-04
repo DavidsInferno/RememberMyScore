@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="#BEA6F4"
     tools:context=".MainActivity"
+    android:clickable="true"
     android:paddingTop="16dp">
 
     <com.google.android.material.textfield.TextInputLayout

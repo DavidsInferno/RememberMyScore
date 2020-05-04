@@ -9,6 +9,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCloseScoreboard"
         android:text="Close Scoreboard"
+        android:backgroundTint="@color/colorAccent"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize" />
 

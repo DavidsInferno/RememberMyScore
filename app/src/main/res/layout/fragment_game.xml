@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.GameFragment"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:background="@color/Tasman">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout2"
@@ -43,7 +44,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+
         android:src="@drawable/trophy"
+
+        app:tint="@color/colorPrimary"
+        app:backgroundTint="@color/colorAccent"
+
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -54,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
 
-        android:text="You have no games active!"
+        android:text="@string/no_active_games"
         android:textSize="20sp"
         android:textStyle="bold"
 
@@ -71,7 +78,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:clickable="false"
-        android:background="#4D7B7B7B"
+        android:background="#52000000"
         android:visibility="gone" />
 
     <FrameLayout
