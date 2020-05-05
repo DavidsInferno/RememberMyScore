@@ -28,6 +28,7 @@ class RulesAdapter(
         var mGameCount: TextView = itemView.findViewById(R.id.GameCount)
         var mButtons: TextView = itemView.findViewById(R.id.Buttons)
         var mLastPlayed: TextView = itemView.findViewById(R.id.LastPlayed)
+        var mDiceRequired: TextView = itemView.findViewById(R.id.DiceNeeded)
 
         //https://www.youtube.com/watch?v=AkiltTv0CjA
         init {
@@ -67,6 +68,16 @@ class RulesAdapter(
                 holder.mTitle.text = rulesList[position].name
                 holder.mPoints.text = "Playing to " + rulesList[position].pointsToWin.toString()
                 holder.mGameCount.text = "Games played: " + dataMover.numberOfGamesPlayed(context, rulesList[position].name).toString()
+
+
+
+                if (rulesList[position].diceRequired)
+                    holder.mDiceRequired.text = "Dice is required "
+                else {
+                    holder.mDiceRequired.text = "Dice not required "
+                    holder.mDiceRequired.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                }
+
 
                 if (rulesList[position].buttons.size != 0)
                     holder.mButtons.text = "Buttons: " + rulesList[position].buttons.toString()

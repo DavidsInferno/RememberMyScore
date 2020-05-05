@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/White"
+    app:cardCornerRadius="10dp"
+    tools:context=".fragments.DiceFragment"
+    app:cardElevation="20dp"
+    android:focusable="true"
+    android:clickable="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/txtNumberOfDices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Ammount\nof Dices"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/numberOfDices"
+            app:layout_constraintStart_toStartOf="@+id/numberOfDices"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <NumberPicker
+            android:id="@+id/numberOfDices"
+            android:layout_width="45dp"
+            android:layout_height="130dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtNumberOfDices" />
+
+        <TextView
+            android:id="@+id/txtTypeOfDice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Number\nof sides"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/typeOfDice"
+            app:layout_constraintStart_toStartOf="@+id/typeOfDice"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <NumberPicker
+            android:id="@+id/typeOfDice"
+            android:layout_width="45dp"
+            android:layout_height="130dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/numberOfDices"
+            app:layout_constraintTop_toBottomOf="@+id/txtTypeOfDice" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRoll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="16dp"
+
+            android:clickable="true"
+            android:focusable="true"
+
+
+            android:text="ROLL"
+            android:textSize="15sp"
+            app:backgroundTint="@color/colorAccent"
+
+
+            app:layout_constraintEnd_toEndOf="@+id/typeOfDice"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="@+id/numberOfDices"
+            app:layout_constraintTop_toBottomOf="@+id/numberOfDices" />
+
+
+        <TextView
+            android:id="@+id/rollValue"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+
+            android:text="Dice roll"
+            app:layout_constraintEnd_toEndOf="@+id/btnRoll"
+            app:layout_constraintStart_toStartOf="@+id/btnRoll"
+            app:layout_constraintTop_toBottomOf="@+id/btnRoll" />
+
+        <View
+            android:id="@+id/BottomDivider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginBottom="24dp"
+            android:background="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/rollValue"
+            app:layout_constraintStart_toStartOf="@+id/rollValue"
+            app:layout_constraintTop_toBottomOf="@+id/rollValue" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>

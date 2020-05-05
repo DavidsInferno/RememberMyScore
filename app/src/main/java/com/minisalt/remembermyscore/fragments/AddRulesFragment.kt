@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.view.KeyEvent
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -26,6 +27,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
     private val dataMover = DataMover()
     var editGameRules: GameRules? = null
     var updatePosition: Int? = null
+    var rulesFragment: RulesFragment? = null
 
     //THIS IS FRAGMENT STUFF
     override var posX: Int? = null
@@ -35,10 +37,16 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
 
     companion object {
         @JvmStatic
-        fun newInstance(exit: IntArray? = null, editGameRules: GameRules? = null, updatePosition: Int? = null): AddRulesFragment =
+        fun newInstance(
+            exit: IntArray? = null,
+            editGameRules: GameRules? = null,
+            updatePosition: Int? = null,
+            rulesFragment: RulesFragment
+        ): AddRulesFragment =
             AddRulesFragment().apply {
                 this.editGameRules = editGameRules
                 this.updatePosition = updatePosition
+                this.rulesFragment = rulesFragment
                 if (exit != null && exit.size == 2) {
                     posX = exit[0]
                     posY = exit[1]
@@ -237,17 +245,16 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
 
     private fun saveSettings(): Boolean {
         val allRules: ArrayList<GameRules> = dataMover.loadGameRules(requireContext())
-        val fragm: RulesFragment? =
-            requireFragmentManager().findFragmentByTag("Rule Fragment") as RulesFragment?
 
+        gameRule.diceRequired = checkbox.isChecked
 
         return if (updatePosition == null && titleCheck(allRules) && pointCheck()) {
             dataMover.appendToGameRules(requireContext(), gameRule)
-            fragm?.gettingLatestRuleList(null)
+            rulesFragment?.gettingLatestRuleList(null)
             true
         } else if (updatePosition != null && checkForChanges()) {
             dataMover.replaceGameRule(requireContext(), gameRule, updatePosition!!)
-            fragm?.gettingLatestRuleList(updatePosition)
+            rulesFragment?.gettingLatestRuleList(updatePosition)
             true
         } else
             false
@@ -262,6 +269,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
     }
 
     private fun updatingListing() {
+        checkbox.isChecked = editGameRules!!.diceRequired
         titleText.text = Editable.Factory.getInstance().newEditable(editGameRules!!.name)
         editPointsToWin.text = Editable.Factory.getInstance().newEditable(editGameRules!!.pointsToWin.toString())
         gameRule.buttons = editGameRules!!.buttons
@@ -270,7 +278,15 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
     }
 
     private fun checkForChanges(): Boolean {
-        return updatedName() && pointCheck() && !dataMover.gameRuleExistence(requireContext(), gameRule)
+        return updatedName() && pointCheck() && !checkGameRuleExistence()
+    }
+
+    fun checkGameRuleExistence(): Boolean {
+        if (dataMover.gameRuleExistence(requireContext(), gameRule)) {
+            Toast.makeText(context, "No changes have been made", Toast.LENGTH_SHORT).show()
+            return true
+        }
+        return false
     }
 
     private fun updatedName(): Boolean {
@@ -285,7 +301,6 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
             }
             else -> gameRule.name = titleText.text.toString().capitalize()
         }
-
         return true
     }
 

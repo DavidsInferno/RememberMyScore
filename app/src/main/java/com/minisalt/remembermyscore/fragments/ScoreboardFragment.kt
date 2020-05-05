@@ -3,20 +3,26 @@ package com.minisalt.remembermyscore.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.transition.Slide
+import com.google.android.material.transition.MaterialSharedAxis
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.PlayerData
 import com.minisalt.remembermyscore.recyclerView.adapter.ScoreboardRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_scoreboard.*
 
 
-class ScoreboardFragment(var players: ArrayList<PlayerData>) : Fragment(R.layout.fragment_scoreboard) {
+class ScoreboardFragment(var players: ArrayList<PlayerData>, val gameFragment: GameFragment) : Fragment(R.layout.fragment_scoreboard) {
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enterTransition = MaterialSharedAxis.create(MaterialSharedAxis.Y, true)
+        exitTransition = MaterialSharedAxis.create(MaterialSharedAxis.Y, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val fragm: ScoreboardFragment? =
-            requireFragmentManager().findFragmentByTag("Scoreboard Fragment") as ScoreboardFragment?
-        fragm?.exitTransition = Slide()
+
+
 
         initRecyclerView(players)
 
@@ -33,20 +39,8 @@ class ScoreboardFragment(var players: ArrayList<PlayerData>) : Fragment(R.layout
     }
 
     fun closeScoreboard() {
-        fragmentManager?.beginTransaction()?.remove(this)?.commit()
-
-        val fragm: GameFragment? =
-            requireFragmentManager().findFragmentByTag("Game Fragment") as GameFragment?
-
-        fragm?.onCloseScoreboard()
+        parentFragmentManager.beginTransaction().remove(this).commit()
+        gameFragment.onCloseGameAdditions()
     }
 
-
-    override fun onPause() {
-        super.onPause()
-        val fragm: GameFragment? =
-            requireFragmentManager().findFragmentByTag("Game Fragment") as GameFragment?
-
-        fragm?.onCloseScoreboard()
-    }
 }

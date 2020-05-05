@@ -28,7 +28,7 @@
 
 
     <View
-        android:id="@+id/divider1"
+        android:id="@+id/BottomDivider"
         android:layout_width="1dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
@@ -52,7 +52,7 @@
 
 
         app:layout_constraintBottom_toBottomOf="@+id/playerPosition"
-        app:layout_constraintStart_toEndOf="@+id/divider1"
+        app:layout_constraintStart_toEndOf="@+id/BottomDivider"
         app:layout_constraintTop_toTopOf="@+id/playerPosition"
         app:layout_constraintVertical_bias="0.0" />
 

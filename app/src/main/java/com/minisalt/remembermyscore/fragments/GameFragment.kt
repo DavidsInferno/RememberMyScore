@@ -1,6 +1,7 @@
 package com.minisalt.remembermyscore.fragments
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -26,6 +27,8 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
 
     lateinit var gameRules: ArrayList<GameRules>
 
+    var diceClickable: Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enterTransition = MaterialFadeThrough.create()
@@ -50,8 +53,8 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
 
 
         scoreboardOverlay.setOnClickListener {
-            fragmentManager?.popBackStack()
-            onCloseScoreboard()
+            childFragmentManager.popBackStack()
+            onCloseGameAdditions()
         }
 
         when {
@@ -73,8 +76,9 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
                 if (indexOfRule != -1) {
                     initRecyclerView(existingGame.players, gameRules[indexOfRule])
 
-                    displayedGame = FinishedMatch(existingGame.players, existingGame.gamePlayed)
-                    initToolbar(existingGame.gamePlayed.name, gameRules[indexOfRule].pointsToWin)
+                    displayedGame = existingGame
+
+                    initToolbar(displayedGame.gamePlayed.name, gameRules[indexOfRule].pointsToWin)
                     initFAB()
                 } else {
                     txtNoGameActive.visibility = View.VISIBLE
@@ -105,6 +109,10 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
     }
 
     private fun initToolbar(title: String, points: Int?) {
+
+        if (displayedGame.gamePlayed.diceRequired)
+            materialToolbar.navigationIcon = resources.getDrawable(R.drawable.ic_casino_24px)
+
         if (points != null)
             materialToolbar.title = "$title ➞ $points"
         else
@@ -131,6 +139,23 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
     }
 
     private fun toolBarButtons() {
+
+        materialToolbar.setNavigationOnClickListener {
+            if (diceClickable) {
+                diceContainer.visibility = View.VISIBLE
+                scoreboardOverlay.visibility = View.VISIBLE
+                scoreboardOverlay.isClickable = true
+
+                childFragmentManager.beginTransaction().add(R.id.diceContainer, DiceFragment(displayedGame.diceProperties))
+                    .addToBackStack(null)
+                    .commit()
+                diceClickable = false
+            } else {
+                childFragmentManager.popBackStack()
+                onCloseGameAdditions()
+            }
+        }
+
         materialToolbar.setOnMenuItemClickListener { item: MenuItem? ->
             when (item?.itemId) {
                 R.id.gameReset -> {
@@ -163,7 +188,6 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
                     true
                 }
                 else -> false
-
             }
         }
     }
@@ -173,23 +197,16 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
 
         if (displayedGame != FinishedMatch() && !saveOccurred)
             dataMover.saveCurrentGame(requireContext(), displayedGame)
-
     }
 
     private fun returnHome(savedGame: Boolean) {
-        fragmentManager?.beginTransaction()?.setCustomAnimations(R.anim.slide_out_right, R.anim.slide_in_right)?.replace(
-            R.id.container, HomeFragment(savedGame)
-        )?.commit()
+        parentFragmentManager.beginTransaction().replace(R.id.container, HomeFragment(savedGame)).commit()
         val navigationView = requireActivity().findViewById(R.id.bottom_nav_view) as BottomNavigationView
         navigationView.menu.getItem(0).isChecked = true
     }
 
     private fun errorMessage(reason: String) {
-        Toast.makeText(
-            requireContext(), reason, Toast
-                .LENGTH_SHORT
-        )
-            .show()
+        Toast.makeText(requireContext(), reason, Toast.LENGTH_SHORT).show()
     }
 
     private fun openScoreboard() {
@@ -202,17 +219,23 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
 
         displayedGame.addPlayerPositionsAndNames()
 
-        fragmentManager?.beginTransaction()
-            ?.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_in_up)?.add(
-                R.id.containerScoreboard, ScoreboardFragment(displayedGame.players), "Scoreboard Fragment"
-            )?.addToBackStack(null)?.commit()
+        childFragmentManager.beginTransaction()
+            .add(R.id.containerScoreboard, ScoreboardFragment(displayedGame.players, this), "Scoreboard Fragment")
+            .addToBackStack(null)
+            .commit()
     }
 
-    fun onCloseScoreboard() {
-        btnScoreboard.show()
+    fun onCloseGameAdditions() {
+        diceContainer.isClickable = false
+        diceClickable = true
+
         containerScoreboard.isClickable = false
+
         scoreboardOverlay.isClickable = false
-        scoreboardOverlay.visibility = View.GONE
+        scoreboardOverlay.visibility = View.INVISIBLE
+
+        Handler().postDelayed({ btnScoreboard.show() }, 300)
+
     }
 
     private fun overlayMargin() {

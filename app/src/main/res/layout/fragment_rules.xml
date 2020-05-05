@@ -38,6 +38,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:text="You might want to add some rules."
             app:layout_constraintBottom_toBottomOf="@+id/recyclerViewRules"
             app:layout_constraintEnd_toEndOf="parent"

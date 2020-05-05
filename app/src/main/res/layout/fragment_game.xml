@@ -38,6 +38,20 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+    <FrameLayout
+        android:id="@+id/diceContainer"
+        android:layout_width="269dp"
+        android:layout_height="320dp"
+        android:visibility="gone"
+
+        android:clickable="false"
+        android:focusable="false"
+
+        android:layout_margin="8dp"
+        android:elevation="20dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/scoreboardOverlay" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnScoreboard"
@@ -77,6 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
+        android:elevation="10dp"
         android:clickable="false"
         android:background="#52000000"
         android:visibility="gone" />
@@ -86,6 +101,10 @@
         android:id="@+id/containerScoreboard"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+
+        android:elevation="20dp"
+
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

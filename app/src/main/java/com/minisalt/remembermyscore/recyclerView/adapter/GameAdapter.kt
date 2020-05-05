@@ -26,6 +26,8 @@ class GameAdapter(
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    val hasButtons = gameRule.buttons.size != 0
+
     inner class PlayDataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var mName: TextInputEditText = itemView.findViewById(R.id.nameInput)
         var mPoints: EditText = itemView.findViewById(R.id.inputScore)
@@ -123,8 +125,10 @@ class GameAdapter(
 
 
 
-
-                initRecyclerView(holder.nestedRecyclerView, holder.mPoints, position)
+                if (hasButtons)
+                    initRecyclerView(holder.nestedRecyclerView, holder.mPoints, position)
+                else
+                    holder.nestedRecyclerView.visibility = View.GONE
             }
         }
     }

@@ -7,6 +7,8 @@
     android:background="#BEA6F4"
     tools:context=".MainActivity"
     android:clickable="true"
+    android:focusable="true"
+
     android:paddingTop="16dp">
 
     <com.google.android.material.textfield.TextInputLayout
@@ -61,23 +63,22 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         app:errorEnabled="true"
+        app:helperText="Swipe To Delete Entries"
         app:layout_constraintEnd_toStartOf="@+id/buttonAdd"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/l_pointsToWin"
-        android:layout_marginHorizontal="16dp"
-        app:helperText="Swipe To Delete Entries"
 
-        >
+        app:layout_constraintTop_toBottomOf="@+id/checkbox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/numberInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberSigned"
+            android:hint="Buttons"
             android:imeOptions="actionSend"
-            android:singleLine="true"
-            android:hint="Buttons" />
+            android:inputType="numberSigned"
+            android:singleLine="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -91,8 +92,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/l_numberInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/l_numberInput"
-        app:layout_constraintTop_toBottomOf="@+id/l_pointsToWin"
-        app:layout_constraintVertical_bias="0.32999998" />
+        app:layout_constraintTop_toTopOf="@+id/l_numberInput" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewButton"
@@ -123,6 +123,18 @@
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:capitalize="none"
+        android:checked="false"
+        android:text="Does this game require a dice?"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toStartOf="@+id/l_pointsToWin"
+        app:layout_constraintTop_toBottomOf="@+id/l_pointsToWin" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

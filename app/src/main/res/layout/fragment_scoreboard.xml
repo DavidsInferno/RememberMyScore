@@ -11,7 +11,10 @@
         android:text="Close Scoreboard"
         android:backgroundTint="@color/colorAccent"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
+        android:layout_height="?attr/actionBarSize"
+
+        android:clickable="true"
+        android:focusable="true" />
 
 
     <androidx.recyclerview.widget.RecyclerView

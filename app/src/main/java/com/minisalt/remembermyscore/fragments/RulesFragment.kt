@@ -49,7 +49,8 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
                 // Pass center as the end position of the circular reveal
                 add(
                     R.id.container, AddRulesFragment.newInstance(
-                        positions
+                        positions,
+                        rulesFragment = this@RulesFragment
                     )
                 ).addToBackStack(null)
             }
@@ -127,7 +128,10 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
 
                                 val positions: IntArray =
                                     intArrayOf(recyclerViewRules.width / 2, viewHolder.itemView.y.toInt() + viewHolder.itemView.height / 2)
-                                add(R.id.container, AddRulesFragment.newInstance(positions, swipedGameRule, position)).addToBackStack(null)
+                                add(
+                                    R.id.container,
+                                    AddRulesFragment.newInstance(positions, swipedGameRule, position, this@RulesFragment)
+                                ).addToBackStack(null)
                                 Handler().postDelayed({ ruleAdapter.notifyItemChanged(position) }, 400)
                             } else {
                                 ruleAdapter.notifyItemChanged(position)
