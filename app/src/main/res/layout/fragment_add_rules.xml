@@ -16,6 +16,9 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+
+        app:helperText="*Required"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -39,6 +42,9 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+
+        app:helperText="*Required"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,6 +65,139 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/l_extraField1"
+
+        android:visibility="gone"
+
+
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        app:endIconMode="clear_text"
+
+        app:errorEnabled="true"
+
+        app:helperText="Tick if it is a winning condition"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/cBextraField1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/l_pointsToWin">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/extraField1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Extra number field"
+            android:inputType="number" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <CheckBox
+
+        android:visibility="gone"
+
+        android:id="@+id/cBextraField1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/l_extraField1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/l_extraField1" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/l_extraField2"
+
+        android:visibility="gone"
+
+
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        app:endIconMode="clear_text"
+
+        app:errorEnabled="true"
+
+        app:helperText="Tick if it is a winning condition"
+
+        app:layout_constraintEnd_toStartOf="@+id/cBextraField2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/l_extraField1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/extraField2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Extra number field 2"
+            android:inputType="number" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <CheckBox
+        android:visibility="gone"
+
+
+        android:id="@+id/cBextraField2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/l_extraField2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/l_extraField2" />
+
+    <Button
+        android:id="@+id/addExtraField"
+
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:padding="0dp"
+        app:icon="@drawable/ic_add_white"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="24dp"
+
+        app:layout_constraintStart_toStartOf="@+id/l_numberInput"
+        app:layout_constraintTop_toBottomOf="@+id/l_extraField2"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Add another field ( long press to remove )"
+        app:layout_constraintBottom_toBottomOf="@+id/addExtraField"
+        app:layout_constraintStart_toEndOf="@+id/addExtraField"
+        app:layout_constraintTop_toTopOf="@+id/addExtraField" />
+
+    <CheckBox
+        android:id="@+id/diceRequirement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="Dice required"
+        app:layout_constraintStart_toStartOf="@+id/l_numberInput"
+        app:layout_constraintTop_toBottomOf="@+id/addExtraField" />
+
+    <CheckBox
+        android:id="@+id/cbLowestScoreWins"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+
+        android:text="Lowest points win"
+        app:layout_constraintBottom_toBottomOf="@+id/diceRequirement"
+        app:layout_constraintEnd_toEndOf="@+id/buttonAdd"
+        app:layout_constraintStart_toEndOf="@+id/diceRequirement"
+        app:layout_constraintTop_toTopOf="@+id/diceRequirement" />
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/l_numberInput"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
@@ -69,7 +208,7 @@
         app:layout_constraintEnd_toStartOf="@+id/buttonAdd"
         app:layout_constraintStart_toStartOf="parent"
 
-        app:layout_constraintTop_toBottomOf="@+id/checkbox">
+        app:layout_constraintTop_toBottomOf="@+id/diceRequirement">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/numberInput"
@@ -123,18 +262,6 @@
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <CheckBox
-        android:id="@+id/checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:capitalize="none"
-        android:checked="false"
-        android:text="Does this game require a dice?"
-        android:textAllCaps="false"
-        app:layout_constraintStart_toStartOf="@+id/l_pointsToWin"
-        app:layout_constraintTop_toBottomOf="@+id/l_pointsToWin" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -34,6 +34,7 @@ class ScoresFragment : Fragment(R.layout.fragment_scores) {
     }
 
     private fun initRecyclerView(allMatches: ArrayList<FinishedMatch>) {
+
         recyclerViewScores.setHasFixedSize(true)
         val scoresAdapter = ScoresRecyclerviewAdapter(allMatches, requireContext())
         recyclerViewScores.adapter = scoresAdapter

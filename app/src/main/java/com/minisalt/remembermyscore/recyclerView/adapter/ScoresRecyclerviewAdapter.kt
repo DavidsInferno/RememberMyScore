@@ -94,7 +94,8 @@ class ScoresRecyclerviewAdapter(val finishedMatch: ArrayList<FinishedMatch>, val
                     collapseItem(holder)
 
 
-                val nestedPlayerScoreboard = ScoreboardRecyclerViewAdapter(context, finishedMatch[position].players)
+                val nestedPlayerScoreboard =
+                    ScoreboardRecyclerViewAdapter(context, finishedMatch[position].players, finishedMatch[position].gamePlayed)
                 initRecyclerView(holder.mRecyclerView, nestedPlayerScoreboard)
             }
         }

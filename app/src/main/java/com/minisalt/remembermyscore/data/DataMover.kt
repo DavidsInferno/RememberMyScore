@@ -14,7 +14,6 @@ class DataMover {
         val json: String? = sharedPreferences.getString("Game Rules", null)
         val type: Type = object : TypeToken<ArrayList<GameRules>>() {}.type
 
-
         return Gson().fromJson(json, type) ?: arrayListOf()
     }
 

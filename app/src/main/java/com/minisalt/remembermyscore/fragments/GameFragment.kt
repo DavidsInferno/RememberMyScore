@@ -13,6 +13,8 @@ import com.google.android.material.transition.MaterialFadeThrough
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.*
 import com.minisalt.remembermyscore.recyclerView.adapter.GameAdapter
+import com.minisalt.remembermyscore.recyclerView.adapter.GameAdapter2
+import com.minisalt.remembermyscore.recyclerView.adapter.GameAdapter3
 import kotlinx.android.synthetic.main.fragment_game.*
 import java.util.*
 
@@ -65,7 +67,7 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
                     freshGame(gameRules[indexOfRule], homeData.players)
 
                     displayedGame = FinishedMatch(displayedGame.players, gameRules[indexOfRule])
-                    initToolbar(displayedGame.gamePlayed.name, gameRules[indexOfRule].pointsToWin)
+                    initToolbar(displayedGame.gamePlayed.name, displayedGame.gamePlayed)
                     initFAB()
                 } else
                     errorMessage("Problem loading home data at GameFragment")
@@ -78,7 +80,7 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
 
                     displayedGame = existingGame
 
-                    initToolbar(displayedGame.gamePlayed.name, gameRules[indexOfRule].pointsToWin)
+                    initToolbar(displayedGame.gamePlayed.name, displayedGame.gamePlayed)
                     initFAB()
                 } else {
                     txtNoGameActive.visibility = View.VISIBLE
@@ -108,15 +110,19 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
         })
     }
 
-    private fun initToolbar(title: String, points: Int?) {
-
+    private fun initToolbar(title: String, gameRule: GameRules) {
         if (displayedGame.gamePlayed.diceRequired)
             materialToolbar.navigationIcon = resources.getDrawable(R.drawable.ic_casino_24px)
 
-        if (points != null)
-            materialToolbar.title = "$title ➞ $points"
+
+        if (gameRule.extraField_1condition && !gameRule.extraField_2condition)
+            materialToolbar.title = "$title ➞ ${gameRule.pointsToWin} : ${gameRule.extraField_1text}"
+        else if (!gameRule.extraField_1condition && gameRule.extraField_2condition)
+            materialToolbar.title = "$title ➞ ${gameRule.pointsToWin} : _ : ${gameRule.extraField_2text}"
+        else if (gameRule.extraField_1condition && gameRule.extraField_2condition)
+            materialToolbar.title = "$title ➞ ${gameRule.pointsToWin} : ${gameRule.extraField_1text} : ${gameRule.extraField_2text}"
         else
-            materialToolbar.title = title
+            materialToolbar.title = "$title ➞ ${gameRule.pointsToWin}"
 
         toolBarButtons()
     }
@@ -133,9 +139,22 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
     }
 
     private fun initRecyclerView(playerList: ArrayList<PlayerData>, gameRule: GameRules) {
-        recyclerViewPlayers.setHasFixedSize(true)
-        val gameAdapter = GameAdapter(playerList, requireContext(), gameRule)
-        recyclerViewPlayers.adapter = gameAdapter
+
+        if (gameRule.extraField_1_enabled && !gameRule.extraField_2_enabled) {
+            recyclerViewPlayers.setHasFixedSize(true)
+            val gameAdapter = GameAdapter2(playerList, requireContext(), gameRule)
+            recyclerViewPlayers.adapter = gameAdapter
+        } else if (gameRule.extraField_1_enabled && gameRule.extraField_2_enabled) {
+            recyclerViewPlayers.setHasFixedSize(true)
+            val gameAdapter = GameAdapter3(playerList, requireContext(), gameRule)
+            recyclerViewPlayers.adapter = gameAdapter
+        } else {
+            recyclerViewPlayers.setHasFixedSize(true)
+            val gameAdapter = GameAdapter(playerList, requireContext(), gameRule)
+            recyclerViewPlayers.adapter = gameAdapter
+        }
+
+
     }
 
     private fun toolBarButtons() {
@@ -220,7 +239,7 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
         displayedGame.addPlayerPositionsAndNames()
 
         childFragmentManager.beginTransaction()
-            .add(R.id.containerScoreboard, ScoreboardFragment(displayedGame.players, this), "Scoreboard Fragment")
+            .add(R.id.containerScoreboard, ScoreboardFragment(displayedGame.players, this, displayedGame.gamePlayed), "Scoreboard Fragment")
             .addToBackStack(null)
             .commit()
     }

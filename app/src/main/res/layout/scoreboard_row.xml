@@ -28,7 +28,7 @@
 
 
     <View
-        android:id="@+id/BottomDivider"
+        android:id="@+id/PositionDivider"
         android:layout_width="1dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
@@ -52,42 +52,110 @@
 
 
         app:layout_constraintBottom_toBottomOf="@+id/playerPosition"
-        app:layout_constraintStart_toEndOf="@+id/BottomDivider"
+        app:layout_constraintStart_toEndOf="@+id/PositionDivider"
         app:layout_constraintTop_toTopOf="@+id/playerPosition"
         app:layout_constraintVertical_bias="0.0" />
 
     <View
-        android:id="@+id/divider2"
+        android:id="@+id/divider1"
         android:layout_width="1dp"
         android:layout_height="30dp"
         android:layout_marginEnd="8dp"
         android:background="?android:attr/dividerVertical"
         app:layout_constraintBottom_toBottomOf="@+id/playerPoints"
         app:layout_constraintEnd_toStartOf="@+id/playerPoints"
-        app:layout_constraintTop_toTopOf="@+id/playerPoints" />
+        app:layout_constraintTop_toTopOf="@+id/playerPoints"
+        app:layout_constraintVertical_bias="0.25" />
 
     <TextView
         android:id="@+id/playerPoints"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
+
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:text="35"
+        android:textSize="25sp"
+
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/playerPosition"
+        app:layout_constraintEnd_toStartOf="@+id/divider2"
+        app:layout_constraintTop_toTopOf="@+id/playerPosition" />
+
+    <View
+        android:id="@+id/divider2"
+
+        android:visibility="gone"
+
+        android:layout_width="1dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/dividerVertical"
+        app:layout_constraintBottom_toBottomOf="@+id/playerPoints"
+        app:layout_constraintEnd_toStartOf="@+id/playerPoints2"
+        app:layout_constraintTop_toTopOf="@+id/playerPoints" />
+
+
+    <TextView
+        android:id="@+id/playerPoints2"
+
+        android:visibility="gone"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+
+        android:text="35"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/playerPoints"
+        app:layout_constraintEnd_toStartOf="@+id/divider3"
+        app:layout_constraintTop_toTopOf="@+id/playerPoints" />
+
+    <View
+        android:id="@+id/divider3"
+
+        android:visibility="gone"
+
+
+        android:layout_width="1dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/dividerVertical"
+        app:layout_constraintBottom_toBottomOf="@+id/playerPoints"
+        app:layout_constraintEnd_toStartOf="@+id/playerPoints3"
+        app:layout_constraintTop_toTopOf="@+id/playerPoints"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/playerPoints3"
+
+        android:visibility="gone"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+
         android:layout_marginEnd="16dp"
-
-
         android:gravity="center"
         android:text="35"
         android:textSize="25sp"
         android:textStyle="bold"
-
-        app:layout_constraintBottom_toBottomOf="@+id/playerPosition"
+        app:layout_constraintBottom_toBottomOf="@+id/playerPoints"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/playerPosition" />
+        app:layout_constraintTop_toTopOf="@+id/playerPoints" />
 
     <View
         android:id="@+id/horizontalDivider"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginHorizontal="16dp"
+
         android:background="?android:attr/dividerVertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/playerPoints"
-        app:layout_constraintStart_toStartOf="@+id/playerPosition" />
+        app:layout_constraintEnd_toEndOf="@+id/playerPoints" />
 </androidx.constraintlayout.widget.ConstraintLayout>
