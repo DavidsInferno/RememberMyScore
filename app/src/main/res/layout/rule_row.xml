@@ -115,7 +115,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
 
-                android:text="Requires Dice "
+                android:text="With Dice "
                 android:textStyle="bold|italic"
                 android:drawableEnd="@drawable/ic_casino_18px"
 
@@ -123,6 +123,37 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/extraField1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+
+                android:layout_marginEnd="8dp"
+                android:text="Extra field "
+                android:textStyle="bold|italic"
+
+                android:drawableEnd="@drawable/ic_rules_check"
+
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/DiceNeeded" />
+
+            <TextView
+                android:id="@+id/extraField2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="Extra field "
+                android:textStyle="bold|italic"
+
+                android:drawableEnd="@drawable/ic_rules_check"
+
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/extraField1" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
 

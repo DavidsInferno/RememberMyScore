@@ -29,6 +29,8 @@ class RulesAdapter(
         var mButtons: TextView = itemView.findViewById(R.id.Buttons)
         var mLastPlayed: TextView = itemView.findViewById(R.id.LastPlayed)
         var mDiceRequired: TextView = itemView.findViewById(R.id.DiceNeeded)
+        var mExtraField1: TextView = itemView.findViewById(R.id.extraField1)
+        var mExtraField2: TextView = itemView.findViewById(R.id.extraField2)
 
         //https://www.youtube.com/watch?v=AkiltTv0CjA
         init {
@@ -69,14 +71,16 @@ class RulesAdapter(
                 holder.mPoints.text = "Playing to " + rulesList[position].pointsToWin.toString()
                 holder.mGameCount.text = "Games played: " + dataMover.numberOfGamesPlayed(context, rulesList[position].name).toString()
 
+                if (rulesList[position].lowestPointsWin)
+                    holder.mPoints.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_down_arrow, 0)
 
 
-                if (rulesList[position].diceRequired)
-                    holder.mDiceRequired.text = "Dice is required "
-                else {
-                    holder.mDiceRequired.text = "Dice not required "
-                    holder.mDiceRequired.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-                }
+
+                if (!rulesList[position].diceRequired)
+                    holder.mDiceRequired.visibility = View.GONE
+
+
+                checkingForExtraFields(holder, rulesList[position])
 
 
                 if (rulesList[position].buttons.size != 0)
@@ -97,4 +101,23 @@ class RulesAdapter(
         return SimpleDateFormat("dd-MM-yy HH:mm").format(date)
     }
 
+    fun checkingForExtraFields(
+        holder: GameRulesViewHolder,
+        gameRule: GameRules
+    ) {
+        if (gameRule.extraField_1_enabled) {
+            if (!gameRule.extraField_1condition)
+                holder.mExtraField1.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+
+            if (gameRule.extraField_2_enabled) {
+                if (!gameRule.extraField_2condition)
+                    holder.mExtraField2.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+            } else
+                holder.mExtraField2.visibility = View.GONE
+
+        } else {
+            holder.mExtraField1.visibility = View.GONE
+            holder.mExtraField2.visibility = View.GONE
+        }
+    }
 }

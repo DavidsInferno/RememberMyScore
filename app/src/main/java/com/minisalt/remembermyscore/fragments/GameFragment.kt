@@ -111,8 +111,11 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
     }
 
     private fun initToolbar(title: String, gameRule: GameRules) {
-        if (displayedGame.gamePlayed.diceRequired)
+        if (displayedGame.gamePlayed.diceRequired) {
             materialToolbar.navigationIcon = resources.getDrawable(R.drawable.ic_casino_24px)
+            materialToolbar.contentInsetStartWithNavigation = 0
+        }
+
 
 
         if (gameRule.extraField_1condition && !gameRule.extraField_2condition)

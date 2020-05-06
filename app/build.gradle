@@ -45,5 +45,10 @@ dependencies {
     //https://github.com/xabaras/RecyclerViewSwipeDecorator
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.2'
 
-    implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC2'
+    //ViewPager2
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+
+    //AdMob
+    implementation 'com.google.android.gms:play-services-ads:19.1.0'
+
 }

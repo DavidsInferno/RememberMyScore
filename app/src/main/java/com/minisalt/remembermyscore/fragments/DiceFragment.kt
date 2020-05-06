@@ -9,7 +9,7 @@ import com.minisalt.remembermyscore.R
 import kotlinx.android.synthetic.main.fragment_dice.*
 
 
-class DiceFragment(val diceProperties: ArrayList<Int>) : Fragment(R.layout.fragment_dice) {
+class DiceFragment(private val diceProperties: ArrayList<Int>) : Fragment(R.layout.fragment_dice) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +20,7 @@ class DiceFragment(val diceProperties: ArrayList<Int>) : Fragment(R.layout.fragm
     }
 
 
-    val diceTypes: Array<String> = arrayOf("4", "6", "8", "10", "12", "20", "100")
+    private val diceTypes: Array<String> = arrayOf("2", "4", "6", "8", "10", "12", "20", "100")
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,12 +30,12 @@ class DiceFragment(val diceProperties: ArrayList<Int>) : Fragment(R.layout.fragm
         initDiceType()
 
         btnRoll.setOnClickListener {
-            val ammountOfDices = numberOfDices.value
+            val amountOfDices = numberOfDices.value
             val numberOfSides = Integer.parseInt(diceTypes[typeOfDice.value])
-            var rollesNumbers: String = ""
+            var rollesNumbers = ""
 
-            for (x in 1..ammountOfDices) {
-                if (x == ammountOfDices) {
+            for (x in 1..amountOfDices) {
+                if (x == amountOfDices) {
                     rollesNumbers += randomNumber(numberOfSides)
                     continue
                 }

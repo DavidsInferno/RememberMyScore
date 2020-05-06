@@ -1,13 +1,19 @@
 package com.minisalt.remembermyscore.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialFadeThrough
+import com.minisalt.remembermyscore.HelpActivity
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.DataMover
 import com.minisalt.remembermyscore.data.HomeData
@@ -23,12 +29,37 @@ class HomeFragment(private val savedGame: Boolean = false) :
         super.onCreate(savedInstanceState)
         enterTransition = MaterialFadeThrough.create()
         exitTransition = MaterialFadeThrough.create()
+        MobileAds.initialize(context)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val adRequest = AdRequest.Builder().build()
+        HomeFragmentAd.loadAd(adRequest)
+        HomeFragmentAd.visibility = View.GONE
+
+        HomeFragmentAd.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                HomeFragmentAd.visibility = View.VISIBLE
+                super.onAdLoaded()
+            }
+
+            override fun onAdFailedToLoad(p0: Int) {
+                Toast.makeText(context, "This isnt working", Toast.LENGTH_SHORT).show()
+                super.onAdFailedToLoad(p0)
+            }
+        }
+
         val allRules = arrayListOf<String>()
+
+
+        helpButton.setOnClickListener {
+            val myIntent = Intent(context, HelpActivity::class.java)
+            startActivity(myIntent)
+        }
+
+
 
 
         numberPickerSetup()
@@ -114,5 +145,10 @@ class HomeFragment(private val savedGame: Boolean = false) :
         )?.commit()
         val navigationView = requireActivity().findViewById(R.id.bottom_nav_view) as BottomNavigationView
         navigationView.menu.getItem(2).isChecked = true
+    }
+
+    override fun onPause() {
+        HomeFragmentAd.destroy()
+        super.onPause()
     }
 }
