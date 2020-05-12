@@ -29,8 +29,8 @@ class RulesAdapter(
         var mButtons: TextView = itemView.findViewById(R.id.Buttons)
         var mLastPlayed: TextView = itemView.findViewById(R.id.LastPlayed)
         var mDiceRequired: TextView = itemView.findViewById(R.id.DiceNeeded)
-        var mExtraField1: TextView = itemView.findViewById(R.id.extraField1)
-        var mExtraField2: TextView = itemView.findViewById(R.id.extraField2)
+        var mExtraField1: TextView = itemView.findViewById(R.id.extraField_1_winPoints)
+        var mExtraField2: TextView = itemView.findViewById(R.id.extraField_2_winPoints)
 
         //https://www.youtube.com/watch?v=AkiltTv0CjA
         init {

@@ -1,287 +1,471 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
-    tools:context=".MainActivity"
     android:clickable="true"
+    android:fillViewport="true"
     android:focusable="true"
 
-    android:animateLayoutChanges="true"
+    tools:context=".MainActivity">
 
-    android:paddingTop="16dp">
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/l_titleText"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-
-        app:helperText="*Required"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginHorizontal="16dp"
-        app:errorEnabled="true"
-        app:endIconMode="clear_text"
-        app:hintTextColor="@color/Black"
-        app:counterEnabled="true"
-        app:counterMaxLength="20"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/titleText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:inputType="text"
-            android:hint="Title" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/l_pointsToWin"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-
-        app:helperText="*Required"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/l_titleText"
-        android:layout_marginHorizontal="16dp"
-        app:endIconMode="clear_text"
-        app:hintTextColor="@color/Black"
-
-
-
-        app:errorEnabled="true">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editPointsToWin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="Points to win" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/l_extraField1"
-
-        android:visibility="gone"
-
-
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        app:endIconMode="clear_text"
-        app:hintTextColor="@color/Black"
-
-        app:errorEnabled="true"
-
-        app:helperText="Tick if it is a winning condition"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/cBextraField1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/l_pointsToWin">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/extraField1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Extra number field"
-            android:inputType="number" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <CheckBox
-
-        android:visibility="gone"
-
-        android:id="@+id/cBextraField1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/l_extraField1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/l_extraField1" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/l_extraField2"
-
-        android:visibility="gone"
-
-
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-
-        app:endIconMode="clear_text"
-        app:hintTextColor="@color/Black"
-
-        app:errorEnabled="true"
-
-        app:helperText="Tick if it is a winning condition"
-
-        app:layout_constraintEnd_toStartOf="@+id/cBextraField2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/l_extraField1">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/extraField2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Extra number field 2"
-            android:inputType="number" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <CheckBox
-        android:visibility="gone"
-
-
-        android:id="@+id/cBextraField2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/l_extraField2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/l_extraField2" />
-
-    <Button
-        android:id="@+id/addExtraField"
-
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        android:insetLeft="0dp"
-        android:insetTop="0dp"
-        android:insetRight="0dp"
-        android:insetBottom="0dp"
-        android:padding="0dp"
-        app:icon="@drawable/ic_add_white"
-        app:iconTint="@color/colorAccent"
-        app:iconGravity="textStart"
-        app:iconPadding="0dp"
-        app:iconSize="24dp"
-
-        app:strokeColor="@color/colorAccent"
-
-        app:layout_constraintStart_toStartOf="@+id/l_numberInput"
-        app:layout_constraintTop_toBottomOf="@+id/l_extraField2"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Add another field ( long press to remove )"
-        app:layout_constraintBottom_toBottomOf="@+id/addExtraField"
-        app:layout_constraintStart_toEndOf="@+id/addExtraField"
-        app:layout_constraintTop_toTopOf="@+id/addExtraField" />
-
-    <CheckBox
-        android:id="@+id/diceRequirement"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="false"
-        android:text="Dice"
-        app:layout_constraintStart_toStartOf="@+id/l_numberInput"
-        app:layout_constraintTop_toBottomOf="@+id/addExtraField" />
-
-    <CheckBox
-        android:id="@+id/cbLowestScoreWins"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="false"
-
-        android:text="Lowest points win"
-        app:layout_constraintBottom_toBottomOf="@+id/diceRequirement"
-        app:layout_constraintEnd_toEndOf="@+id/buttonAdd"
-        app:layout_constraintStart_toEndOf="@+id/diceRequirement"
-        app:layout_constraintTop_toTopOf="@+id/diceRequirement" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/l_numberInput"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        app:errorEnabled="true"
-
-        app:endIconMode="clear_text"
-        app:hintTextColor="@color/Black"
-
-        app:helperText="Swipe To Delete Entries"
-        app:layout_constraintEnd_toStartOf="@+id/buttonAdd"
-        app:layout_constraintStart_toStartOf="parent"
-
-        app:layout_constraintTop_toBottomOf="@+id/diceRequirement">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/numberInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Buttons"
-            android:imeOptions="actionSend"
-            android:inputType="numberSigned"
-            android:singleLine="true" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/buttonAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-
-        android:text="Add Button"
-        android:textColor="@color/colorAccent"
-
-        app:layout_constraintBottom_toBottomOf="@+id/l_numberInput"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/l_numberInput"
-        app:layout_constraintTop_toTopOf="@+id/l_numberInput" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewButton"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="70dp"
-        android:layout_marginBottom="8dp"
-        android:overScrollMode="never"
-        android:padding="4dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/btnSave"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:layout_margin="16dp">
+
+        <TextView
+            android:id="@+id/addRulesTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="8dp"
+            android:text="Creating new rule"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Switch
+            android:id="@+id/simpleSwitch"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:text="Simple  "
+            app:layout_constraintBottom_toBottomOf="@+id/addRulesTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/addRulesTitle" />
 
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/l_numberInput"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="Save"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/l_titleText"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginTop="32dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="20"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:helperText="*Required"
+            app:hintTextColor="@color/Black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addRulesTitle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/titleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Title"
+                android:inputType="text"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <View
+            android:id="@+id/pointDivider1"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="12dp"
+            android:background="?android:attr/dividerVertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/l_titleText" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/l_pointsToWin"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+
+            android:layout_marginTop="12dp"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:helperText="*Required"
+            app:hintTextColor="@color/Black"
+            app:layout_constraintEnd_toEndOf="parent"
+
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pointDivider1">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/pointsToWin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Points to win"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/l_defaultPoints_1"
+
+            android:visibility="gone"
+
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="8dp"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:hintTextColor="@color/Black"
+
+
+            app:layout_constraintEnd_toStartOf="@+id/cbLowestScoreWins"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/l_pointsToWin">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/defaultPoints_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="0"
+                android:hint="Starting points"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <CheckBox
+            android:id="@+id/cbLowestScoreWins"
+
+            android:visibility="gone"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+
+            android:text="Lowest points win"
+            app:layout_constraintBottom_toBottomOf="@+id/l_defaultPoints_1"
+            app:layout_constraintEnd_toEndOf="@+id/l_pointsToWin"
+            app:layout_constraintTop_toBottomOf="@+id/l_pointsToWin" />
+
+        <View
+            android:id="@+id/pointDivider2"
+
+            android:visibility="gone"
+
+            android:layout_width="250dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/dividerVertical"
+            app:layout_constraintEnd_toEndOf="@+id/cbLowestScoreWins"
+            app:layout_constraintStart_toStartOf="@+id/l_defaultPoints_1"
+            app:layout_constraintTop_toBottomOf="@+id/l_defaultPoints_1" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/l_extraField_1_default"
+
+            android:visibility="gone"
+
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:endIconMode="clear_text"
+
+            app:errorEnabled="true"
+
+            app:hintTextColor="@color/Black"
+            app:layout_constraintEnd_toStartOf="@+id/cBwinningCondition1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pointDivider2">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/extraField_1_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="0"
+                android:hint="Extra field starting points"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <CheckBox
+            android:id="@+id/cBwinningCondition1"
+
+            android:visibility="gone"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Need winning condition"
+            app:layout_constraintBottom_toBottomOf="@+id/l_extraField_1_default"
+            app:layout_constraintEnd_toEndOf="@+id/l_titleText"
+            app:layout_constraintTop_toTopOf="@+id/l_extraField_1_default" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/l_extraField_1_winPoints"
+
+            android:visibility="gone"
+
+
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            app:endIconMode="clear_text"
+
+            app:errorEnabled="true"
+            app:hintTextColor="@color/Black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/l_extraField_1_default">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/extraField_1_winPoints"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Winning points"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <View
+            android:id="@+id/pointDivider3"
+
+            android:visibility="gone"
+
+            android:layout_width="250dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/dividerVertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/l_extraField_1_winPoints" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/l_defaultPoints_2"
+
+            android:visibility="gone"
+
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="8dp"
+            app:endIconMode="clear_text"
+
+            app:errorEnabled="true"
+            app:hintTextColor="@color/Black"
+            app:layout_constraintEnd_toStartOf="@+id/cBwinningCondition2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pointDivider3">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/extraField_2_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:hint="Extra field 2 starting points"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <CheckBox
+            android:id="@+id/cBwinningCondition2"
+
+            android:visibility="gone"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Need winning condition"
+            app:layout_constraintBottom_toBottomOf="@+id/l_defaultPoints_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/l_defaultPoints_2" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/l_extraField_2_winPoints"
+
+            android:visibility="gone"
+
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginEnd="32dp"
+            app:endIconMode="clear_text"
+
+            app:errorEnabled="true"
+            app:hintTextColor="@color/Black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/l_defaultPoints_2">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/extraField_2_winPoints"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Winning points"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <View
+            android:id="@+id/pointDivider4"
+            app:layout_goneMarginTop="12dp"
+
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:background="?android:attr/dividerVertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/l_extraField_2_winPoints" />
+
+        <Button
+            android:id="@+id/addExtraField"
+
+            android:visibility="gone"
+
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:padding="0dp"
+            app:icon="@drawable/ic_add_white"
+
+            app:iconGravity="textStart"
+
+            app:iconPadding="0dp"
+            app:iconSize="24dp"
+            app:iconTint="@color/colorAccent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pointDivider4"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Circle"
+            app:strokeColor="@color/colorAccent" />
+
+
+        <TextView
+            android:id="@+id/txtExtraField"
+
+            android:visibility="gone"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Add another field \n( long press to remove )"
+            app:layout_constraintBottom_toBottomOf="@+id/addExtraField"
+            app:layout_constraintStart_toEndOf="@+id/addExtraField"
+            app:layout_constraintTop_toTopOf="@+id/addExtraField" />
+
+
+        <CheckBox
+            android:id="@+id/diceRequirement"
+
+            android:visibility="gone"
+
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:checked="false"
+
+            android:text="Dice"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addExtraField" />
+
+        <CheckBox
+            android:id="@+id/roundCounter"
+
+            android:visibility="gone"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Round counter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/diceRequirement" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/l_numberInput"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            app:endIconMode="clear_text"
+
+            app:errorEnabled="true"
+
+            app:helperText="Swipe To Delete Entries"
+            app:hintTextColor="@color/Black"
+            app:layout_constraintEnd_toStartOf="@+id/buttonAdd"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/roundCounter"
+            app:layout_goneMarginTop="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/numberInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Buttons"
+                android:imeOptions="actionSend"
+                android:inputType="numberSigned"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/buttonAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="16dp"
+
+            android:text="Add Button"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="@+id/l_numberInput"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/l_numberInput"
+            app:layout_constraintTop_toTopOf="@+id/l_numberInput" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewButton"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+
+            android:overScrollMode="never"
+
+
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+
+
+            app:layout_constraintBottom_toTopOf="@+id/btnSave"
+            app:layout_constraintEnd_toEndOf="@+id/l_numberInput"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/l_numberInput"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.core.widget.NestedScrollView>

@@ -9,7 +9,10 @@
     tools:context=".fragments.DiceFragment"
     app:cardElevation="20dp"
     android:focusable="true"
-    android:clickable="true">
+    android:clickable="true"
+    android:animateLayoutChanges="true"
+
+    android:id="@+id/diceLayout">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"

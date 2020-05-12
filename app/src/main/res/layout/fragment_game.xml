@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.GameFragment"
-    android:animateLayoutChanges="true"
     android:background="@color/Tasman">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -17,7 +16,8 @@
             android:id="@+id/l_materialToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:liftOnScroll="true">
+            app:liftOnScroll="true"
+            android:animateLayoutChanges="true">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/materialToolbar"
@@ -26,7 +26,10 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_scrollFlags="scroll|snap|enterAlways"
                 app:titleMarginStart="0dp"
-                app:menu="@menu/top_app_bar" />
+                app:menu="@menu/top_app_bar"
+                android:animateLayoutChanges="true"
+
+                />
 
         </com.google.android.material.appbar.AppBarLayout>
 

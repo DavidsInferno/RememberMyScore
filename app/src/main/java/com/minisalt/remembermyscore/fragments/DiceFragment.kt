@@ -3,6 +3,8 @@ package com.minisalt.remembermyscore.fragments
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import androidx.fragment.app.Fragment
 import com.google.android.material.transition.MaterialSharedAxis
 import com.minisalt.remembermyscore.R
@@ -16,6 +18,7 @@ class DiceFragment(private val diceProperties: ArrayList<Int>) : Fragment(R.layo
 
         enterTransition = MaterialSharedAxis.create(MaterialSharedAxis.Y, false)
         exitTransition = MaterialSharedAxis.create(MaterialSharedAxis.Y, true)
+
 
     }
 
@@ -32,21 +35,37 @@ class DiceFragment(private val diceProperties: ArrayList<Int>) : Fragment(R.layo
         btnRoll.setOnClickListener {
             val amountOfDices = numberOfDices.value
             val numberOfSides = Integer.parseInt(diceTypes[typeOfDice.value])
-            var rollesNumbers = ""
+            var rolledNumbers = ""
 
             for (x in 1..amountOfDices) {
                 if (x == amountOfDices) {
-                    rollesNumbers += randomNumber(numberOfSides)
+                    rolledNumbers += randomNumber(numberOfSides)
                     continue
                 }
-
-                rollesNumbers += randomNumber(numberOfSides) + "   "
+                rolledNumbers += randomNumber(numberOfSides) + "   "
             }
-            rollValue.text = rollesNumbers
+            changeTextWithAnim(rolledNumbers)
         }
     }
 
-    fun randomNumber(end: Int): String {
+    private fun changeTextWithAnim(rolledNumbers: String) {
+        val anim = AlphaAnimation(1.0f, 0.0f)
+        anim.duration = 200
+        anim.repeatCount = 1
+        anim.repeatMode = Animation.REVERSE
+
+        anim.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationEnd(animation: Animation?) {}
+            override fun onAnimationStart(animation: Animation?) {}
+            override fun onAnimationRepeat(animation: Animation?) {
+                rollValue.text = rolledNumbers
+            }
+        })
+
+        rollValue.startAnimation(anim)
+    }
+
+    private fun randomNumber(end: Int): String {
         return (1..end).random().toString()
     }
 

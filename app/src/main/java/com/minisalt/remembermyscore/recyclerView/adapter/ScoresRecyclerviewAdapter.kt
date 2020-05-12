@@ -31,11 +31,11 @@ class ScoresRecyclerviewAdapter(val finishedMatch: ArrayList<FinishedMatch>, val
     inner class ScoresViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mGameTitle: TextView = itemView.findViewById(R.id.gameTitle)
         val mDatePlayed: TextView = itemView.findViewById(R.id.datePlayed)
-        val mPosition: TextView = itemView.findViewById(R.id.position)
-        val mUsername: TextView = itemView.findViewById(R.id.username)
-        val mPointsToWin: TextView = itemView.findViewById(R.id.pointsToWin)
         val mCardView: CardView = itemView.findViewById(R.id.ScoresRow)
         val mArrow: ImageView = itemView.findViewById(R.id.chevron)
+
+        val mPlayingTo: TextView = itemView.findViewById(R.id.pointGoal)
+        val mRound: TextView = itemView.findViewById(R.id.roundCount)
 
 
         val mRecyclerView = itemView.findViewById<RecyclerView>(R.id.scoreboardRecyclerView)
@@ -77,15 +77,27 @@ class ScoresRecyclerviewAdapter(val finishedMatch: ArrayList<FinishedMatch>, val
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ScoresViewHolder -> {
+                val game = finishedMatch[position].gamePlayed
 
-                val gameTitleText = finishedMatch[position].gamePlayed.name + " ➙ " + finishedMatch[position]
-                    .gamePlayed.pointsToWin.toString()
+                val pointsToWin = if (game.extraField_1condition && !game.extraField_2condition)
+                    "Playing to ${game.pointsToWin}/${game.extraField_1_pointsToWin}"
+                else if (!game.extraField_1condition && game.extraField_2condition)
+                    "Playing to ${game.pointsToWin}/_/${game.extraField_2_pointsToWin}"
+                else if (game.extraField_1condition && game.extraField_2condition)
+                    "Playing to ${game.pointsToWin}/${game.extraField_1_pointsToWin}/${game.extraField_2_pointsToWin}"
+                else
+                    "Playing to ${game.pointsToWin}"
 
-                holder.mGameTitle.text = gameTitleText
+                holder.mGameTitle.text = game.name
                 holder.mDatePlayed.text = "Played: " + dateParser(finishedMatch[position].datePlayed!!)
-                holder.mPosition.text = "Rank"
-                holder.mUsername.text = "User name"
-                holder.mPointsToWin.text = "Score"
+
+
+                holder.mPlayingTo.text = pointsToWin
+
+                if (game.roundCounter)
+                    holder.mRound.text = "Rounds: " + finishedMatch[position].round
+                else
+                    holder.mRound.visibility = View.GONE
 
 
                 if (finishedMatch[position].expanded) {

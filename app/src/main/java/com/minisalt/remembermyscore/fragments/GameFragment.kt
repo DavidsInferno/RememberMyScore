@@ -31,6 +31,8 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
 
     var diceClickable: Boolean = true
 
+    var playingTo: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enterTransition = MaterialFadeThrough.create()
@@ -53,7 +55,6 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
         }
 
 
-
         scoreboardOverlay.setOnClickListener {
             childFragmentManager.popBackStack()
             onCloseGameAdditions()
@@ -67,7 +68,7 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
                     freshGame(gameRules[indexOfRule], homeData.players)
 
                     displayedGame = FinishedMatch(displayedGame.players, gameRules[indexOfRule])
-                    initToolbar(displayedGame.gamePlayed.name, displayedGame.gamePlayed)
+                    initToolbar(displayedGame.gamePlayed.name)
                     initFAB()
                 } else
                     errorMessage("Problem loading home data at GameFragment")
@@ -80,7 +81,7 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
 
                     displayedGame = existingGame
 
-                    initToolbar(displayedGame.gamePlayed.name, displayedGame.gamePlayed)
+                    initToolbar(displayedGame.gamePlayed.name)
                     initFAB()
                 } else {
                     txtNoGameActive.visibility = View.VISIBLE
@@ -110,22 +111,14 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
         })
     }
 
-    private fun initToolbar(title: String, gameRule: GameRules) {
+    private fun initToolbar(title: String) {
         if (displayedGame.gamePlayed.diceRequired) {
             materialToolbar.navigationIcon = resources.getDrawable(R.drawable.ic_casino_24px)
             materialToolbar.contentInsetStartWithNavigation = 0
         }
+        materialToolbar.findViewById<View>(R.id.gameRound).visibility = View.GONE
 
-
-
-        if (gameRule.extraField_1condition && !gameRule.extraField_2condition)
-            materialToolbar.title = "$title ➞ ${gameRule.pointsToWin} : ${gameRule.extraField_1text}"
-        else if (!gameRule.extraField_1condition && gameRule.extraField_2condition)
-            materialToolbar.title = "$title ➞ ${gameRule.pointsToWin} : _ : ${gameRule.extraField_2text}"
-        else if (gameRule.extraField_1condition && gameRule.extraField_2condition)
-            materialToolbar.title = "$title ➞ ${gameRule.pointsToWin} : ${gameRule.extraField_1text} : ${gameRule.extraField_2text}"
-        else
-            materialToolbar.title = "$title ➞ ${gameRule.pointsToWin}"
+        materialToolbar.title = title
 
         toolBarButtons()
     }
@@ -137,6 +130,7 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
         for (i in 0 until amountOfPlayers)
             displayedGame.players.add(PlayerData())
 
+        displayedGame.round = 0
         displayedGame.addPlayerPositionsAndNames()
         initRecyclerView(displayedGame.players, gameRule)
     }
@@ -144,14 +138,30 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
     private fun initRecyclerView(playerList: ArrayList<PlayerData>, gameRule: GameRules) {
 
         if (gameRule.extraField_1_enabled && !gameRule.extraField_2_enabled) {
+            for (i in playerList) {
+                i.playerPoints = gameRule.startingPoints
+                i.playerPoints2 = gameRule.extraField_StartPoint_1
+            }
+
             recyclerViewPlayers.setHasFixedSize(true)
             val gameAdapter = GameAdapter2(playerList, requireContext(), gameRule)
             recyclerViewPlayers.adapter = gameAdapter
         } else if (gameRule.extraField_1_enabled && gameRule.extraField_2_enabled) {
+            for (i in playerList) {
+                i.playerPoints = gameRule.startingPoints
+                i.playerPoints2 = gameRule.extraField_StartPoint_1
+                i.playerPoints3 = gameRule.extraField_StartPoint_2
+            }
+
             recyclerViewPlayers.setHasFixedSize(true)
             val gameAdapter = GameAdapter3(playerList, requireContext(), gameRule)
             recyclerViewPlayers.adapter = gameAdapter
         } else {
+            for (i in playerList) {
+                i.playerPoints = gameRule.startingPoints
+                i.playerPoints2 = gameRule.extraField_StartPoint_1
+            }
+
             recyclerViewPlayers.setHasFixedSize(true)
             val gameAdapter = GameAdapter(playerList, requireContext(), gameRule)
             recyclerViewPlayers.adapter = gameAdapter
@@ -209,6 +219,11 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
                     returnHome(savedGame = true)
                     true
                 }
+                R.id.gameRound -> {
+                    displayedGame.round++
+                    materialToolbar.title = playingTo + "  Round ${displayedGame.round}"
+                    true
+                }
                 else -> false
             }
         }
@@ -237,6 +252,10 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
         scoreboardOverlay.isClickable = true
         scoreboardOverlay.visibility = View.VISIBLE
 
+
+        toolbarForScoreboard(displayedGame.gamePlayed)
+
+
         overlayMargin()
 
         displayedGame.addPlayerPositionsAndNames()
@@ -247,14 +266,49 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
             .commit()
     }
 
+    private fun toolbarForScoreboard(gamePlayed: GameRules) {
+        materialToolbar.findViewById<View>(R.id.gameReset).visibility = View.GONE
+        materialToolbar.findViewById<View>(R.id.gameDelete).visibility = View.GONE
+        materialToolbar.findViewById<View>(R.id.gameSave).visibility = View.GONE
+        materialToolbar.navigationIcon = null
+
+        if (displayedGame.gamePlayed.roundCounter)
+            materialToolbar.findViewById<View>(R.id.gameRound).visibility = View.VISIBLE
+
+
+
+        playingTo = if (gamePlayed.extraField_1condition && !gamePlayed.extraField_2condition)
+            "Playing to ${gamePlayed.pointsToWin}/${gamePlayed.extraField_1_pointsToWin}"
+        else if (!gamePlayed.extraField_1condition && gamePlayed.extraField_2condition)
+            "Playing to ${gamePlayed.pointsToWin}/_/${gamePlayed.extraField_2_pointsToWin}"
+        else if (gamePlayed.extraField_1condition && gamePlayed.extraField_2condition)
+            "Playing to ${gamePlayed.pointsToWin}/${gamePlayed.extraField_1_pointsToWin}/${gamePlayed.extraField_2_pointsToWin}"
+        else
+            "Playing to ${gamePlayed.pointsToWin}"
+
+        if (gamePlayed.roundCounter)
+            materialToolbar.title = playingTo + "  Round ${displayedGame.round}"
+        else
+            materialToolbar.title = playingTo
+    }
+
     fun onCloseGameAdditions() {
         diceContainer.isClickable = false
         diceClickable = true
+
 
         containerScoreboard.isClickable = false
 
         scoreboardOverlay.isClickable = false
         scoreboardOverlay.visibility = View.INVISIBLE
+
+        initToolbar(displayedGame.gamePlayed.name)
+
+        materialToolbar.findViewById<View>(R.id.gameReset).visibility = View.VISIBLE
+        materialToolbar.findViewById<View>(R.id.gameDelete).visibility = View.VISIBLE
+        materialToolbar.findViewById<View>(R.id.gameSave).visibility = View.VISIBLE
+        materialToolbar.findViewById<View>(R.id.gameRound).visibility = View.GONE
+
 
         Handler().postDelayed({ btnScoreboard.show() }, 300)
 

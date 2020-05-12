@@ -62,55 +62,54 @@
             app:layout_constraintTop_toBottomOf="@+id/datePlayed">
 
             <TextView
-                android:id="@+id/position"
+                android:id="@+id/pointGoal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Pos"
+                android:textSize="15sp"
+                android:textStyle="italic"
+                android:text="Playing to"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/username"
+                android:id="@+id/roundCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Username"
-                app:layout_constraintEnd_toStartOf="@+id/pointsToWin"
-                app:layout_constraintStart_toEndOf="@+id/position"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/pointsToWin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="Points"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Round count"
+                android:textSize="15sp"
+                android:textStyle="italic"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pointGoal" />
 
             <View
                 android:id="@+id/horizontalDivider"
                 android:layout_width="0dp"
+
                 android:layout_height="1dp"
+                android:layout_marginTop="16dp"
                 android:background="?android:attr/dividerVertical"
+                android:paddingTop="20dp"
                 app:layout_constraintEnd_toEndOf="@+id/scoreboardRecyclerView"
                 app:layout_constraintStart_toStartOf="@+id/scoreboardRecyclerView"
-                app:layout_constraintTop_toTopOf="@+id/scoreboardRecyclerView" />
+                app:layout_constraintTop_toBottomOf="@+id/roundCount" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/scoreboardRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_marginHorizontal="16dp"
 
+
+                android:layout_marginBottom="16dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/username" />
+                app:layout_constraintTop_toBottomOf="@+id/horizontalDivider" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

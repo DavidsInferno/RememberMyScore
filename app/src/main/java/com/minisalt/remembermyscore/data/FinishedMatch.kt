@@ -2,14 +2,15 @@ package com.minisalt.remembermyscore.data
 
 import java.util.*
 
-data class FinishedMatch(var players: ArrayList<PlayerData> = arrayListOf(), val gamePlayed: GameRules = GameRules()) {
+data class FinishedMatch(
+    var players: ArrayList<PlayerData> = arrayListOf(),
+    val gamePlayed: GameRules = GameRules(),
+    var expanded: Boolean = false,
+    var diceProperties: ArrayList<Int> = arrayListOf(-1, -1),
+    var datePlayed: Date? = null,
+    var round: Int = 0
+) {
 
-    var expanded: Boolean = false
-
-    var diceProperties: ArrayList<Int> = arrayListOf(-1, -1)
-
-
-    var datePlayed: Date? = null
 
 
     fun addPlayerPositionsAndNames() {

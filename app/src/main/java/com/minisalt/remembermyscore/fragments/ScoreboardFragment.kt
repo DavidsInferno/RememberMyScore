@@ -43,7 +43,7 @@ class ScoreboardFragment(
         recyclerScoreboard.adapter = scoreBoardAdapter
     }
 
-    fun closeScoreboard() {
+    private fun closeScoreboard() {
         parentFragmentManager.beginTransaction().remove(this).commit()
         gameFragment.onCloseGameAdditions()
     }

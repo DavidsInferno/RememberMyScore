@@ -84,7 +84,7 @@ class GameAdapter2(val playerList: ArrayList<PlayerData>, val context: Context, 
                     } else {
                         playerList[adapterPosition].playerPoints2 = Integer.parseInt(mPoints.text.toString())
                         if (gameRule.extraField_1condition) {
-                            checkWinner(playerList[adapterPosition].playerPoints2, gameRule.extraField_1text!!, adapterPosition)
+                            checkWinner(playerList[adapterPosition].playerPoints2, gameRule.extraField_1_pointsToWin!!, adapterPosition)
                         }
                     }
 

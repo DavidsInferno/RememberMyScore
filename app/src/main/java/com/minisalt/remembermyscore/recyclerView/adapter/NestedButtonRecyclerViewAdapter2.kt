@@ -57,7 +57,7 @@ class NestedButtonRecyclerViewAdapter2(
                         playerData.playerPoints2 = score
                         mScore2.text = Editable.Factory.getInstance().newEditable(score.toString())
                         if (gameRule.extraField_1condition)
-                            checkWinner(score, gameRule.extraField_1text)
+                            checkWinner(score, gameRule.extraField_1_pointsToWin)
                     }
 
 
