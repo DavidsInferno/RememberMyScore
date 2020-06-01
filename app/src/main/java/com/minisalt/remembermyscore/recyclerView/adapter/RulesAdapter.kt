@@ -29,23 +29,19 @@ class RulesAdapter(
         var mButtons: TextView = itemView.findViewById(R.id.Buttons)
         var mLastPlayed: TextView = itemView.findViewById(R.id.LastPlayed)
         var mDiceRequired: TextView = itemView.findViewById(R.id.DiceNeeded)
-        var mExtraField1: TextView = itemView.findViewById(R.id.extraField_1_winPoints)
-        var mExtraField2: TextView = itemView.findViewById(R.id.extraField_2_winPoints)
+        var mExtraFields: TextView = itemView.findViewById(R.id.extraField_1_winPoints)
+        var mRoundCounter: TextView = itemView.findViewById(R.id.roundCounter)
 
         //https://www.youtube.com/watch?v=AkiltTv0CjA
         init {
-            itemView.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(view: View) {
-                    recyclerViewClickInterface.onItemClick(adapterPosition)
-                }
-            })
+            itemView.setOnClickListener {
+                recyclerViewClickInterface.onItemClick(adapterPosition)
+            }
 
-            itemView.setOnLongClickListener(object : View.OnLongClickListener {
-                override fun onLongClick(view: View): Boolean {
-                    recyclerViewClickInterface.onLongItemClick(adapterPosition)
-                    return true
-                }
-            })
+            itemView.setOnLongClickListener {
+                recyclerViewClickInterface.onLongItemClick(adapterPosition)
+                true
+            }
         }
         //-------------------------------------------
     }
@@ -74,6 +70,12 @@ class RulesAdapter(
                 if (rulesList[position].lowestPointsWin)
                     holder.mPoints.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_down_arrow, 0)
 
+                if (rulesList[position].roundCounter)
+                    holder.mRoundCounter.visibility = View.VISIBLE
+                else
+                    holder.mRoundCounter.visibility = View.GONE
+
+
 
 
                 if (!rulesList[position].diceRequired)
@@ -101,23 +103,16 @@ class RulesAdapter(
         return SimpleDateFormat("dd-MM-yy HH:mm").format(date)
     }
 
-    fun checkingForExtraFields(
-        holder: GameRulesViewHolder,
-        gameRule: GameRules
-    ) {
+    private fun checkingForExtraFields(holder: GameRulesViewHolder, gameRule: GameRules) {
         if (gameRule.extraField_1_enabled) {
-            if (!gameRule.extraField_1condition)
-                holder.mExtraField1.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
 
-            if (gameRule.extraField_2_enabled) {
-                if (!gameRule.extraField_2condition)
-                    holder.mExtraField2.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-            } else
-                holder.mExtraField2.visibility = View.GONE
+            if (gameRule.extraField_2_enabled)
+                holder.mExtraFields.text = "Extra field x2 "
+            else
+                holder.mExtraFields.text = "Extra field "
 
-        } else {
-            holder.mExtraField1.visibility = View.GONE
-            holder.mExtraField2.visibility = View.GONE
-        }
+        } else
+            holder.mExtraFields.visibility = View.GONE
+
     }
 }

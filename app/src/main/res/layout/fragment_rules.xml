@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.RulesFragment"
-    android:background="@color/Tasman"
-    android:id="@+id/rulesContainer">
+    android:background="@color/Tasman">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

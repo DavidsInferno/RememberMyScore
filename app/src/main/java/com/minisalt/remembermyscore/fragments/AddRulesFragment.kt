@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputLayout
 import com.minisalt.remembermyscore.MainActivity
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.DataMover
@@ -20,6 +21,12 @@ import com.minisalt.remembermyscore.utils.ExitWithAnimation
 import com.minisalt.remembermyscore.utils.startCircularReveal
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.android.synthetic.main.fragment_add_rules.*
+
+enum class InputFields {
+    Main,
+    Second,
+    Third
+}
 
 class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimation,
     RecyclerViewClickInterface {
@@ -227,23 +234,10 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
             }
 
             override fun onChildDraw(
-                c: Canvas,
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                dX: Float,
-                dY: Float,
-                actionState: Int,
+                c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int,
                 isCurrentlyActive: Boolean
             ) {
-                RecyclerViewSwipeDecorator.Builder(
-                    c,
-                    recyclerView,
-                    viewHolder,
-                    dX,
-                    dY,
-                    actionState,
-                    isCurrentlyActive
-                )
+                RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     .addBackgroundColor(ContextCompat.getColor(context!!, R.color.DeleteRed))
                     .addActionIcon(R.drawable.ic_delete_white)
                     .setIconHorizontalMargin(R.drawable.ic_delete_white, 8)
@@ -353,7 +347,6 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
                 true
             }
         }
-
     }
 
     private fun startingPointCheck(): Boolean {
@@ -465,6 +458,33 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
     }
     //------------------------------------
 
+    private fun startingPointCheck(points: String, layout: TextInputLayout, inputField: InputFields): Boolean {
+        return when {
+            points == "" -> {
+                layout.error = "Field can't be empty"
+                false
+            }
+            points.length > 10 -> {
+                layout.error = "Number is too big"
+                false
+            }
+            else -> {
+                when (inputField) {
+                    InputFields.Main -> {
+                        gameRule.startingPoints = Integer.parseInt(points)
+                        println("This just worked")
+                    }
+
+                    InputFields.Second -> gameRule.startingPoints = Integer.parseInt(points)
+
+                    InputFields.Third -> gameRule.startingPoints = Integer.parseInt(points)
+                }
+
+                layout.error = null
+                true
+            }
+        }
+    }
 
     private fun saveSettings(): Boolean {
         val allRules: ArrayList<GameRules> = dataMover.loadGameRules(requireContext())
@@ -480,6 +500,10 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         }
 
 
+        //startingPointCheck(defaultPoints_1.text.toString(), l_defaultPoints_1, InputFields.Main)
+
+        if (!titleCheck(allRules))
+            return false
 
         if (winningPointCheck()) {
             if (gameRule.advancedMode) {
@@ -487,11 +511,13 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
                     if (!gameRule.lowestPointsWin && (gameRule.startingPoints >= gameRule.pointsToWin)) {
                         l_defaultPoints_1.error = "Starting points higher than winning points"
                         return false
+                    } else if (gameRule.lowestPointsWin && (gameRule.pointsToWin >= gameRule.startingPoints)) {
+                        l_defaultPoints_1.error = "Starting points must be higher than winning points"
+                        return false
                     }
                 } else
                     return false
             }
-
         } else
             return false
 
@@ -528,11 +554,11 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
 
 
         //updatePosition indicates if the rule is being updated or not
-        return if (updatePosition == null && titleCheck(allRules)) {
+        return if (updatePosition == null) {
             dataMover.appendToGameRules(requireContext(), gameRule)
             rulesFragment?.gettingLatestRuleList(null)
             true
-        } else if (updatePosition != null && checkForChanges()) {
+        } else if (updatePosition != null && !checkGameRuleExistence()) {
             dataMover.replaceGameRule(requireContext(), gameRule, updatePosition!!)
             rulesFragment?.gettingLatestRuleList(updatePosition)
             true
@@ -542,6 +568,12 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
 
 
     private fun repeatingName(allRules: ArrayList<GameRules>): Boolean {
+        if (updatePosition != null) // game is getting updated
+        {
+            if (editGameRules!!.name.decapitalize() == titleText.text.toString().decapitalize())
+                return false
+        }
+
         for (topItem in allRules)
             if (topItem.name.decapitalize() == titleText.text.toString().decapitalize())
                 return true
@@ -592,31 +624,12 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         buttonBackup.addAll(gameRule.buttons)
     }
 
-    private fun checkForChanges(): Boolean {
-        return updatedName() && !checkGameRuleExistence()
-    }
-
     fun checkGameRuleExistence(): Boolean {
         if (dataMover.gameRuleExistence(requireContext(), gameRule)) {
             Toast.makeText(context, "No changes have been made", Toast.LENGTH_SHORT).show()
             return true
         }
         return false
-    }
-
-    private fun updatedName(): Boolean {
-        when {
-            titleText.text.toString() == "" -> {     //Checking if there is a name
-                l_titleText.error = "Input valid title name"
-                return false
-            }
-            titleText.length() > 20 -> {
-                l_titleText.error = "Title length must be under 20 characters"
-                return false
-            }
-            else -> gameRule.name = titleText.text.toString().capitalize()
-        }
-        return true
     }
 
     override fun onPause() {
@@ -633,6 +646,11 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
 
     override fun onLongItemClick(position: Int) {
         TODO("Not yet implemented")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        parentFragmentManager.popBackStack()
     }
 
 }

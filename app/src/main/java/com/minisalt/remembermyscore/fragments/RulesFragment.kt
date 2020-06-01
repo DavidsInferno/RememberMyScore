@@ -101,7 +101,6 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
                         val swipedGameRule = list[position]
 
                         if (!(checkIfGameIsInProgress(swipedGameRule.name))) {
-
                             list.removeAt(position)
                             ruleAdapter.notifyItemRemoved(position)
                             //set anchor view to show it above the navigation buttons
@@ -125,7 +124,6 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
                             val swipedGameRule = list[position]
 
                             if (!(checkIfGameIsInProgress(swipedGameRule.name))) {
-
                                 val positions: IntArray =
                                     intArrayOf(recyclerViewRules.width / 2, viewHolder.itemView.y.toInt() + viewHolder.itemView.height / 2)
                                 add(
@@ -136,7 +134,6 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
                             } else {
                                 ruleAdapter.notifyItemChanged(position)
                             }
-
                         }
                     }
                 }

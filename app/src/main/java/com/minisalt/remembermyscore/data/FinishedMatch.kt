@@ -20,6 +20,24 @@ data class FinishedMatch(
             descending()
     }
 
+    fun addPlayerPoints() {
+        if (gamePlayed.extraField_1_enabled && !gamePlayed.extraField_2_enabled) {
+            for (i in players) {
+                i.playerPoints = gamePlayed.startingPoints
+                i.playerPoints2 = gamePlayed.extraField_StartPoint_1
+            }
+        } else if (gamePlayed.extraField_1_enabled && gamePlayed.extraField_2_enabled) {
+            for (i in players) {
+                i.playerPoints = gamePlayed.startingPoints
+                i.playerPoints2 = gamePlayed.extraField_StartPoint_1
+                i.playerPoints3 = gamePlayed.extraField_StartPoint_2
+            }
+        } else {
+            for (i in players)
+                i.playerPoints = gamePlayed.startingPoints
+        }
+    }
+
 
     private fun ascending() {
         val sortedList: List<PlayerData> = players.sortedWith((compareBy { it.playerPoints }))

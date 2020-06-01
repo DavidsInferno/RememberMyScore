@@ -22,7 +22,6 @@ class DiceFragment(private val diceProperties: ArrayList<Int>) : Fragment(R.layo
 
     }
 
-
     private val diceTypes: Array<String> = arrayOf("2", "4", "6", "8", "10", "12", "20", "100")
 
 

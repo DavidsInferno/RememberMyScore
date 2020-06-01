@@ -3,10 +3,10 @@
 
     <item
         android:id="@+id/gameRound"
-        android:icon="@drawable/ic_plusone"
+        android:icon="@drawable/ic_oneplus_24px"
         android:contentDescription="Add round"
         android:title="Add round"
-        app:showAsAction="always|withText" />
+        app:showAsAction="always" />
 
 
     <item

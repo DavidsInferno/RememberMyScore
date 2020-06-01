@@ -35,6 +35,8 @@
 
             android:layout_height="wrap_content"
             android:text="Simple  "
+            android:textStyle="italic"
+            android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="@+id/addRulesTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/addRulesTitle" />
@@ -45,7 +47,6 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
 
             android:layout_marginTop="32dp"
             app:counterEnabled="true"
@@ -65,7 +66,6 @@
                 android:hint="Title"
                 android:inputType="text"
                 android:maxLines="1" />
-
         </com.google.android.material.textfield.TextInputLayout>
 
 

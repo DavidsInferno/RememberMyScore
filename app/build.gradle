@@ -51,4 +51,8 @@ dependencies {
     //AdMob
     implementation 'com.google.android.gms:play-services-ads:19.1.0'
 
+    //leak canary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:2.3'
+
 }

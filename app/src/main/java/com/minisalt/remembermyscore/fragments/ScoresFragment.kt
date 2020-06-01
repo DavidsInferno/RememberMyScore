@@ -9,12 +9,13 @@ import com.minisalt.remembermyscore.data.DataMover
 import com.minisalt.remembermyscore.data.FinishedMatch
 import com.minisalt.remembermyscore.recyclerView.adapter.ScoresRecyclerviewAdapter
 import kotlinx.android.synthetic.main.fragment_scores.*
-import java.util.*
 
 
 class ScoresFragment : Fragment(R.layout.fragment_scores) {
 
     val dataMover = DataMover()
+    var ammountOfGames = 0
+    lateinit var finishedMatches: ArrayList<FinishedMatch>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,10 +27,16 @@ class ScoresFragment : Fragment(R.layout.fragment_scores) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val finishedMatches = dataMover.loadAllMatches(requireContext())
+        finishedMatches = dataMover.loadAllMatches(requireContext())
+        ammountOfGames = finishedMatches.size
+
 
         initRecyclerView(finishedMatches)
 
+        if (finishedMatches.size == 0)
+            txtNoGameActive.visibility = View.VISIBLE
+        else
+            txtNoGameActive.visibility = View.GONE
 
     }
 
@@ -38,5 +45,11 @@ class ScoresFragment : Fragment(R.layout.fragment_scores) {
         recyclerViewScores.setHasFixedSize(true)
         val scoresAdapter = ScoresRecyclerviewAdapter(allMatches, requireContext())
         recyclerViewScores.adapter = scoresAdapter
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (ammountOfGames != finishedMatches.size)
+            dataMover.saveMatches(requireContext(), finishedMatches)
     }
 }

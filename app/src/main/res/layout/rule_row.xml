@@ -13,7 +13,6 @@
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/titleConstraint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/CornflowerBlue">
@@ -54,7 +53,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/infoConstraint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/White">
@@ -140,16 +138,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/DiceNeeded" />
 
             <TextView
-                android:id="@+id/extraField_2_winPoints"
+                android:id="@+id/roundCounter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="Extra field "
+                android:text="Round counter "
                 android:textStyle="bold|italic"
 
-                android:drawableEnd="@drawable/ic_rules_check"
+                android:drawableEnd="@drawable/ic_timer"
 
 
                 app:layout_constraintEnd_toEndOf="parent"

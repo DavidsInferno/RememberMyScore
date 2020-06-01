@@ -66,6 +66,9 @@ class ScoreboardRecyclerViewAdapter(
                 } else {
                     holder.mPlayerScore2.visibility = View.GONE
                     holder.divider2.visibility = View.GONE
+
+                    holder.mPlayerScore3.visibility = View.GONE
+                    holder.divider3.visibility = View.GONE
                 }
 
             }

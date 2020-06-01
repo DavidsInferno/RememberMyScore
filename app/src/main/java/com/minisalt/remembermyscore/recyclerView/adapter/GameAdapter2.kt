@@ -122,16 +122,24 @@ class GameAdapter2(val playerList: ArrayList<PlayerData>, val context: Context, 
     }
 
     fun checkWinner(playerPoints: Int, pointsToWin: Int, adapterPosition: Int) {
-        if (playerPoints >= pointsToWin) {
-            MaterialAlertDialogBuilder(context)
-                .setTitle("${playerList[adapterPosition].playerName} has won the game!")
-                .setMessage("On dialog close, you can resume the game, or start another")
-                .setPositiveButton("Awesome!") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .show()
-        }
+        //if it feels bad just place the materialDialogBuilder in each of the inner if-s and remove the negation
+        if (!gameRule.lowestPointsWin) {
+            if (!(playerPoints >= pointsToWin))
+                return
+        } else
+            if (!(playerPoints <= pointsToWin))
+                return
+
+
+        MaterialAlertDialogBuilder(context)
+            .setTitle("${playerList[adapterPosition].playerName} has won the game!")
+            .setMessage("On dialog close, you can resume the game, or start another")
+            .setPositiveButton("Awesome!") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
+
 
     private fun initRecyclerView(
         nestedRecyclerView: RecyclerView,

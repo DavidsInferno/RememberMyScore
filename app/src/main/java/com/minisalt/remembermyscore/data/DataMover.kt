@@ -8,6 +8,7 @@ import java.lang.reflect.Type
 import java.util.*
 
 class DataMover {
+
     fun loadGameRules(context: Context): ArrayList<GameRules> {
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
@@ -74,7 +75,6 @@ class DataMover {
         return allGameRules.contains(rule)
     }
 
-
     fun saveCurrentGame(context: Context, match: FinishedMatch) {
         val sharedPreferences: SharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
@@ -97,6 +97,15 @@ class DataMover {
         val type: Type = object : TypeToken<ArrayList<FinishedMatch>>() {}.type
 
         return Gson().fromJson(json, type) ?: arrayListOf()
+    }
+
+    fun saveMatches(context: Context, list: ArrayList<FinishedMatch>) {
+        val sharedPreferences: SharedPreferences =
+            context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+
+        editor.putString("Finished Matches", Gson().toJson(list))
+        editor.apply()
     }
 
     fun appendToFinishedMatches(context: Context, match: FinishedMatch) {
@@ -169,5 +178,20 @@ class DataMover {
 
         return counter
     }
+
+
+    fun firstTimeRead(context: Context): Boolean {
+        val sharedPreferences: SharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean("First Launch", true)
+    }
+
+    fun firstTimeWrite(context: Context, firstTime: Boolean) {
+        val sharedPreferences: SharedPreferences =
+            context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+
+        editor.putBoolean("First Launch", firstTime).apply()
+    }
+
 
 }

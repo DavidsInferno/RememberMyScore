@@ -1,11 +1,13 @@
 package com.minisalt.remembermyscore
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.minisalt.remembermyscore.data.DataMover
 import com.minisalt.remembermyscore.fragments.GameFragment
 import com.minisalt.remembermyscore.fragments.HomeFragment
 import com.minisalt.remembermyscore.fragments.RulesFragment
@@ -25,37 +27,37 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        if (DataMover().firstTimeRead(this)) {
+            val myIntent = Intent(this, HelpActivity::class.java)
+            startActivity(myIntent)
+        }
+
         bottom_nav_view.setOnNavigationItemSelectedListener(this)
         bottom_nav_view.selectedItemId = R.id.navigation_home
     }
 
-
-    val homeFragment = HomeFragment()
-    val gameFragment = GameFragment()
-    val rulesFragment = RulesFragment()
-    val scoresFragment = ScoresFragment()
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
             R.id.navigation_home -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, homeFragment, "Home Fragment").commit()
+                    .replace(R.id.container, HomeFragment(), "Home Fragment").commit()
             }
 
             R.id.navigation_game -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, gameFragment, "Game Fragment").commit()
+                    .replace(R.id.container, GameFragment(), "Game Fragment").commit()
             }
 
             R.id.navigation_rules -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, rulesFragment, "Rule Fragment").commit()
+                    .replace(R.id.container, RulesFragment(), "Rule Fragment").commit()
             }
 
             R.id.navigation_scores -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, scoresFragment, "Scores Fragment").commit()
+                    .replace(R.id.container, ScoresFragment(), "Scores Fragment").commit()
             }
         }
         return true

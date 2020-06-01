@@ -9,16 +9,36 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.viewpager2.widget.ViewPager2
+import com.minisalt.remembermyscore.data.DataMover
+import com.minisalt.remembermyscore.data.IntroSlide
 import kotlinx.android.synthetic.main.activity_help.*
 
 class HelpActivity : AppCompatActivity() {
 
     private val introSlideAdapter = IntroSlideAdapter(
         listOf(
-            IntroSlide("Sunlight", "This is another thing", R.drawable.jenga),
-            IntroSlide("Ble", "Jos jedan opis", R.drawable.two_green_folk),
-            IntroSlide("Peja!", "Evo ti peja dude", R.drawable.highfive),
-            IntroSlide("Winning!", "To stari jel mos virovat da san pobjedia ovo!", R.drawable.winning)
+            IntroSlide(
+                "Welcome to RememberMyScore", "This is an app that lets you keep track of any game you want. Let me walk you through " +
+                        "some of the features", R.drawable.redo_main
+            ),
+            IntroSlide(
+                "Home Screen", "From this screen you can select how many players are playing and what game you want to play.", R.drawable
+                    .home_screen
+            ),
+
+            IntroSlide(
+                "Game screen", "This is where you keep track of all your scores. Don't worry about losing your progress, it gets saved " +
+                        "automatically when you leave this screen.", R.drawable.game_screen
+            ),
+            IntroSlide(
+                "Rules screen", "This is where you will keep a collection of all the games you have created. From here you can make " +
+                        "your own!", R.drawable.rules_screen
+            ),
+            IntroSlide(
+                "Scores screen",
+                "All the games you have completed will be saved here",
+                R.drawable.scores_screen
+            )
         )
     )
 
@@ -34,6 +54,8 @@ class HelpActivity : AppCompatActivity() {
             if (introSliderViewPager.currentItem + 1 < introSlideAdapter.itemCount)
                 introSliderViewPager.currentItem++
             else {
+                DataMover().firstTimeWrite(this, false)
+
                 val myIntent = Intent(this, MainActivity::class.java)
                 startActivity(myIntent)
             }
@@ -83,6 +105,5 @@ class HelpActivity : AppCompatActivity() {
             }
         }
     }
-
 
 }

@@ -37,6 +37,8 @@ class ScoresRecyclerviewAdapter(val finishedMatch: ArrayList<FinishedMatch>, val
         val mPlayingTo: TextView = itemView.findViewById(R.id.pointGoal)
         val mRound: TextView = itemView.findViewById(R.id.roundCount)
 
+        val mDeleteIcon: ImageView = itemView.findViewById(R.id.deleteScore)
+
 
         val mRecyclerView = itemView.findViewById<RecyclerView>(R.id.scoreboardRecyclerView)
 
@@ -53,6 +55,11 @@ class ScoresRecyclerviewAdapter(val finishedMatch: ArrayList<FinishedMatch>, val
 
                 notifyItemChanged(adapterPosition)
                 previouslyExpanded = adapterPosition
+            }
+
+            mDeleteIcon.setOnClickListener {
+                finishedMatch.removeAt(adapterPosition)
+                notifyItemRemoved(adapterPosition)
             }
         }
     }
@@ -118,6 +125,7 @@ class ScoresRecyclerviewAdapter(val finishedMatch: ArrayList<FinishedMatch>, val
         holder.mCardView.backgroundTintList = ColorStateList.valueOf(expandedColor)
         holder.mGameTitle.setTextColor(expandedTextColor)
         holder.mDatePlayed.setTextColor(expandedTextColor)
+        holder.mDeleteIcon.visibility = View.VISIBLE
 
         val newLayoutParams = holder.mCardView.layoutParams as RecyclerView.LayoutParams
 
@@ -129,6 +137,8 @@ class ScoresRecyclerviewAdapter(val finishedMatch: ArrayList<FinishedMatch>, val
 
     private fun collapseItem(holder: ScoresViewHolder) {
         holder.expandableLayout.visibility = View.GONE
+        holder.mDeleteIcon.visibility = View.GONE
+
         holder.mCardView.backgroundTintList = ColorStateList.valueOf(collapsedColor)
 
         val newLayoutParams = holder.mCardView.layoutParams as RecyclerView.LayoutParams
@@ -136,11 +146,9 @@ class ScoresRecyclerviewAdapter(val finishedMatch: ArrayList<FinishedMatch>, val
         holder.mGameTitle.setTextColor(collapsedTextColor)
         holder.mDatePlayed.setTextColor(collapsedTextColor)
 
-
         //I know in the layout it says 16 but when checking what newLayoutParams spat it out says its 56
         newLayoutParams.setMargins(56, 35, 56, 35)
         holder.mCardView.layoutParams = newLayoutParams
-
 
         ObjectAnimator.ofFloat(holder.mArrow, View.ROTATION, 0f, -90f).setDuration(300).start()
     }

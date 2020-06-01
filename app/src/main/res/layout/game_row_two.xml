@@ -6,8 +6,7 @@
     android:backgroundTint="@color/colorPrimary"
     app:cardCornerRadius="10dp"
     android:layout_margin="16dp"
-    app:cardElevation="50dp"
-    android:id="@+id/gameRow">
+    app:cardElevation="50dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -75,7 +74,7 @@
             android:inputType="numberSigned"
             android:minWidth="60dp"
             android:singleLine="true"
-            android:text="3"
+            android:text="0"
             app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
             app:layout_constraintEnd_toStartOf="@+id/inputScore2" />
 
@@ -98,6 +97,7 @@
 
             android:imeOptions="actionDone"
 
+            android:text="0"
 
             android:inputType="numberSigned"
             android:minWidth="60dp"

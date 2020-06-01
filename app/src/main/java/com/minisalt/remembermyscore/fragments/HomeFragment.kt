@@ -46,7 +46,7 @@ class HomeFragment(private val savedGame: Boolean = false) :
             }
 
             override fun onAdFailedToLoad(p0: Int) {
-                Toast.makeText(context, "This isnt working", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Ad failed to load", Toast.LENGTH_SHORT).show()
                 super.onAdFailedToLoad(p0)
             }
         }
@@ -60,11 +60,8 @@ class HomeFragment(private val savedGame: Boolean = false) :
         }
 
 
-
-
         numberPickerSetup()
         initSpinner(allRules)
-
 
 
         if (savedGame) {

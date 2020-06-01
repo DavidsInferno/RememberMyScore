@@ -8,7 +8,6 @@
     android:background="@color/Tasman">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -19,18 +18,33 @@
             app:liftOnScroll="true"
             android:animateLayoutChanges="true">
 
-            <com.google.android.material.appbar.MaterialToolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/materialToolbar"
                 style="@style/ThemeOverlay.MaterialComponents.Toolbar.Primary"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_scrollFlags="scroll|snap|enterAlways"
-                app:titleMarginStart="0dp"
+                android:layout_height="wrap_content"
                 app:menu="@menu/top_app_bar"
-                android:animateLayoutChanges="true"
+                app:layout_scrollFlags="scroll|snap|enterAlways"
+                android:animateLayoutChanges="true">
 
-                />
+                <ImageButton
+                    android:id="@+id/toolbarNavIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_casino_24px"
+                    android:background="?android:selectableItemBackground" />
 
+                <TextView
+                    android:id="@+id/toolbarTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    android:textColor="@color/DarkerGrey"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:text="This is the title" />
+
+            </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
