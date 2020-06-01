@@ -11,6 +11,7 @@ import androidx.core.view.get
 import androidx.viewpager2.widget.ViewPager2
 import com.minisalt.remembermyscore.data.DataMover
 import com.minisalt.remembermyscore.data.IntroSlide
+import com.minisalt.remembermyscore.recyclerView.adapter.IntroSlideAdapter
 import kotlinx.android.synthetic.main.activity_help.*
 
 class HelpActivity : AppCompatActivity() {

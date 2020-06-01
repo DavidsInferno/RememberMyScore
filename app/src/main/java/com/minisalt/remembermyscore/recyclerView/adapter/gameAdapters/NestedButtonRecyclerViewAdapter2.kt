@@ -1,4 +1,4 @@
-package com.minisalt.remembermyscore.recyclerView.adapter
+package com.minisalt.remembermyscore.recyclerView.adapter.gameAdapters
 
 import android.content.Context
 import android.text.Editable

@@ -1,4 +1,4 @@
-package com.minisalt.remembermyscore.recyclerView.adapter
+package com.minisalt.remembermyscore.recyclerView.adapter.gameAdapters
 
 import android.content.Context
 import android.text.Editable
@@ -179,7 +179,16 @@ class GameAdapter3(val playerList: ArrayList<PlayerData>, val context: Context, 
         position: Int
     ) {
         val nestedButtonRecyclerViewAdapter =
-            NestedButtonRecyclerViewAdapter3(context, gameRule, mPoints1, mPoints2, mPoints3, mRadio1, mRadio2, playerList[position])
+            NestedButtonRecyclerViewAdapter3(
+                context,
+                gameRule,
+                mPoints1,
+                mPoints2,
+                mPoints3,
+                mRadio1,
+                mRadio2,
+                playerList[position]
+            )
         nestedRecyclerView.setHasFixedSize(true)
         nestedRecyclerView.adapter = nestedButtonRecyclerViewAdapter
     }

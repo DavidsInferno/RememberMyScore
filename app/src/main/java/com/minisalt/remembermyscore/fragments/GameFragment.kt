@@ -12,9 +12,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.transition.MaterialFadeThrough
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.*
-import com.minisalt.remembermyscore.recyclerView.adapter.GameAdapter
-import com.minisalt.remembermyscore.recyclerView.adapter.GameAdapter2
-import com.minisalt.remembermyscore.recyclerView.adapter.GameAdapter3
+import com.minisalt.remembermyscore.recyclerView.adapter.gameAdapters.GameAdapter
+import com.minisalt.remembermyscore.recyclerView.adapter.gameAdapters.GameAdapter2
+import com.minisalt.remembermyscore.recyclerView.adapter.gameAdapters.GameAdapter3
 import kotlinx.android.synthetic.main.fragment_game.*
 import java.util.*
 
@@ -139,19 +139,31 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
         if (gameRule.extraField_1_enabled && !gameRule.extraField_2_enabled) {
 
             recyclerViewPlayers.setHasFixedSize(true)
-            val gameAdapter = GameAdapter2(playerList, requireContext(), gameRule)
+            val gameAdapter = GameAdapter2(
+                playerList,
+                requireContext(),
+                gameRule
+            )
             recyclerViewPlayers.adapter = gameAdapter
 
         } else if (gameRule.extraField_1_enabled && gameRule.extraField_2_enabled) {
 
             recyclerViewPlayers.setHasFixedSize(true)
-            val gameAdapter = GameAdapter3(playerList, requireContext(), gameRule)
+            val gameAdapter = GameAdapter3(
+                playerList,
+                requireContext(),
+                gameRule
+            )
             recyclerViewPlayers.adapter = gameAdapter
 
         } else {
 
             recyclerViewPlayers.setHasFixedSize(true)
-            val gameAdapter = GameAdapter(playerList, requireContext(), gameRule)
+            val gameAdapter = GameAdapter(
+                playerList,
+                requireContext(),
+                gameRule
+            )
             recyclerViewPlayers.adapter = gameAdapter
 
         }

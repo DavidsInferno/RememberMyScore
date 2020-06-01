@@ -1,4 +1,4 @@
-package com.minisalt.remembermyscore
+package com.minisalt.remembermyscore.recyclerView.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.IntroSlide
 
 class IntroSlideAdapter(private val introSlide: List<IntroSlide>) : RecyclerView.Adapter<IntroSlideAdapter.IntroSlideViewHolder>() {

@@ -248,7 +248,7 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/l_defaultPoints_2"
+            android:id="@+id/l_extraField_2_default"
 
             android:visibility="gone"
 
@@ -283,9 +283,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Need winning condition"
-            app:layout_constraintBottom_toBottomOf="@+id/l_defaultPoints_2"
+            app:layout_constraintBottom_toBottomOf="@+id/l_extraField_2_default"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/l_defaultPoints_2" />
+            app:layout_constraintTop_toTopOf="@+id/l_extraField_2_default" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/l_extraField_2_winPoints"
@@ -303,7 +303,7 @@
             app:hintTextColor="@color/Black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/l_defaultPoints_2">
+            app:layout_constraintTop_toBottomOf="@+id/l_extraField_2_default">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/extraField_2_winPoints"

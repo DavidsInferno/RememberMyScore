@@ -4,7 +4,6 @@ import android.graphics.Canvas
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -14,13 +13,12 @@ import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.DataMover
 import com.minisalt.remembermyscore.data.GameRules
 import com.minisalt.remembermyscore.recyclerView.adapter.RulesAdapter
-import com.minisalt.remembermyscore.recyclerView.clickListener.RecyclerViewClickInterface
 import com.minisalt.remembermyscore.utils.findLocationOfCenterOnTheScreen
 import com.minisalt.remembermyscore.utils.open
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.android.synthetic.main.fragment_rules.*
 
-class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterface {
+class RulesFragment : Fragment(R.layout.fragment_rules) {
 
     lateinit var ruleAdapter: RulesAdapter
 
@@ -42,10 +40,10 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
         fabSetup()
     }
 
-    fun fabSetup() {
+    private fun fabSetup() {
         fab.setOnClickListener {
             val positions = it.findLocationOfCenterOnTheScreen()
-            fragmentManager?.open {
+            childFragmentManager.open {
                 // Pass center as the end position of the circular reveal
                 add(
                     R.id.container, AddRulesFragment.newInstance(
@@ -120,7 +118,7 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
                     }
 
                     ItemTouchHelper.RIGHT -> {
-                        fragmentManager?.open {
+                        parentFragmentManager.open {
                             val swipedGameRule = list[position]
 
                             if (!(checkIfGameIsInProgress(swipedGameRule.name))) {
@@ -164,18 +162,11 @@ class RulesFragment : Fragment(R.layout.fragment_rules), RecyclerViewClickInterf
 
     private fun initRecyclerView(rules: ArrayList<GameRules>) {
         recyclerViewRules.setHasFixedSize(true)
-        ruleAdapter = RulesAdapter(rules, this, requireContext());
+        ruleAdapter = RulesAdapter(rules, requireContext())
         recyclerViewRules.adapter = ruleAdapter
 
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
         itemTouchHelper.attachToRecyclerView(recyclerViewRules)
-    }
-
-    override fun onItemClick(position: Int) {
-        Toast.makeText(requireContext(), "You can swipe the rules!", Toast.LENGTH_LONG).show()
-    }
-
-    override fun onLongItemClick(position: Int) {
     }
 
     fun checkIfGameIsInProgress(gameName: String): Boolean {

@@ -16,7 +16,6 @@ import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.DataMover
 import com.minisalt.remembermyscore.data.GameRules
 import com.minisalt.remembermyscore.recyclerView.adapter.ButtonAdapter
-import com.minisalt.remembermyscore.recyclerView.clickListener.RecyclerViewClickInterface
 import com.minisalt.remembermyscore.utils.ExitWithAnimation
 import com.minisalt.remembermyscore.utils.startCircularReveal
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
@@ -28,8 +27,7 @@ enum class InputFields {
     Third
 }
 
-class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimation,
-    RecyclerViewClickInterface {
+class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimation {
 
     private val dataMover = DataMover()
     var editGameRules: GameRules? = null
@@ -127,7 +125,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
 
     }
 
-    fun simpleMode() {
+    private fun simpleMode() {
         simpleSwitch.text = "Simple"
 
 
@@ -142,7 +140,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         roundCounter.visibility = View.GONE
     }
 
-    fun advancedMode() {
+    private fun advancedMode() {
         simpleSwitch.text = "Advanced"
 
         cbLowestScoreWins.setOnCheckedChangeListener { _, isChecked ->
@@ -194,7 +192,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
             txtExtraField.text = "Long press to remove"
 
             pointDivider3.visibility = View.VISIBLE
-            l_defaultPoints_2.visibility = View.VISIBLE
+            l_extraField_2_default.visibility = View.VISIBLE
             cBwinningCondition2.visibility = View.VISIBLE
 
             cBwinningCondition2.setOnCheckedChangeListener { _, isChecked ->
@@ -211,7 +209,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
             txtExtraField.text = "Add another field \n( long press to remove )"
 
             pointDivider3.visibility = View.GONE
-            l_defaultPoints_2.visibility = View.GONE
+            l_extraField_2_default.visibility = View.GONE
             l_extraField_2_winPoints.visibility = View.GONE
             cBwinningCondition2.visibility = View.GONE
         }
@@ -244,17 +242,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
                     .create()
                     .decorate()
 
-
-
-                super.onChildDraw(
-                    c,
-                    recyclerView,
-                    viewHolder,
-                    dX,
-                    dY,
-                    actionState,
-                    isCurrentlyActive
-                )
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             }
         }
 
@@ -307,6 +295,40 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         return counter
     }
 
+
+    private fun saveSettings(): Boolean {
+        val allRules: ArrayList<GameRules> = dataMover.loadGameRules(requireContext())
+
+        gameRule.advancedMode = simpleSwitch.isChecked
+
+        if (gameRule.advancedMode) {
+            gameRule.diceRequired = diceRequirement.isChecked
+            gameRule.lowestPointsWin = cbLowestScoreWins.isChecked
+            gameRule.extraField_1condition = cBwinningCondition1.isChecked
+            gameRule.extraField_2condition = cBwinningCondition2.isChecked
+            gameRule.roundCounter = roundCounter.isChecked
+        }
+
+
+        if (!titleCheck(allRules))
+            return false
+
+        if (!checkingPoints())
+            return false
+
+        //updatePosition indicates if the rule is being updated or not
+        return if (updatePosition == null) {
+            dataMover.appendToGameRules(requireContext(), gameRule)
+            rulesFragment?.gettingLatestRuleList(null)
+            true
+        } else if (updatePosition != null && !checkGameRuleExistence()) {
+            dataMover.replaceGameRule(requireContext(), gameRule, updatePosition!!)
+            rulesFragment?.gettingLatestRuleList(updatePosition)
+            true
+        } else
+            false
+    }
+
     private fun titleCheck(list: ArrayList<GameRules>): Boolean {
         if (titleText.text.toString() == "") {     //Checking if there is a name
             l_titleText.error = "Input valid title name"
@@ -327,187 +349,11 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         return true
     }
 
-
-    //Checks PointsToWin
-    private fun winningPointCheck(): Boolean {
-        val pointsAsString = pointsToWin.text.toString()
-
-        return when {
-            pointsAsString == "" -> {
-                l_pointsToWin.error = "Field can't be empty"
-                false
-            }
-            pointsAsString.length > 10 -> {
-                l_pointsToWin.error = "Number is too big"
-                false
-            }
-            else -> {
-                gameRule.pointsToWin = Integer.parseInt(pointsAsString)
-                l_pointsToWin.error = null
-                true
-            }
-        }
-    }
-
-    private fun startingPointCheck(): Boolean {
-        val defaultPoints = defaultPoints_1.text.toString()
-
-        return when {
-            defaultPoints == "" -> {
-                l_defaultPoints_1.error = "Field can't be empty"
-                false
-            }
-            defaultPoints.length > 10 -> {
-                l_defaultPoints_1.error = "Number is too big"
-                false
-            }
-            else -> {
-                gameRule.startingPoints = Integer.parseInt(defaultPoints)
-                l_defaultPoints_1.error = null
-                true
-            }
-        }
-    }
-    //------------------------------------------------
-
-    //Checks ExtraField 1
-    private fun startingPointCheck2(): Boolean {
-        val defaultPoints = extraField_1_default.text.toString()
-
-        return when {
-            defaultPoints == "" -> {
-                l_extraField_1_default.error = "Field can't be empty"
-                false
-            }
-            defaultPoints.length > 10 -> {
-                l_extraField_1_default.error = "Number is too big"
-                false
-            }
-            else -> {
-                gameRule.extraField_StartPoint_1 = Integer.parseInt(defaultPoints)
-                l_extraField_1_default.error = null
-                true
-            }
-        }
-    }
-
-    private fun winningPointCheck2(): Boolean {
-        val pointsAsString = extraField_1_winPoints.text.toString()
-
-        return when {
-            pointsAsString == "" -> {
-                l_extraField_1_winPoints.error = "Field can't be empty"
-                false
-            }
-            pointsAsString.length > 10 -> {
-                l_extraField_1_winPoints.error = "Number is too big"
-                false
-            }
-            else -> {
-                gameRule.extraField_1_pointsToWin = Integer.parseInt(pointsAsString)
-                if (gameRule.extraField_1_pointsToWin <= gameRule.extraField_StartPoint_1) {
-                    l_extraField_1_winPoints.error = "Can't be lower than starting points"
-                    return false
-                }
-                l_extraField_1_winPoints.error = null
-                true
-            }
-        }
-    }
-    //------------------------------------
-
-    //Checks ExtraField 2
-    private fun startingPointCheck3(): Boolean {
-        val defaultPoints = extraField_2_default.text.toString()
-
-        return when {
-            defaultPoints == "" -> {
-                l_defaultPoints_2.error = "Field can't be empty"
-                false
-            }
-            defaultPoints.length > 10 -> {
-                l_defaultPoints_2.error = "Number is too big"
-                false
-            }
-            else -> {
-                gameRule.extraField_StartPoint_2 = Integer.parseInt(defaultPoints)
-                l_defaultPoints_2.error = null
-                true
-            }
-        }
-    }
-
-    private fun winningPointCheck3(): Boolean {
-        val pointsAsString = extraField_2_winPoints.text.toString()
-
-        return when {
-            pointsAsString == "" -> {
-                l_extraField_2_winPoints.error = "Field can't be empty"
-                false
-            }
-            pointsAsString.length > 10 -> {
-                l_extraField_2_winPoints.error = "Number is too big"
-                false
-            }
-            else -> {
-                gameRule.extraField_2_pointsToWin = Integer.parseInt(pointsAsString)
-                l_extraField_2_winPoints.error = null
-                true
-            }
-        }
-    }
-    //------------------------------------
-
-    private fun startingPointCheck(points: String, layout: TextInputLayout, inputField: InputFields): Boolean {
-        return when {
-            points == "" -> {
-                layout.error = "Field can't be empty"
-                false
-            }
-            points.length > 10 -> {
-                layout.error = "Number is too big"
-                false
-            }
-            else -> {
-                when (inputField) {
-                    InputFields.Main -> {
-                        gameRule.startingPoints = Integer.parseInt(points)
-                        println("This just worked")
-                    }
-
-                    InputFields.Second -> gameRule.startingPoints = Integer.parseInt(points)
-
-                    InputFields.Third -> gameRule.startingPoints = Integer.parseInt(points)
-                }
-
-                layout.error = null
-                true
-            }
-        }
-    }
-
-    private fun saveSettings(): Boolean {
-        val allRules: ArrayList<GameRules> = dataMover.loadGameRules(requireContext())
-
-        gameRule.advancedMode = simpleSwitch.isChecked
-
-        if (gameRule.advancedMode) {
-            gameRule.diceRequired = diceRequirement.isChecked
-            gameRule.lowestPointsWin = cbLowestScoreWins.isChecked
-            gameRule.extraField_1condition = cBwinningCondition1.isChecked
-            gameRule.extraField_2condition = cBwinningCondition2.isChecked
-            gameRule.roundCounter = roundCounter.isChecked
-        }
-
-
-        //startingPointCheck(defaultPoints_1.text.toString(), l_defaultPoints_1, InputFields.Main)
-
-        if (!titleCheck(allRules))
-            return false
-
-        if (winningPointCheck()) {
+    private fun checkingPoints(): Boolean {
+        //Checking the main field
+        if (winningPointCheck(pointsToWin.text.toString(), l_defaultPoints_1, InputFields.Main)) {
             if (gameRule.advancedMode) {
-                if (startingPointCheck()) {
+                if (startingPointCheck(defaultPoints_1.text.toString(), l_defaultPoints_1, InputFields.Main)) {
                     if (!gameRule.lowestPointsWin && (gameRule.startingPoints >= gameRule.pointsToWin)) {
                         l_defaultPoints_1.error = "Starting points higher than winning points"
                         return false
@@ -521,10 +367,14 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         } else
             return false
 
+        //---------------------
+
+
+        //Checking the extra fields
         if (gameRule.advancedMode) {
-            if (startingPointCheck2()) {
+            if (startingPointCheck(extraField_1_default.text.toString(), l_extraField_1_default, InputFields.Second)) {
                 if (gameRule.extraField_1condition) {
-                    if (winningPointCheck2()) {
+                    if (winningPointCheck(extraField_1_winPoints.text.toString(), l_extraField_1_default, InputFields.Second)) {
                         if (gameRule.extraField_StartPoint_1 >= gameRule.extraField_1_pointsToWin) {
                             l_defaultPoints_1.error = "Starting points higher than winning points"
                             return false
@@ -536,11 +386,11 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
             } else
                 return false
 
-            if (startingPointCheck3()) {
+            if (startingPointCheck(extraField_2_default.text.toString(), l_extraField_2_default, InputFields.Third)) {
                 if (gameRule.extraField_2condition) {
-                    if (winningPointCheck3()) {
+                    if (winningPointCheck(extraField_2_winPoints.text.toString(), l_extraField_2_default, InputFields.Third)) {
                         if (gameRule.extraField_StartPoint_2 >= gameRule.extraField_2_pointsToWin) {
-                            l_defaultPoints_2.error = "Starting points higher than winning points"
+                            l_extraField_2_default.error = "Starting points higher than winning points"
                             return false
                         }
                     } else
@@ -549,21 +399,72 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
                 }
             } else
                 return false
-
         }
+        //-------------------------
 
+        return true
+    }
 
-        //updatePosition indicates if the rule is being updated or not
-        return if (updatePosition == null) {
-            dataMover.appendToGameRules(requireContext(), gameRule)
-            rulesFragment?.gettingLatestRuleList(null)
-            true
-        } else if (updatePosition != null && !checkGameRuleExistence()) {
-            dataMover.replaceGameRule(requireContext(), gameRule, updatePosition!!)
-            rulesFragment?.gettingLatestRuleList(updatePosition)
-            true
-        } else
-            false
+    private fun startingPointCheck(pointsToCheck: String, layout: TextInputLayout, inputField: InputFields): Boolean {
+        return when {
+            pointsToCheck == "" -> {
+                layout.error = "Field can't be empty"
+                false
+            }
+            pointsToCheck.length > 10 -> {
+                layout.error = "Number is too big"
+                false
+            }
+            else -> {
+                when (inputField) {
+                    InputFields.Main -> gameRule.startingPoints = Integer.parseInt(pointsToCheck)
+
+                    InputFields.Second -> gameRule.extraField_StartPoint_1 = Integer.parseInt(pointsToCheck)
+
+                    InputFields.Third -> gameRule.extraField_StartPoint_2 = Integer.parseInt(pointsToCheck)
+                }
+
+                layout.error = null
+                true
+            }
+        }
+    }
+
+    private fun winningPointCheck(pointsToCheck: String, layout: TextInputLayout, inputField: InputFields): Boolean {
+        return when {
+            pointsToCheck == "" -> {
+                layout.error = "Field can't be empty"
+                false
+            }
+            pointsToCheck.length > 10 -> {
+                layout.error = "Number is too big"
+                false
+            }
+            else -> {
+                when (inputField) {
+                    InputFields.Main -> gameRule.pointsToWin = Integer.parseInt(pointsToCheck)
+
+                    InputFields.Second -> {
+                        gameRule.extraField_1_pointsToWin = Integer.parseInt(pointsToCheck)
+                        if (gameRule.extraField_1_pointsToWin <= gameRule.extraField_StartPoint_1) {
+                            layout.error = "Can't be lower than starting points"
+                            return false
+                        }
+                    }
+
+                    InputFields.Third -> {
+                        gameRule.extraField_2_pointsToWin = Integer.parseInt(pointsToCheck)
+                        if (gameRule.extraField_2_pointsToWin <= gameRule.extraField_StartPoint_2) {
+                            layout.error = "Can't be lower than starting points"
+                            return false
+                        }
+                    }
+                }
+
+                layout.error = null
+                true
+            }
+        }
     }
 
 
@@ -624,7 +525,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         buttonBackup.addAll(gameRule.buttons)
     }
 
-    fun checkGameRuleExistence(): Boolean {
+    private fun checkGameRuleExistence(): Boolean {
         if (dataMover.gameRuleExistence(requireContext(), gameRule)) {
             Toast.makeText(context, "No changes have been made", Toast.LENGTH_SHORT).show()
             return true
@@ -640,17 +541,8 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         }
     }
 
-    override fun onItemClick(position: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onLongItemClick(position: Int) {
-        TODO("Not yet implemented")
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         parentFragmentManager.popBackStack()
     }
-
 }

@@ -5,16 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.minisalt.remembermyscore.R
 import com.minisalt.remembermyscore.data.DataMover
 import com.minisalt.remembermyscore.data.GameRules
-import com.minisalt.remembermyscore.recyclerView.clickListener.RecyclerViewClickInterface
 import java.text.SimpleDateFormat
 import java.util.*
 
 class RulesAdapter(
-    private val rulesList: ArrayList<GameRules>, val recyclerViewClickInterface: RecyclerViewClickInterface, val context:
+    private val rulesList: ArrayList<GameRules>, val context:
     Context
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -32,15 +33,12 @@ class RulesAdapter(
         var mExtraFields: TextView = itemView.findViewById(R.id.extraField_1_winPoints)
         var mRoundCounter: TextView = itemView.findViewById(R.id.roundCounter)
 
+        val mCard: CardView = itemView.findViewById(R.id.RuleCard)
+
         //https://www.youtube.com/watch?v=AkiltTv0CjA
         init {
-            itemView.setOnClickListener {
-                recyclerViewClickInterface.onItemClick(adapterPosition)
-            }
-
-            itemView.setOnLongClickListener {
-                recyclerViewClickInterface.onLongItemClick(adapterPosition)
-                true
+            mCard.setOnClickListener {
+                Toast.makeText(context, "You can swipe the rules!", Toast.LENGTH_LONG).show()
             }
         }
         //-------------------------------------------
