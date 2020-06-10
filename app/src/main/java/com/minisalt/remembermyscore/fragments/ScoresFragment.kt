@@ -13,8 +13,8 @@ import kotlinx.android.synthetic.main.fragment_scores.*
 
 class ScoresFragment : Fragment(R.layout.fragment_scores) {
 
-    val dataMover = DataMover()
-    var ammountOfGames = 0
+    private val dataMover = DataMover()
+    private var ammountOfGames = 0
     lateinit var finishedMatches: ArrayList<FinishedMatch>
 
 
@@ -46,7 +46,6 @@ class ScoresFragment : Fragment(R.layout.fragment_scores) {
         val scoresAdapter = ScoresRecyclerviewAdapter(allMatches, requireContext())
         recyclerViewScores.adapter = scoresAdapter
     }
-
     override fun onPause() {
         super.onPause()
         if (ammountOfGames != finishedMatches.size)

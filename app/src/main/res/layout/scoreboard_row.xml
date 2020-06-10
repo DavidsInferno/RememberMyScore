@@ -62,8 +62,7 @@
         android:background="?android:attr/dividerVertical"
         app:layout_constraintBottom_toBottomOf="@+id/playerPoints"
         app:layout_constraintEnd_toStartOf="@+id/playerPoints"
-        app:layout_constraintTop_toTopOf="@+id/playerPoints"
-        app:layout_constraintVertical_bias="0.25" />
+        app:layout_constraintTop_toTopOf="@+id/playerPoints" />
 
     <TextView
         android:id="@+id/playerPoints"
@@ -84,7 +83,7 @@
     <View
         android:id="@+id/divider2"
 
-        android:visibility="visible"
+        android:visibility="gone"
 
         android:layout_width="1dp"
         android:layout_height="30dp"
@@ -103,13 +102,14 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
 
+        android:visibility="gone"
+
 
         android:gravity="center"
         android:text="35"
 
         android:textSize="25sp"
         android:textStyle="bold"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/divider3"
         app:layout_constraintTop_toTopOf="parent" />
@@ -117,7 +117,7 @@
     <View
         android:id="@+id/divider3"
 
-        android:visibility="visible"
+        android:visibility="gone"
 
 
         android:layout_width="1dp"
@@ -137,12 +137,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
 
+        android:visibility="gone"
 
         android:gravity="center"
         android:text="35"
         android:textSize="25sp"
         android:textStyle="bold"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">RememberMyScore</string>
-    <string name="admob_app_id">ca-app-pub-2404027123081375~5087668089</string>
-    <string name="homeAd">ca-app-pub-2404027123081375/1810219314</string>
+    <string name="admob_app_id">ca-app-pub-8906171219763331~3721886578</string>
+    <string name="homeAd">ca-app-pub-8906171219763331/1514525637</string>
 
     <string name="save_game">Save and Close Game</string>
     <string name="save_game_desc">Saves current game and returns to home</string>

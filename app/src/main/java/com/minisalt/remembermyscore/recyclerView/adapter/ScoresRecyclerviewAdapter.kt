@@ -106,7 +106,6 @@ class ScoresRecyclerviewAdapter(val finishedMatch: ArrayList<FinishedMatch>, val
                 else
                     holder.mRound.visibility = View.GONE
 
-
                 if (finishedMatch[position].expanded) {
                     expandItem(holder)
                 } else

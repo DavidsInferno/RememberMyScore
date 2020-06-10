@@ -43,7 +43,7 @@ class RulesFragment : Fragment(R.layout.fragment_rules) {
     private fun fabSetup() {
         fab.setOnClickListener {
             val positions = it.findLocationOfCenterOnTheScreen()
-            childFragmentManager.open {
+            parentFragmentManager.open {
                 // Pass center as the end position of the circular reveal
                 add(
                     R.id.container, AddRulesFragment.newInstance(

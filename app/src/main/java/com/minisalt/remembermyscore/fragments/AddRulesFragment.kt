@@ -119,8 +119,11 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
             val checkClose: Boolean = saveSettings()
             if (checkClose) {
                 (activity as MainActivity?)?.onBackPressed()
-            } else
+            } else {
                 Toast.makeText(context, "Errors made", Toast.LENGTH_SHORT).show()
+                gameRule = GameRules()
+            }
+
         }
 
     }
@@ -176,6 +179,10 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
             }
         } else {
             gameRule.extraField_1_enabled = false
+
+            l_extraField_1_default.error = null
+            l_extraField_1_winPoints.error = null
+
             pointDivider2.visibility = View.GONE
             l_extraField_1_default.visibility = View.GONE
             l_extraField_1_winPoints.visibility = View.GONE
@@ -205,6 +212,8 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
             }
         } else {
             gameRule.extraField_2_enabled = false
+            l_extraField_2_default.error = null
+            l_extraField_2_winPoints.error = null
 
             txtExtraField.text = "Add another field \n( long press to remove )"
 
@@ -295,7 +304,6 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         return counter
     }
 
-
     private fun saveSettings(): Boolean {
         val allRules: ArrayList<GameRules> = dataMover.loadGameRules(requireContext())
 
@@ -351,7 +359,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
 
     private fun checkingPoints(): Boolean {
         //Checking the main field
-        if (winningPointCheck(pointsToWin.text.toString(), l_defaultPoints_1, InputFields.Main)) {
+        if (winningPointCheck(pointsToWin.text.toString(), l_pointsToWin, InputFields.Main)) {
             if (gameRule.advancedMode) {
                 if (startingPointCheck(defaultPoints_1.text.toString(), l_defaultPoints_1, InputFields.Main)) {
                     if (!gameRule.lowestPointsWin && (gameRule.startingPoints >= gameRule.pointsToWin)) {
@@ -366,7 +374,6 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
             }
         } else
             return false
-
         //---------------------
 
 
@@ -374,7 +381,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
         if (gameRule.advancedMode) {
             if (startingPointCheck(extraField_1_default.text.toString(), l_extraField_1_default, InputFields.Second)) {
                 if (gameRule.extraField_1condition) {
-                    if (winningPointCheck(extraField_1_winPoints.text.toString(), l_extraField_1_default, InputFields.Second)) {
+                    if (winningPointCheck(extraField_1_winPoints.text.toString(), l_extraField_1_winPoints, InputFields.Second)) {
                         if (gameRule.extraField_StartPoint_1 >= gameRule.extraField_1_pointsToWin) {
                             l_defaultPoints_1.error = "Starting points higher than winning points"
                             return false
@@ -388,7 +395,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
 
             if (startingPointCheck(extraField_2_default.text.toString(), l_extraField_2_default, InputFields.Third)) {
                 if (gameRule.extraField_2condition) {
-                    if (winningPointCheck(extraField_2_winPoints.text.toString(), l_extraField_2_default, InputFields.Third)) {
+                    if (winningPointCheck(extraField_2_winPoints.text.toString(), l_extraField_2_winPoints, InputFields.Third)) {
                         if (gameRule.extraField_StartPoint_2 >= gameRule.extraField_2_pointsToWin) {
                             l_extraField_2_default.error = "Starting points higher than winning points"
                             return false
@@ -432,7 +439,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
 
     private fun winningPointCheck(pointsToCheck: String, layout: TextInputLayout, inputField: InputFields): Boolean {
         return when {
-            pointsToCheck == "" -> {
+            pointsToCheck == "" || pointsToCheck == "-" -> {
                 layout.error = "Field can't be empty"
                 false
             }

@@ -102,7 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Points to win"
-                android:inputType="number" />
+                android:inputType="numberSigned" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -132,7 +132,7 @@
 
                 android:text="0"
                 android:hint="Starting points"
-                android:inputType="number" />
+                android:inputType="numberSigned" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -189,7 +189,7 @@
 
                 android:text="0"
                 android:hint="Extra field starting points"
-                android:inputType="number" />
+                android:inputType="numberSigned" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -229,7 +229,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Winning points"
-                android:inputType="number" />
+                android:inputType="numberSigned" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -271,7 +271,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:hint="Extra field 2 starting points"
-                android:inputType="number" />
+                android:inputType="numberSigned" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -310,7 +310,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Winning points"
-                android:inputType="number" />
+                android:inputType="numberSigned" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
