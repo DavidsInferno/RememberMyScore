@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
@@ -46,7 +45,7 @@ class HomeFragment(private val savedGame: Boolean = false) :
             }
 
             override fun onAdFailedToLoad(p0: Int) {
-                Toast.makeText(context, "Ad failed to load: $p0", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context, "Ad failed to load: $p0", Toast.LENGTH_SHORT).show()
                 super.onAdFailedToLoad(p0)
             }
         }
@@ -128,18 +127,18 @@ class HomeFragment(private val savedGame: Boolean = false) :
     }
 
     private fun goToGameFragment(newGame: HomeData) {
-        fragmentManager?.beginTransaction()?.replace(
+        parentFragmentManager.beginTransaction().replace(
             R.id.container, GameFragment
                 (homeData = newGame)
-        )?.commit()
+        ).commit()
         val navigationView = requireActivity().findViewById(R.id.bottom_nav_view) as BottomNavigationView
         navigationView.menu.getItem(1).isChecked = true
     }
 
     private fun goToRuleFragment() {
-        fragmentManager?.beginTransaction()?.replace(
+        parentFragmentManager.beginTransaction().replace(
             R.id.container, RulesFragment()
-        )?.commit()
+        ).commit()
         val navigationView = requireActivity().findViewById(R.id.bottom_nav_view) as BottomNavigationView
         navigationView.menu.getItem(2).isChecked = true
     }

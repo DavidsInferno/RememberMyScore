@@ -40,17 +40,15 @@ class ScoresRecyclerviewAdapter(val finishedMatch: ArrayList<FinishedMatch>, val
         val mDeleteIcon: ImageView = itemView.findViewById(R.id.deleteScore)
 
 
-        val mRecyclerView = itemView.findViewById<RecyclerView>(R.id.scoreboardRecyclerView)
-
+        val mRecyclerView: RecyclerView = itemView.findViewById(R.id.scoreboardRecyclerView)
         val expandableLayout: ConstraintLayout = itemView.findViewById(R.id.expandable_layout)
-
 
         init {
             mCardView.setOnClickListener {
                 val match = finishedMatch[adapterPosition]
                 match.expanded = !match.expanded
 
-                if (previouslyExpanded != -1 && previouslyExpanded != adapterPosition)
+                if (previouslyExpanded != -1 && previouslyExpanded != adapterPosition && previouslyExpanded != finishedMatch.size)
                     closeOtherScore(previouslyExpanded)
 
                 notifyItemChanged(adapterPosition)
@@ -157,7 +155,7 @@ class ScoresRecyclerviewAdapter(val finishedMatch: ArrayList<FinishedMatch>, val
     }
 
     private fun initRecyclerView(nestedRecyclerView: RecyclerView, nestedPlayerScoreboard: ScoreboardRecyclerViewAdapter) {
-        nestedRecyclerView.setHasFixedSize(true);
+        nestedRecyclerView.setHasFixedSize(true)
         nestedRecyclerView.adapter = nestedPlayerScoreboard
     }
 }
