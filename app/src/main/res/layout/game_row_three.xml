@@ -15,18 +15,17 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
 
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            app:layout_goneMarginBottom="8dp"
+
+            android:layout_marginEnd="8dp"
 
             android:hint="Player"
 
-            android:minWidth="150dp"
             android:textColorHint="@color/SailorBlue"
-
             app:boxCornerRadiusBottomEnd="0dp"
             app:boxCornerRadiusBottomStart="0dp"
             app:boxCornerRadiusTopEnd="8dp"
@@ -34,8 +33,10 @@
             app:boxStrokeColor="@color/SailorBlue"
             app:hintTextColor="@color/SailorBlue"
             app:layout_constraintBottom_toTopOf="@+id/rvNestedButtons"
+            app:layout_constraintEnd_toStartOf="@+id/inputScore"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_goneMarginBottom="8dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nameInput"
@@ -67,15 +68,15 @@
             android:layout_height="wrap_content"
 
 
-            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:gravity="center"
             android:imeOptions="actionDone"
             android:inputType="numberSigned"
-            android:minWidth="60dp"
+            android:minWidth="45dp"
             android:singleLine="true"
             android:text="0"
             app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
-            app:layout_constraintStart_toEndOf="@+id/textInputLayout" />
+            app:layout_constraintEnd_toStartOf="@+id/inputScore2" />
 
         <RadioButton
             android:id="@+id/secondPoint"
@@ -91,37 +92,37 @@
             android:id="@+id/inputScore2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+
+            android:layout_marginEnd="8dp"
 
             android:gravity="center"
 
-            android:text="0"
-
             android:imeOptions="actionDone"
             android:inputType="numberSigned"
-            android:minWidth="60dp"
+            android:minWidth="45dp"
             android:singleLine="true"
+            android:text="0"
             app:layout_constraintBottom_toBottomOf="@+id/inputScore"
-            app:layout_constraintStart_toEndOf="@+id/inputScore" />
+            app:layout_constraintEnd_toStartOf="@+id/inputScore3" />
 
 
         <EditText
             android:id="@+id/inputScore3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+
+            android:layout_marginEnd="8dp"
 
             android:gravity="center"
-
-            android:text="0"
 
 
             android:imeOptions="actionDone"
             android:inputType="numberSigned"
-            android:minWidth="60dp"
+            android:minWidth="45dp"
             android:singleLine="true"
+            android:text="0"
             app:layout_constraintBottom_toBottomOf="@+id/inputScore2"
-            app:layout_constraintStart_toEndOf="@+id/inputScore2" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <RadioButton
             android:id="@+id/thirdPoint"

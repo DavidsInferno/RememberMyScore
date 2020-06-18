@@ -8,7 +8,7 @@ data class FinishedMatch(
     var expanded: Boolean = false,
     var diceProperties: ArrayList<Int> = arrayListOf(-1, -1),
     var datePlayed: Date? = null,
-    var round: Int = 0
+    var round: Int = 1
 ) {
 
 

@@ -127,7 +127,7 @@ class GameFragment(val homeData: HomeData? = null) : Fragment(R.layout.fragment_
         for (i in 0 until amountOfPlayers)
             displayedGame.players.add(PlayerData())
 
-        displayedGame.round = 0
+        displayedGame.round = 1
         displayedGame.addPlayerPositionsAndNames()
         displayedGame.addPlayerPoints()
         initRecyclerView(displayedGame.players, gameRule)

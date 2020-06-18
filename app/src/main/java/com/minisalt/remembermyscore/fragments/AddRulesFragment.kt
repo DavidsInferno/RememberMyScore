@@ -119,10 +119,8 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
             val checkClose: Boolean = saveSettings()
             if (checkClose) {
                 (activity as MainActivity?)?.onBackPressed()
-            } else {
+            } else
                 Toast.makeText(context, "Errors made", Toast.LENGTH_SHORT).show()
-                gameRule = GameRules()
-            }
 
         }
 
@@ -418,7 +416,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
                 layout.error = "Field can't be empty"
                 false
             }
-            pointsToCheck.length > 10 -> {
+            pointsToCheck.length > 6 -> {
                 layout.error = "Number is too big"
                 false
             }
@@ -443,7 +441,7 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
                 layout.error = "Field can't be empty"
                 false
             }
-            pointsToCheck.length > 10 -> {
+            pointsToCheck.length > 6 -> {
                 layout.error = "Number is too big"
                 false
             }
@@ -533,11 +531,13 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
     }
 
     private fun checkGameRuleExistence(): Boolean {
-        if (dataMover.gameRuleExistence(requireContext(), gameRule)) {
+        val gameExist = dataMover.gameRuleExistence(requireContext(), gameRule)
+
+        return if (gameExist) {
             Toast.makeText(context, "No changes have been made", Toast.LENGTH_SHORT).show()
-            return true
-        }
-        return false
+            true
+        } else
+            false
     }
 
     override fun onPause() {

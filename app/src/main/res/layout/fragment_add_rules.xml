@@ -200,7 +200,7 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Need winning condition"
+            android:text="Is winning condition"
             app:layout_constraintBottom_toBottomOf="@+id/l_extraField_1_default"
             app:layout_constraintEnd_toEndOf="@+id/l_titleText"
             app:layout_constraintTop_toTopOf="@+id/l_extraField_1_default" />
@@ -282,7 +282,7 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Need winning condition"
+            android:text="Is winning condition"
             app:layout_constraintBottom_toBottomOf="@+id/l_extraField_2_default"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/l_extraField_2_default" />

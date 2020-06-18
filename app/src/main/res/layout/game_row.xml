@@ -62,7 +62,7 @@
             android:inputType="numberSigned"
 
 
-            android:minWidth="60dp"
+            android:minWidth="45dp"
             android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
             app:layout_constraintEnd_toEndOf="parent"

@@ -20,7 +20,7 @@ class RulesAdapter(
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val dataMover = DataMover()
+    private val dataMover = DataMover()
 
 
     inner class GameRulesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -35,13 +35,11 @@ class RulesAdapter(
 
         val mCard: CardView = itemView.findViewById(R.id.RuleCard)
 
-        //https://www.youtube.com/watch?v=AkiltTv0CjA
         init {
             mCard.setOnClickListener {
-                Toast.makeText(context, "You can swipe the rules!", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Swipe right to edit, swipe left to delete!", Toast.LENGTH_LONG).show()
             }
         }
-        //-------------------------------------------
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
