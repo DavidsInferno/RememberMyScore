@@ -20,7 +20,7 @@ class HelpActivity : AppCompatActivity() {
         listOf(
             IntroSlide(
                 "Welcome to RememberMyScore", "This is an app that lets you keep track of any game you want. Let me walk you through " +
-                        "some of the features", R.drawable.redo_main
+                        "some of the features.", R.drawable.redo_main
             ),
             IntroSlide(
                 "Home Screen", "From this screen you can select how many players are playing and what game you want to play.", R.drawable
@@ -37,7 +37,7 @@ class HelpActivity : AppCompatActivity() {
             ),
             IntroSlide(
                 "Scores screen",
-                "All the games you have completed will be saved here",
+                "All the games you have completed will be saved here.",
                 R.drawable.scores_screen
             )
         )
