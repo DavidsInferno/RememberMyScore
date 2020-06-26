@@ -447,7 +447,14 @@ class AddRulesFragment : Fragment(R.layout.fragment_add_rules), ExitWithAnimatio
             }
             else -> {
                 when (inputField) {
-                    InputFields.Main -> gameRule.pointsToWin = Integer.parseInt(pointsToCheck)
+                    InputFields.Main -> {
+                        gameRule.pointsToWin = Integer.parseInt(pointsToCheck)
+                        if (!gameRule.advancedMode && gameRule.pointsToWin <= gameRule.startingPoints) {
+                            layout.error = "Can't be lower or equal to 0"
+                            return false
+                        }
+
+                    }
 
                     InputFields.Second -> {
                         gameRule.extraField_1_pointsToWin = Integer.parseInt(pointsToCheck)
